@@ -1,0 +1,7 @@
+[stackdriver]
+name=Stackdriver Agent Repository
+baseurl=http://repo.stackdriver.com/repo/el$releasever/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=https://www.stackdriver.com/RPM-GPG-KEY-stackdriver
+
