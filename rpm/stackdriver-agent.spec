@@ -85,7 +85,7 @@ Source: collectd-%{version}.tar.gz
 # nss. this avoids problems of nss leaking with libcurl. sigh.
 Source1: curl-%{curl_version}.tar.bz2
 Source200: stackdriver-agent
-Source201: stackdriver-collectd.conf
+Source201: collectd.conf.tmpl
 Source202: stackdriver.sysconfig
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
@@ -336,7 +336,7 @@ fi
 
 
 %changelog
-* Mon May 1 2017 Dhrupad Bhardwaj <dhrupad@google.com> 5.5.2-360
+* Mon May 1 2017 Dhrupad Bhardwaj <dhrupad@google.com> 5.5.2-365
 - Remove --write-gcm.
 
 * Thu Jan 16 2014 Jeremy Katz <jeremy@stackdriver.com> 5.3.0-122

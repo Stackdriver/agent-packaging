@@ -1,10 +1,11 @@
-# simplest makefile possible with way too much hardcoded
-# this should hijack more stuff from the fedora package
-# git stuff so that we can get the source files, srpm filename, etc dynamically
+# Simplest makefile possible with way too much hardcoded.
+# This should hijack more stuff from the fedora package,
+# git stuff so that we can get the source files, srpm filename, etc dynamically.
 
 source:
-	[ -d collectd-$(VERSION).git ] && rm -rf collectd-$(VERSION).git || true # return true so we don't error out because the test condition fails
-	# this is run from inside our collectd fork so we clone a clean copy to work off of
+	# Return true so we don't error out because the test condition fails.
+	[ -d collectd-$(VERSION).git ] && rm -rf collectd-$(VERSION).git || true
+	# This is run from inside our collectd fork so we clone a clean copy to work off of.
 	git clone ../../ collectd-$(VERSION).git
 	pushd collectd-$(VERSION).git ; \
 	git archive --format tar --prefix=collectd-$(VERSION)/ HEAD | gzip > ../collectd-$(VERSION).tar.gz  ; \
@@ -42,12 +43,12 @@ sign:
 
 vendor-dirs:
 	mkdir -p vendor-el6/i386 vendor-el6/x86_64 vendor-el6/src
-# amazon linux 2014.03 can use el6 packages
+# Amazon linux 2014.03 can use el6 packages.
 	rm -f vendor-amzn-2014.03 && ln -s vendor-el6 vendor-amzn-2014.03
 	mkdir -p vendor-el7/x86_64 vendor-el7/src
 
-# download yajl packages for our repo
-# these are from stock centos6
+# Download yajl packages for our repo.
+# These are from stock centos6.
 get-yajl: vendor-dirs
 	pushd vendor-el6/i386 && curl -O http://testrepo.stackdriver.com/vendor/yajl/i386/yajl-1.0.7-3.el6.i686.rpm
 	pushd vendor-el6/i386 && curl -O http://testrepo.stackdriver.com/vendor/yajl/i386/yajl-devel-1.0.7-3.el6.i686.rpm
@@ -55,7 +56,7 @@ get-yajl: vendor-dirs
 	pushd vendor-el6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-devel-1.0.7-3.el6.x86_64.rpm
 	pushd vendor-el6/src && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-1.0.7-3.el6.src.rpm
 
-# these are from epel
+# These are from epel.
 get-hiredis: vendor-dirs
 	pushd vendor-el6/i386 && curl -O http://testrepo.stackdriver.com/vendor/hiredis/i386/hiredis-0.10.1-3.el6.i686.rpm
 	pushd vendor-el6/i386 && curl -O http://testrepo.stackdriver.com/vendor/hiredis/i386/hiredis-devel-0.10.1-3.el6.i686.rpm
@@ -63,7 +64,7 @@ get-hiredis: vendor-dirs
 	pushd vendor-el6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/hiredis/x86_64/hiredis-devel-0.10.1-3.el6.x86_64.rpm
 	pushd vendor-el6/src && curl -O http://testrepo.stackdriver.com/vendor/hiredis/x86_64/hiredis-0.10.1-3.el6.src.rpm
 
-# these are from epel
+# These are from epel.
 get-psutil: vendor-dirs
 	pushd vendor-el6/i386 && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-1.el6.i686.rpm
 	pushd vendor-el6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-1.el6.x86_64.rpm
@@ -71,7 +72,7 @@ get-psutil: vendor-dirs
 	pushd vendor-el7/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-3.el7.x86_64.rpm
 	pushd vendor-el7/src && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-3.el7.src.rpm
 
-# these are from epel
+# These are from epel.
 get-netifaces: vendor-dirs
 	pushd vendor-el6/i386 && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-1.el6.i686.rpm
 	pushd vendor-el6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-1.el6.x86_64.rpm
@@ -79,7 +80,7 @@ get-netifaces: vendor-dirs
 	pushd vendor-el7/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-4.el7.x86_64.rpm
 	pushd vendor-el7/src && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-4.el7.src.rpm
 
-# download packages which aren't necessarily in base repos
+# Download packages which aren't necessarily in base repos.
 vendor-rpms: get-yajl get-hiredis get-psutil get-netifaces
 
 repo:
@@ -97,17 +98,6 @@ repo:
 		done ; \
                 if [ $$distro == "el6" ]; then ln -s $$distro repo/$$distro"Server" ; fi ; \
 	done
-
-# would love to use the jenkins s3 artifact uploader for this but it doesn't preserve
-# the directory structure
-# consider --delete-removed
-# also, figure out how to make this put the repo config + gpg key + readme in place
-# and don't use an s3 config file in /tmp
-syncrepo: repo
-	s3cmd -c /etc/s3cmd.cfg sync --follow-symlinks repo/ s3://testrepo.stackdriver.com/repo/
-
-syncalpharepo: repo
-	s3cmd -c /etc/s3cmd.cfg sync --follow-symlinks repo/ s3://alpharepo.stackdriver.com/repo/
 
 syncgrepo: repo
 	export BOTO_CONFIG=/etc/boto.cfg
