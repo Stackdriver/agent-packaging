@@ -1,0 +1,4 @@
+/lib /host/lib none defaults,bind 0 0
+/lib64 /host/lib64 none defaults,bind 0 0
+/opt /host/opt none defaults,bind 0 0
+/usr/lib /host/usr/lib none defaults,bind 0 0
