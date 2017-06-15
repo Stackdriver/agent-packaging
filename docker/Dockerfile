@@ -17,7 +17,8 @@ RUN apt-get update \
         libvarnishapi1 \
         libyajl2 \
     && (dpkg -i /stackdriver-agent_$version.xenial_amd64.deb || true) \
-    && apt-get install -f -y \
+    # We are temporarily ignoring the error due to builds happening outside of a GCP VM that don't have access to the metadata server
+    && (apt-get install -f -y || true) \
     && rm -rf /var/lib/apt/lists/*
 
 ADD . /collectd
