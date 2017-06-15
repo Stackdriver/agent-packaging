@@ -1,6 +1,7 @@
 FROM ubuntu:xenial
 
-ADD https://storage.googleapis.com/stackdriver-container-alpha/deb/xenial/stackdriver-agent_5.5.2-364+docker1.xenial_amd64.deb /stackdriver-agent_5.5.2-364+docker1.xenial_amd64.deb
+ARG version=5.5.2-364+docker1
+ADD https://storage.googleapis.com/stackdriver-container-alpha/deb/xenial/stackdriver-agent_$version.xenial_amd64.deb /stackdriver-agent_$version.xenial_amd64.deb
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
@@ -15,7 +16,9 @@ RUN apt-get update \
         libpq5 \
         libvarnishapi1 \
         libyajl2 \
-    && (dpkg -i /stackdriver-agent_5.5.2-364+docker1.xenial_amd64.deb || apt-get install -f -y)
+    && (dpkg -i /stackdriver-agent_$version.xenial_amd64.deb || true) \
+    && apt-get install -f -y \
+    && rm -rf /var/lib/apt/lists/*
 
 ADD . /collectd
 

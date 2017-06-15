@@ -4,7 +4,7 @@ if [ -f /usr/src/collectd/collectd.conf ]; then
     configuration_file="/usr/src/collectd/collectd.conf"
 fi
 
-echo "Using configuration file: $configuration_file.";
+echo "Using configuration file: $configuration_file."
 
 mount -a && \
     cp /etc/hosts /host/etc/hosts && \
