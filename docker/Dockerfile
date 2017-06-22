@@ -20,13 +20,15 @@ RUN apt-get update \
         libvarnishapi1 \
         libyajl2 \
     && (dpkg -i /stackdriver-agent_$version.xenial_amd64.deb || true) \
-    # We are temporarily ignoring the error due to builds happening outside of a GCP VM that don't have access to the metadata server
+    # We are temporarily ignoring the error due to builds happening outside of 
+    # a GCP VM that don't have access to the metadata server.
     && (apt-get install -f -y || true) \
     && rm -rf /var/lib/apt/lists/*
 
 ADD . /collectd
 
-# Mount everything in host in order to volume the host's proc into the container.
+# Mount everything under /host in order to volume the host's proc into the 
+# container.
 RUN mkdir -p /host/bin /host/dev /host/etc /host/etc/ssl /host/lib /host/lib64 /host/opt /host/usr/bin /host/usr/lib /host/var/lib \
     && cp /collectd/collectd.conf /opt/stackdriver/collectd/etc/collectd.conf \
     && cp /collectd/fstab /etc/fstab
