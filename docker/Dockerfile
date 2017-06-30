@@ -29,7 +29,7 @@ ADD . /collectd
 
 # Mount everything under /host in order to volume the host's proc into the 
 # container.
-RUN mkdir -p /host/bin /host/dev /host/etc /host/etc/ssl /host/lib /host/lib64 /host/opt /host/usr/bin /host/usr/lib /host/var/lib \
+RUN mkdir -p /host/bin /host/dev /host/etc /host/lib /host/lib64 /host/opt /host/usr/bin /host/usr/lib /host/var/lib \
     && cp /collectd/collectd.conf /opt/stackdriver/collectd/etc/collectd.conf \
     && cp /collectd/fstab /etc/fstab
 

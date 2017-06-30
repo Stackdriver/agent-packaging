@@ -1,6 +1,5 @@
 /bin /host/bin none defaults,bind 0 0
 /dev /host/dev none defaults,bind 0 0
-/etc/ssl /host/etc/ssl none defaults,bind 0 0
 /lib /host/lib none defaults,bind 0 0
 /lib64 /host/lib64 none defaults,bind 0 0
 /opt /host/opt none defaults,bind 0 0
