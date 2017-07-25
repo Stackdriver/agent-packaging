@@ -33,7 +33,7 @@ build: srcpkg
 DISTRO?=`lsb_release -a 2>/dev/null | grep Codename |awk {'print $2;'}`
 ARCH?=`uname -i`
 
-OUTPUT_DIR ?= result
+OUTPUT_DIR?=result
 
 vendor-debs:
 

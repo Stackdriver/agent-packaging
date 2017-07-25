@@ -24,7 +24,7 @@ case "$1" in
         INSTANCE_SCOPES=""
         # first, see if the instance has a monitoring.write scope
         if [ -x /usr/bin/curl ]; then
-            INSTANCE_SCOPES=$(curl --silent -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/scopes 2>/dev/null || /bin/true)
+            INSTANCE_SCOPES=$(curl --silent --connect-timeout 5 -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/scopes 2>/dev/null || /bin/true)
         fi
         if [ `echo $INSTANCE_SCOPES | grep -c monitoring.write` -ge 1 ]; then
             # don't need to ask for an api key as we'll try to use instance scopes

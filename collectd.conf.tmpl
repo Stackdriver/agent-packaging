@@ -22,22 +22,27 @@ LoadPlugin df
 </Plugin>
 
 #LoadPlugin docker
+
 LoadPlugin cpu
 <Plugin "cpu">
   ValuesPercentage true
   ReportByCpu false
 </Plugin>
+
 LoadPlugin swap
 <Plugin "swap">
   ValuesPercentage true
 </Plugin>
+
 LoadPlugin interface
 LoadPlugin disk
 LoadPlugin load
+
 LoadPlugin memory
 <Plugin "memory">
   ValuesPercentage true
 </Plugin>
+
 LoadPlugin processes
 LoadPlugin tcpconns
 LoadPlugin write_gcm
