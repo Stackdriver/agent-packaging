@@ -190,6 +190,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-plugin_mem \
     --enable-processes \
     --enable-ntpd \
+    --enable-nfs \
     --enable-zookeeper \
     --enable-stackdriver_agent \
     --enable-exec \
