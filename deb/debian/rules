@@ -2,7 +2,6 @@
 
 SHELL=/bin/bash
 DISTRO=$(shell lsb_release -a 2>/dev/null |grep Codename |awk {'printf $$2;'})
-ARCH := $(shell cat ~/.build_arch)
 debian_version := $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
 
 ifeq ($(DISTRO),xenial)
@@ -15,7 +14,7 @@ CFLAGS = -g
 	dh $@
 
 override_dh_auto_configure:
-	echo "building for $(DISTRO)-$(ARCH)"
+	echo "building for $(DISTRO)"
 	autoconf
 	dh_auto_configure -- --prefix=/opt/stackdriver/collectd \
 	--program-prefix=stackdriver- \
