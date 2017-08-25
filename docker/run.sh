@@ -5,7 +5,7 @@ configuration_file="/opt/stackdriver/collectd/etc/collectd.conf"
 # It is OK if the container_id is empty, the monitoring agent will attempt to fill it.
 container_id=$(cat /proc/self/cgroup | grep -o  -e "docker/.*" | head -n 1 | sed "s/docker\/\(.*\)/\\1/")
 
-sed -i "s/%STACKDRIVER_AGENT_RESOURCE_ID%/$container_id/" "$configuration_file"
+sed -i "s/%CONTAINER_ID%/$container_id/" "$configuration_file"
 
 # If the metadata agent hostname is not provided, we will assume a link by the name of metadata-agent.
 METADATA_AGENT_HOSTNAME="${METADATA_AGENT_HOSTNAME:-metadata-agent}"
