@@ -1,6 +1,6 @@
 #!/bin/bash
 
-configuration_file="/opt/stackdriver/collectd/etc/collectd.conf"
+configuration_file="/etc/collectd/collectd.conf"
 
 # It is OK if the container_id is empty, the monitoring agent will attempt to fill it.
 container_id=$(cat /proc/self/cgroup | grep -o  -e "docker/.*" | head -n 1 | sed "s/docker\/\(.*\)/\\1/")
@@ -28,6 +28,4 @@ fi
 
 sed -i "s/%MONITORED_RESOURCE%/$monitored_resource/" "$configuration_file"
 
-mount -a && \
-    cp -r /etc/* /host/etc/ && \
-    chroot /host /opt/stackdriver/collectd/sbin/stackdriver-collectd -f -C "$configuration_file"
+/opt/stackdriver/collectd/sbin/stackdriver-collectd -f -C "$configuration_file"

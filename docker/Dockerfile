@@ -25,16 +25,11 @@ RUN apt-get update \
     && (apt-get install -f -y || true) \
     && rm -rf /var/lib/apt/lists/*
 
-ADD . /collectd
-
-# Mount everything under /host in order to volume the host's proc into the 
-# container.
-RUN mkdir -p /host/bin /host/dev /host/etc /host/lib /host/lib64 /host/opt /host/usr/bin /host/usr/lib /host/var/lib \
-    && cp /collectd/collectd.conf /opt/stackdriver/collectd/etc/collectd.conf \
-    && cp /collectd/fstab /etc/fstab
-
-# Mount the chroot dependencies and run collectd in the foreground.
-CMD /collectd/run.sh
-
 # Allow user specified configuration files.
-VOLUME ["/host/proc", "/host/usr/src/collectd"]
+VOLUME ["/etc/collectd/collectd.d/"]
+
+ADD collectd.conf /etc/collectd/collectd.conf
+ADD run.sh /run.sh
+
+# Populate dynamic values in the configuration and run the collectd process.
+CMD /run.sh
