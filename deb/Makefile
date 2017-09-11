@@ -36,31 +36,5 @@ OUTPUT_DIR ?= result
 
 vendor-debs:
 
-repo:
-	@rm -rf apt
-	@mkdir -p apt/conf
-	@cp distributions apt/conf/distributions
-	@for distro in precise trusty xenial wheezy jessie ; do \
-		find $(OUTPUT_DIR)/*$$distro* -name "*.deb" -exec reprepro --export=never -Vb apt includedeb $$distro {} \; ;\
-		find $(OUTPUT_DIR)/*$$distro* -name "*.dsc" -exec reprepro --export=never -Vb apt includedsc $$distro {} \; ; \
-	done
-
-# would love to use the jenkins s3 artifact uploader for this but it doesn't preserve
-# the directory structure
-syncrepo: repo
-	s3cmd -c /etc/s3cmd.cfg sync --follow-symlinks apt/ s3://testrepo.stackdriver.com/apt/
-
-syncalpharepo: repo
-	s3cmd -c /etc/s3cmd.cfg sync --follow-symlinks apt/ s3://alpharepo.stackdriver.com/apt/
-
-# The default permissions for the repo is set to public-read
-syncgrepo: repo
-	export BOTO_CONFIG=/etc/boto.cfg
-	gsutil -m rsync -c -r apt/ gs://gtestrepo.stackdriver.com/apt/
-
-sign:
-	# need to do this after adding packages so that the repo is properly signed. and yay expect
-	expect signer.exp
-
 clean:
 	rm -rf *.dsc *.deb *.tar.gz *.tar.bz2 collectd-$(VERSION) result apt

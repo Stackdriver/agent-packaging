@@ -1,5 +1,0 @@
-Template: stackdriver-agent/apikey
-Type: string
-Description: API key for use with Stackdriver
- Stackdriver requires an API key to submit metrics. You can
- get an API key from https://app.stackdriver.com/settings/
