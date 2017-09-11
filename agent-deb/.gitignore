@@ -1,0 +1,9 @@
+*.tar.bz2
+*.tar.gz
+*.deb
+*.dsc
+*~
+repo
+*.changes
+apt
+.vagrant

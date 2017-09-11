@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+# Source debconf library.
+. /usr/share/debconf/confmodule
+
+# Get Stackdriver API key
+db_input high stackdriver-agent/apikey || true
+db_go

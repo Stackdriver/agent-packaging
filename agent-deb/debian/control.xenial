@@ -1,0 +1,17 @@
+Source: stackdriver-agent
+Maintainer: Stackdriver Engineering <engineering@stackdriver.com>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 7.0.50), libcurl4-openssl-dev, libmysqlclient-dev, libpq-dev, libhiredis-dev (>= 0.10.0), autoconf, automake, libtool, libltdl-dev, libyajl-dev, lsb-release, libvarnishapi-dev, pkg-config, default-jdk
+
+Package: stackdriver-agent
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, curl, libcurl3, libltdl7, libyajl2
+Recommends: stackdriver-extractor (>= 94)
+Suggests: libmysqlclient20, libpq5, libhiredis0.13, default-jre
+Description: Stackdriver system metrics collection daemon
+  The Stackdriver system metrics daemon collects system statistics and
+  sends them to the Stackdriver service.
+  Currently includes collectd.
+
