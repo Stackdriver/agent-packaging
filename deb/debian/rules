@@ -14,6 +14,7 @@ MYSQL=libmysqlclient20
 else
 HIREDIS=libhiredis0.10
 MYSQL=libmysqlclient18
+endif
 
 ifeq ($(DISTRO),xenial)
 	DOCKER_FLAG="--enable-docker"
