@@ -1,0 +1,13 @@
+#!/usr/bin/expect
+# yay signing with expect. :(
+
+spawn reprepro --ask-passphrase  -Vb apt export
+expect {
+    "Please enter passphrase:" {
+        send -- "$env(KEYPASSPHRASE)\r"
+        exp_continue
+    }
+    eof {
+        # done
+    }
+}

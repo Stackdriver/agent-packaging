@@ -1,0 +1,6 @@
+stackdriver-agent (5.3.0-0) precise lucid squeeze wheezy jessie; urgency=low
+
+  * automated build
+
+ -- Stackdriver Engineering <engineering@stackdriver.com>  Thu, 18 Jul 2013 18:57:02 +0000
+
