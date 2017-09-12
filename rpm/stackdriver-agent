@@ -27,7 +27,6 @@ prog="stackdriver-collectd"
 pidfile=/var/run/stackdriver-agent.pid
 CONFIG=/opt/stackdriver/collectd/etc/collectd.conf
 CONFIG_TEMPLATE=/opt/stackdriver/collectd/etc/collectd.conf.tmpl
-GCM_CONFIG_TEMPLATE=/opt/stackdriver/collectd/etc/collectd-gcm.conf.tmpl
 
 JAVA_LIB_DIR=""
 
@@ -115,51 +114,15 @@ gen_config() {
 #     AUTOGENERATE_COLLECTD_CONFIG=\"no\"
 # in /etc/sysconfig/stackdriver
 "
-    if [ -z "$USE_GCM_API" -a -n "$DETECT_GCM" ]; then
-        # automatically determine if we should be using the GCM API
-        # first, see if the instance has a monitoring.write scope
-        INSTANCE_SCOPES=$(curl --silent -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/scopes 2>/dev/null)$'\n'
-        if [[ $INSTANCE_SCOPES == *"/monitoring.write"$'\n'* || $INSTANCE_SCOPES == *"/monitoring"$'\n'* || $INSTANCE_SCOPES == *"/cloud-platform"$'\n'* ]]; then
-            echo "Found sufficient authorization scope for the GCM API"
-            USE_GCM_API="yes"
-        # second, see if the application default credential file is in the system location
-        elif [ -f /etc/google/auth/application_default_credentials.json ]; then
-            echo "Found a credentials file"
-            USE_GCM_API="yes"
-        # or we're not using the gcm api
-        else
-            echo "Not authorized to talk to the GCM API, falling back on legacy" >&2
-            USE_GCM_API="no"
-        fi
-    fi
-    # now see if we should be using write_gcm and use the appropriate template if so
-    if [ "$USE_GCM_API" = "yes" ]; then
-        echo "$AUTOGENERATE_HEADER" > $CONFIG
-        cat $GCM_CONFIG_TEMPLATE >> $CONFIG
-        return
-    fi
-
-
-    if [ -z "$STACKDRIVER_API_KEY" ]; then
-        STACKDRIVER_API_KEY=$(curl --silent -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/project/attributes/stackdriver-agent-key 2>/dev/null)
-        if [ -z "$STACKDRIVER_API_KEY" ]; then
-            echo "Need to set STACKDRIVER_API_KEY in /etc/sysconfig/stackdriver" >&2
-            return 1
-        fi
-    fi
     local IID=$(get_instance_id)
     if [ -z "$IID" ]; then
         echo "Unable to discover instance id" >&2
     return 1
     fi
-    if [ -z "$COLLECTD_ENDPOINT"]; then
-        COLLECTD_ENDPOINT=$(get_collectd_endpoint)
-        if [[ $? -ne 0 ]]; then
-            return 1
-        fi
-    fi
     echo "$AUTOGENERATE_HEADER" > $CONFIG
-    sed -e "s/{IID}/$IID/; s/{API_KEY}/$STACKDRIVER_API_KEY/; s|{COLLECTD_ENDPOINT}|$COLLECTD_ENDPOINT|" $CONFIG_TEMPLATE >> $CONFIG
+    echo "Hostname \"$IID\"" >> $CONFIG
+    cat $CONFIG_TEMPLATE >> $CONFIG
+    return
 }
 
 start () {

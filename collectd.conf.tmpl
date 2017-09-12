@@ -4,6 +4,7 @@ LoadPlugin syslog
 <Plugin "syslog">
   LogLevel "info"
 </Plugin>
+
 # if you uncomment this, you will get collectd logs separate from syslog
 #LoadPlugin logfile
 #<Plugin "logfile">
@@ -65,6 +66,7 @@ LoadPlugin "match_regex"
 
 <Plugin "write_gcm">
   PrettyPrintJSON false
+  # EnableMetadataAgent true
 </Plugin>
 
 PostCacheChain "PostCache"

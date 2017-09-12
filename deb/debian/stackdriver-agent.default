@@ -1,11 +1,10 @@
-# whether or not to autogenerate the stackdriver collectd config file
 AUTOGENERATE_COLLECTD_CONFIG="yes"
+
+# Default the agent to use write_gcm to send metrics.
+DETECT_GCM="yes"
 
 # url to a proxy for outbound https
 PROXY_URL=""
-
-# your stackdriver api key
-STACKDRIVER_API_KEY=""
 
 # the location of the java libraries, for the java plugin
 # substitute the location where libjvm.so can be found

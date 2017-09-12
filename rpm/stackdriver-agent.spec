@@ -30,7 +30,13 @@
 %define dep_filter 1
 %endif
 
+%if 0%{?rhel} >= 7
+%define curl_version 7.52.1
+%define docker_flag --enable-docker
+%endif
+
 %if 0%{?rhel} <= 6
+%define curl_version 7.34.0
 %define java_version 1.6.0
 %endif
 
@@ -77,12 +83,10 @@ URL: http://www.stackdriver.com/
 Source: collectd-%{version}.tar.gz
 # embed libcurl so we know it's linked against openssl instead of
 # nss. this avoids problems of nss leaking with libcurl. sigh.
-%define curl_version 7.34.0
 Source1: curl-%{curl_version}.tar.bz2
 Source200: stackdriver-agent
 Source201: stackdriver-collectd.conf
 Source202: stackdriver.sysconfig
-Source203: stackdriver-collectd-gcm.conf
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
 BuildRequires: python-devel
@@ -117,7 +121,6 @@ Requires: sed
 Requires(preun): /sbin/chkconfig
 Requires(post): /sbin/chkconfig
 Requires(post): /bin/grep
-Requires: stackdriver-extractor >= 94
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %define    _use_internal_dependency_generator 0
@@ -225,7 +228,6 @@ popd
 %{__install} -Dp -m0755 %{SOURCE200} %{buildroot}/%{_initddir}/stackdriver-agent
 %{__install} -Dp -m0644 %{SOURCE201} %{buildroot}%{_sysconfdir}/collectd.conf.tmpl
 %{__install} -Dp -m0644 %{SOURCE202} %{buildroot}/etc/sysconfig/stackdriver
-%{__install} -Dp -m0644 %{SOURCE203} %{buildroot}%{_sysconfdir}/collectd-gcm.conf.tmpl
 
 %{__install} -d -m0755 %{buildroot}/%{_datadir}/collectd/collection3/
 
@@ -265,9 +267,6 @@ rm -rf %{buildroot}%{_prefix}/include/curl %{buildroot}%{_prefix}/lib/libcurl*
 %post
 /sbin/ldconfig
 /sbin/chkconfig --add stackdriver-agent
-if [ $(grep -c 'STACKDRIVER_API_KEY=""' /etc/sysconfig/stackdriver) -eq 0 ] ; then
-    echo Please edit /etc/sysconfig/stackdriver to supply your API key.
-fi
 
 %preun
 if [ $1 -eq 0 ]; then
@@ -283,7 +282,6 @@ fi
 %defattr(-, root, root, -)
 %ghost %{_sysconfdir}/collectd.conf
 %config %{_sysconfdir}/collectd.conf.tmpl
-%config %{_sysconfdir}/collectd-gcm.conf.tmpl
 %config(noreplace) %{_sysconfdir}/collectd.d/
 
 %{_bindir}/%{programprefix}collectd-nagios
@@ -338,69 +336,5 @@ fi
 
 
 %changelog
-* Thu Jan 16 2014 Jeremy Katz <jeremy@stackdriver.com> 5.3.0-122
-- Build libcurl against openssl and use that instead of system libcurl to avoid leaks
-
-* Thu Jul 18 2013 John (J5) Palmieri <j5@stackdriver.com>
-- Move to automated builds from jenkins
-
-* Mon Jul 15 2013 John (J5) Palmieri <j5@stackdriver.com> 5.3.0-19
-- start of refactor
-
-* Thu Jul 11 2013 John (J5) Palmieri <j5@stackdriver.com> 5.3.0-18
-- bump for authentication fixes in collectd
-
-* Thu Jul 11 2013 John (J5) Palmieri <j5@stackdriver.com> 5.3.0-17
-- bump for collectd fixes
-
-* Fri Jul 05 2013 John (J5) Palmieri <j5@stackdriver.com> 5.3.0-16
-- install the postgresql_default.conf default query files
-
-* Tue Jul 02 2013 John (J5) Palmieri <j5@stackdriver.com> 5.3.0-15
-- bump to grab invalid free fix
-
-* Mon Jul 01 2013 John (J5) Palmieri <j5@stackdriver.com> 5.3.0-14
-- bump for upstream becaue we don't yet have auto version builders inplace
-
-* Sun Jun 30 2013 John (J5) Palmieri <j5@stackdriver.com> 5.3.0-13
-- Get rid of patches
-- Build new collectd from our repo
-
-* Thu Jun 28 2013 John (J5) Palmieri <j5@stackdriver.com> 5.3.0-12
-- use our forked copy of collectd
-
-* Thu Jun 27 2013 John (J5) Palmieri <j5@stackdriver.com> 5.3.0-11
-- fix typo s/LD_LIBRARY_DIR/LD_LIBRARY_PATH
-
-* Thu Jun 27 2013 John (J5) Palmieri <j5@stackdriver.com> 5.3.0-10
-- init file now sets LD_LIBRARY_PATH when running collectd so the mongo plugi
-  can find its support libs
-
-* Wed Jun 26 2013 John (J5) Palmieri <j5@stackdriver.com> 5.3.0-9
-- looks like we still dynamically link to the mongo drivers so install them
-
-* Wed Jun 26 2013 John (J5) Palmieri <j5@stackdriver.com> 5.3.0-8
-- make path to the mongo driver absolute
-
-* Wed Jun 26 2013 John (J5) Palmieri <j5@stackdriver.com> - 5.3.0-7
-- add bits for building mongodb plugin
-
-* Mon Jun  3 2013 Jeremy Katz <katzj@fedoraproject.org>
-- Add plugins for mysql, postgresql and redis
-
-* Fri May 31 2013 Jeremy Katz <katzj@fedoraproject.org>
-- Add memcached, nginx and apache plugins
-
-* Mon May 28 2013 Jeremy Katz <katzj@fedoraproject.org>
-- Restart nightly
-
-* Wed May 23 2013 Jeremy Katz <katzj@fedoraproject.org>
-- Enable aggregation plugin
-- Set up to send rates to new endpoint + use aggregates
-- Bump buffer size for write_http so we send all data at once
-
-* Wed May 23 2013 Jeremy Katz <katzj@fedoraproject.org>
-- Minor fixes
-
-* Wed May  8 2013 Jeremy Katz <katzj@fedoraproject.org>
-- Initial build of Stackdriver agent package based on Fedora collectd 5.3.0 package
+* Mon May 1 2017 Dhrupad Bhardwaj <dhrupad@google.com> 5.5.2-365
+- Remove --write-gcm.

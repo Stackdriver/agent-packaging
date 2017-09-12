@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
 SHELL=/bin/bash
+ARCH := $(shell cat ~/.build_arch)
 DISTRO=$(shell lsb_release -a 2>/dev/null |grep Codename |awk {'printf $$2;'})
 debian_version := $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
 
@@ -13,6 +14,9 @@ MYSQL=libmysqlclient20
 else
 HIREDIS=libhiredis0.10
 MYSQL=libmysqlclient18
+
+ifeq ($(DISTRO),xenial)
+	DOCKER_FLAG="--enable-docker"
 endif
 
 CFLAGS = -g
@@ -21,7 +25,7 @@ CFLAGS = -g
 	dh $@
 
 override_dh_auto_configure:
-	echo "building for $(DISTRO)"
+	echo "building for $(DISTRO)-$(ARCH)"
 	autoconf
 	dh_auto_configure -- --prefix=/opt/stackdriver/collectd \
 	--program-prefix=stackdriver- \
@@ -68,7 +72,8 @@ override_dh_auto_configure:
 	--enable-mongodb \
 	--enable-varnish \
 	--enable-write_gcm \
-	--enable-debug
+	--enable-debug \
+	$(DOCKER_FLAG)
 
 # filter out shlib deps we don't want to force on people
 override_dh_shlibdeps:

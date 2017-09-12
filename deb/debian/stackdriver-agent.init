@@ -32,7 +32,6 @@ DAEMON=/opt/stackdriver/collectd/sbin/stackdriver-collectd
 
 CONFIGFILE=/opt/stackdriver/collectd/etc/collectd.conf
 CONFIG_TEMPLATE=/opt/stackdriver/collectd/etc/collectd.conf.tmpl
-GCM_CONFIG_TEMPLATE=/opt/stackdriver/collectd/etc/collectd-gcm.conf.tmpl
 _PIDFILE=/var/run/stackdriver-agent.pid
 
 MAXWAIT=30
@@ -101,17 +100,6 @@ get_instance_id () {
     echo $iid
 }
 
-get_collectd_endpoint () {
-    for endpoint in collectd-gateway.google.stackdriver.com collectd-gateway.stackdriver.com; do
-        if [[ "200" = $(curl --silent -f -s -w "%{http_code}" --retry 1 -o /dev/null https://${endpoint}/v1/agent-test?stackdriver-apikey=${STACKDRIVER_API_KEY} 2>/dev/null) ]]; then
-            echo $endpoint
-            return
-        fi
-    done
-    echo 'Unable to determine collectd endpoint!' >&2
-    return 1
-}
-
 gen_hostid() {
     echo "Generating a host id"
     uuidgen > /opt/stackdriver/hostid
@@ -126,50 +114,15 @@ gen_config() {
 #     AUTOGENERATE_COLLECTD_CONFIG=\"no\"
 # in /etc/default/$NAME
 "
-    if [ -z "$USE_GCM_API" -a -n "$DETECT_GCM" ]; then
-        # automatically determine if we should be using the GCM API
-        # first, see if the instance has a monitoring.write scope
-        INSTANCE_SCOPES=$(curl --silent -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/scopes 2>/dev/null)$'\n'
-        if [[ $INSTANCE_SCOPES == *"/monitoring.write"$'\n'* || $INSTANCE_SCOPES == *"/monitoring"$'\n'* || $INSTANCE_SCOPES == *"/cloud-platform"$'\n'* ]]; then
-            log_progress_msg "Found sufficient authorization scope for the GCM API"
-            USE_GCM_API="yes"
-        # second, see if the application default credential file is in the system location
-        elif [ -f /etc/google/auth/application_default_credentials.json ]; then
-            log_progress_msg "Found a credentials file"
-            USE_GCM_API="yes"
-        else
-            log_warning_msg "Not authorized to talk to the GCM API, falling back on legacy"
-            USE_GCM_API="no"
-        fi
-    fi
-    # now see if we should be using write_gcm and use the appropriate template if so
-    if [ "$USE_GCM_API" = "yes" ]; then
-        echo "$AUTOGENERATE_HEADER" > $CONFIGFILE
-        cat $GCM_CONFIG_TEMPLATE >> $CONFIGFILE
-        return
-    fi
-
-    if test -z "$STACKDRIVER_API_KEY" ; then
-        STACKDRIVER_API_KEY=$(curl --silent -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/project/attributes/stackdriver-agent-key 2>/dev/null)
-        if test -z "$STACKDRIVER_API_KEY"; then
-            log_failure_msg "Need to set STACKDRIVER_API_KEY in /etc/default/$NAME"
-            return 3
-        fi
-    fi
-
     local IID=$(get_instance_id)
     if [ -z "$IID" ]; then
         log_failure_msg "Unable to discover instance id"
         return
     fi
-    if [ -z "$COLLECTD_ENDPOINT"]; then
-        COLLECTD_ENDPOINT=$(get_collectd_endpoint)
-        if [[ $? -ne 0 ]]; then
-            return 1
-        fi
-    fi
     echo "$AUTOGENERATE_HEADER" > $CONFIGFILE
-    sed -e "s/{IID}/$IID/; s/{API_KEY}/$STACKDRIVER_API_KEY/; s|{COLLECTD_ENDPOINT}|$COLLECTD_ENDPOINT|" $CONFIG_TEMPLATE >> $CONFIGFILE
+    echo "Hostname \"$IID\"" >> $CONFIGFILE
+    cat $CONFIG_TEMPLATE >> $CONFIGFILE
+    return
 }
 
 # return:

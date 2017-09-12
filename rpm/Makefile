@@ -11,8 +11,13 @@ source:
 	popd
 
 vendor:
-	[ -f curl-7.34.0.tar.bz2 ] || curl -O https://curl.haxx.se/download/curl-7.34.0.tar.bz2
-	sha1sum -c curl.sha1
+	if [ "x$(DISTRO)" == "xepel-7" ]; then \
+		[ -f curl-7.52.1.tar.bz2 ] || curl -O https://curl.haxx.se/download/curl-7.52.1.tar.bz2; \
+		sha1sum -c curl-7.52.1.sha1; \
+	else \
+		[ -f curl-7.34.0.tar.bz2 ] || curl -O https://curl.haxx.se/download/curl-7.34.0.tar.bz2; \
+		sha1sum -c curl-7.34.0.sha1; \
+	fi
 
 srpm: source vendor
 	rpmbuild --define "_source_filedigest_algorithm md5" --define "_sourcedir $$(pwd)" --define "_srcrpmdir $$(pwd)" --define "collectd_version $(VERSION)" --define "build_num $(BUILD_NUM)" -bs stackdriver-agent.spec
@@ -25,9 +30,7 @@ ARCH ?= `uname -m`
 
 build: srpm vendor-rpms
 	rm -rf result
-	if [[ $(DISTRO) != "epel-7" ]]; then \
-	    mock --arch $(ARCH) -r $(MOCK_ROOT) --install vendor-*/$(ARCH)/hiredis*-0.10.1-3.*.rpm ; \
-	fi ;
+	mock --arch $(ARCH) -r $(MOCK_ROOT) --install vendor-*/$(ARCH)/hiredis*-0.10.1-3.*.rpm
 	mock --arch $(ARCH) -r $(MOCK_ROOT) --no-clean --define "collectd_version $(VERSION)" --define "build_num $(BUILD_NUM)" --resultdir result $$(pwd)/*.src.rpm
 
 OUTPUT_DIR ?= result

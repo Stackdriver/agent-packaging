@@ -34,11 +34,6 @@ case "$1" in
             # don't need to ask for an api key as we'll use application default creds
             /bin/true
         else
-            # ask using debconf at low priority for a stackdriver api key
-            db_get stackdriver-agent/apikey
-            if [ -n "$RET" ]; then
-                sed -i "s/^STACKDRIVER_API_KEY=.*/STACKDRIVER_API_KEY=\"$RET\"/" /etc/default/stackdriver-agent
-            fi
         fi
     ;;
 
