@@ -16,7 +16,7 @@ sed -i "s/%METADATA_AGENT_HOSTNAME%/$METADATA_AGENT_HOSTNAME/" "$configuration_f
 monitored_resource=""
 
 if [[ ! -z "$POD_NAMESPACE"  &&  ! -z "$POD_NAME"  &&  ! -z "$MONITORED_CONTAINER_NAME" ]]; then
-    monitored_resource="gke_containerName.$POD_NAMESPACE.$POD_NAME.$MONITORED_CONTAINER_NAME"
+    monitored_resource="k8s_containerName.$POD_NAMESPACE.$POD_NAME.$MONITORED_CONTAINER_NAME"
 
 elif [[ "$LOOKUP_GCE_INSTANCE_ID" == "true" ]]; then
     monitored_resource=$(curl --silent -f -H 'Metadata-Flavor: Google' http://169.254.169.254/computeMetadata/v1/instance/id 2>/dev/null)
