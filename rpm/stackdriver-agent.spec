@@ -243,6 +243,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/collectd.d/
 
 # *.la files shouldn't be distributed.
 rm -f %{buildroot}%{_libdir}/{collectd/,}*.la
+rm -f %{buildroot}%{_sysconfdir}/collectd.conf.pkg-orig
 
 # now remove more libcurl stuff that was needed to finish the install
 rm -rf %{buildroot}%{_prefix}/include/curl %{buildroot}%{_prefix}/lib/libcurl*
@@ -300,7 +301,6 @@ fi
 %{_libdir}/libcollectdclient.so
 %{_libdir}/libcollectdclient.so.1
 %{_libdir}/libcollectdclient.so.1.0.0
-%{_libdir}/pkgconfig/libcollectdclient.pc
 %{_includedir}/collectd/client.h
 %{_includedir}/collectd/lcc_features.h
 %{_includedir}/collectd/network.h

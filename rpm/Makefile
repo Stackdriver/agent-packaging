@@ -27,6 +27,11 @@ ARCH ?= `uname -m`
 build: source vendor vendor-rpms
 	rm -rf result
 	yum install -y vendor-*/$(ARCH)/hiredis*-0.10.1-3.*.rpm
+# Stagger installs as libyajl needs to be installed before yajl-devel.
+	if [[ "$(DISTRO)" == "amzn-2016.09" ]]; then \
+		yum install -y vendor-*/$(ARCH)/yajl-1*.rpm; \
+		yum install -y vendor-*/$(ARCH)/yajl-devel*.rpm; \
+	fi
 	rpmbuild --define "_source_filedigest_algorithm md5" --define "_sourcedir $$(pwd)" --define "_srcrpmdir $$(pwd)" --define "collectd_version $(VERSION)" --define "build_num $(BUILD_NUM)" -ba stackdriver-agent.spec
 	cp /root/rpmbuild/RPMS/$(ARCH)/stackdriver-agent-*.rpm .
 	mkdir result
@@ -45,34 +50,34 @@ vendor-dirs:
 	rm -f vendor-amzn-2016.09 && ln -s vendor-el6 vendor-amzn-2016.09
 	mkdir -p vendor-el7/x86_64 vendor-el7/src
 
-# download yajl packages for our repo
-# these are from stock centos6
+# Download yajl packages for our repo;
+# These are from stock centos6.
 get-yajl: vendor-dirs
 	pushd vendor-el6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-1.0.7-3.el6.x86_64.rpm
 	pushd vendor-el6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-devel-1.0.7-3.el6.x86_64.rpm
 	pushd vendor-el6/src && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-1.0.7-3.el6.src.rpm
 
-# these are from epel
+# These are from epel.
 get-hiredis: vendor-dirs
 	pushd vendor-el6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/hiredis/x86_64/hiredis-0.10.1-3.el6.x86_64.rpm
 	pushd vendor-el6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/hiredis/x86_64/hiredis-devel-0.10.1-3.el6.x86_64.rpm
 	pushd vendor-el6/src && curl -O http://testrepo.stackdriver.com/vendor/hiredis/x86_64/hiredis-0.10.1-3.el6.src.rpm
 
-# these are from epel
+# These are from epel.
 get-psutil: vendor-dirs
 	pushd vendor-el6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-1.el6.x86_64.rpm
 	pushd vendor-el6/src && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-1.el6.src.rpm
 	pushd vendor-el7/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-3.el7.x86_64.rpm
 	pushd vendor-el7/src && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-3.el7.src.rpm
 
-# these are from epel
+# These are from epel.
 get-netifaces: vendor-dirs
 	pushd vendor-el6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-1.el6.x86_64.rpm
 	pushd vendor-el6/src && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-1.el6.src.rpm
 	pushd vendor-el7/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-4.el7.x86_64.rpm
 	pushd vendor-el7/src && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-4.el7.src.rpm
 
-# download packages which aren't necessarily in base repos
+# Download packages which aren't necessarily in base repos.
 vendor-rpms: get-yajl get-hiredis get-psutil get-netifaces
 
 clean:
