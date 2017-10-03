@@ -1,7 +1,3 @@
-# simple makefile to handle setting up and running
-# the builds of the stackdriver agent on debian-y
-# distributions
-#
 # this assumes it is being built from inside the stackdriver collectd git fork
 SHELL=/bin/bash
 

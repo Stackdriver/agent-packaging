@@ -48,6 +48,7 @@ LoadPlugin stackdriver_agent
   ProcessMatch "all" ".*"
   Detail "ps_vm"
   Detail "ps_cputime"
+  Detail "ps_disk_octets"
 </Plugin>
 
 <Plugin "disk">
@@ -56,6 +57,14 @@ LoadPlugin stackdriver_agent
 
 <Plugin "tcpconns">
   AllPortsSummary true
+</Plugin>
+
+LoadPlugin exec
+# Monitor the Stackdriver Logging agent. This should fail gracefully if for any
+# reason the metrics endpoint for the Logging agent isn't reachable.
+<Plugin "exec">
+  # The script doesn't need any privileges, so run as 'nobody'.
+  Exec "nobody" "/opt/stackdriver/collectd/bin/stackdriver-read_agent_logging" "http://localhost:24231/metrics"
 </Plugin>
 
 LoadPlugin aggregation
@@ -74,7 +83,7 @@ PostCacheChain "PostCache"
   <Rule "processes">
     <Match "regex">
       Plugin "^processes$"
-      Type "^(ps_vm|ps_cputime)$"
+      Type "^(ps_vm|ps_cputime|disk_octets)$"
     </Match>
     <Target "jump">
       Chain "MaybeThrottleProcesses"

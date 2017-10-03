@@ -39,6 +39,7 @@ override_dh_auto_configure:
 	--enable-disk \
 	--enable-load \
 	--enable-logfile \
+	--enable-logging-metrics \
 	--enable-memory \
 	--enable-swap \
 	--enable-syslog \
@@ -69,6 +70,7 @@ override_dh_auto_configure:
 	--with-useragent="stackdriver_agent/$(debian_version)" \
 	--enable-java --with-java=/usr/lib/jvm/default-java \
 	--enable-redis --with-libhiredis \
+	--enable-curl \
 	--enable-curl_json \
 	--enable-mongodb \
 	--enable-varnish \

@@ -1,7 +1,3 @@
-# simplest makefile possible with way too much hardcoded
-# this should hijack more stuff from the fedora package
-# git stuff so that we can get the source files, srpm filename, etc dynamically
-
 source:
 	[ -d collectd-$(VERSION).git ] && rm -rf collectd-$(VERSION).git || true # return true so we don't error out because the test condition fails
 	# this is run from inside our collectd fork so we clone a clean copy to work off of
@@ -18,9 +14,6 @@ vendor:
 		[ -f curl-7.34.0.tar.bz2 ] || curl -O https://curl.haxx.se/download/curl-7.34.0.tar.bz2; \
 		sha1sum -c curl-7.34.0.sha1; \
 	fi
-
-srpm: source vendor
-	rpmbuild --define "_source_filedigest_algorithm md5" --define "_sourcedir $$(pwd)" --define "_srcrpmdir $$(pwd)" --define "collectd_version $(VERSION)" --define "build_num $(BUILD_NUM)" -bs stackdriver-agent.spec
 
 ARCH ?= `uname -m`
 

@@ -170,10 +170,12 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --with-libcurl=%{buildroot}/%{_prefix} \
     --with-python \
     --enable-cpu \
+    --enable-curl \
     --enable-df \
     --enable-disk \
     --enable-load \
     --enable-logfile \
+    --enable-logging-metrics \
     --enable-memory \
     --enable-swap \
     --enable-syslog \
