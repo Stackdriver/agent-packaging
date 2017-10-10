@@ -287,9 +287,11 @@ fi
 %config %{_sysconfdir}/collectd.conf.tmpl
 %config(noreplace) %{_sysconfdir}/collectd.d/
 
+
 %{_bindir}/%{programprefix}collectd-nagios
 %{_bindir}/%{programprefix}collectdctl
 %{_bindir}/%{programprefix}collectd-tg
+%{_bindir}/%{programprefix}read_agent_logging
 %{_sbindir}/%{programprefix}collectd
 %{_sbindir}/%{programprefix}collectdmon
 
