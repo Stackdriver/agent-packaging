@@ -37,6 +37,7 @@ override_dh_auto_configure:
 	--enable-cpu \
 	--enable-df \
 	--enable-disk \
+	--enable-docker \
 	--enable-load \
 	--enable-logfile \
 	--enable-logging-metrics \

@@ -173,6 +173,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-curl \
     --enable-df \
     --enable-disk \
+    --enable-docker \
     --enable-load \
     --enable-logfile \
     --enable-logging-metrics \
