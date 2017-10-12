@@ -69,9 +69,6 @@ get_instance_id () {
         iid=$INSTANCE_ID
     elif [ -r /opt/stackdriver/hostid ]; then
         iid=$(cat /opt/stackdriver/hostid)
-    # RS: Check Rackspace first because we can fail quickly.
-    elif [[ -x /usr/bin/xenstore-read && $(/usr/bin/xenstore-read vm-data/provider_data/provider) = "Rackspace" ]]; then
-        iid=$(/usr/bin/xenstore-read name |sed -e 's/^instance-//')
     elif [ -z "$SKIP_METADATA_CHECKS" ]; then
         # AWS: If we're on EC2, this ought to return the instance id.
         iid=$(curl --silent --connect-timeout 1 -f http://169.254.169.254/latest/meta-data/instance-id 2>/dev/null)
@@ -86,17 +83,6 @@ get_instance_id () {
     fi
 
     echo $iid
-}
-
-get_collectd_endpoint () {
-    for endpoint in collectd-gateway.google.stackdriver.com collectd-gateway.stackdriver.com; do
-        if [[ "200" = $(curl --silent -f -s -w "%{http_code}" --retry 1 -o /dev/null https://${endpoint}/v1/agent-test?stackdriver-apikey=${STACKDRIVER_API_KEY} 2>/dev/null) ]]; then
-            echo $endpoint
-            return
-        fi
-    done
-    echo 'Unable to determine collectd endpoint!' >&2
-    return 1
 }
 
 gen_hostid() {
