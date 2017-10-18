@@ -288,7 +288,6 @@ fi
 %config %{_sysconfdir}/collectd.conf.tmpl
 %config(noreplace) %{_sysconfdir}/collectd.d/
 
-
 %{_bindir}/%{programprefix}collectd-nagios
 %{_bindir}/%{programprefix}collectdctl
 %{_bindir}/%{programprefix}collectd-tg
@@ -341,5 +340,5 @@ fi
 
 
 %changelog
-* Tue Sep 12 2017 Dhrupad Bhardwaj <dhrupad@google.com> 5.5.2-364
+* Mon Oct 16 2017 Dhrupad Bhardwaj <dhrupad@google.com> 5.5.2-372
 - Remove --write-gcm.

@@ -1,6 +1,6 @@
-stackdriver-agent (5.5.2-364) precise trusty xenial wheezy jessie stretch; urgency=low
+stackdriver-agent (5.5.2-372) precise trusty xenial wheezy jessie stretch; urgency=low
 
   * automated build
 
- -- Google Stackdriver <gcm-agent-dev@google.com>  Tue, 12 Sep 2017 18:57:02 +0000
+ -- Google Cloud Monitoring <gcm-agent-dev@google.com>  Mon, 16 Oct 2017 18:57:02 +0000
 
