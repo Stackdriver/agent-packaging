@@ -21,27 +21,27 @@ set -e
 
 case "$1" in
     configure)
-        INSTANCE_SCOPES=""
-        # first, see if the instance has a monitoring.write scope
-        if [ -x /usr/bin/curl ]; then
-            INSTANCE_SCOPES=$(curl --silent --connect-timeout 1 -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/scopes 2>/dev/null || /bin/true)
-        fi
-        if [ `echo $INSTANCE_SCOPES | grep -c monitoring.write` -ge 1 ]; then
-            # don't need to ask for an api key as we'll try to use instance scopes
-            /bin/true
-        # second, see if the application default credential file is in the system location
-        elif [ -f /etc/google/auth/application_default_credentials.json ]; then
-            # don't need to ask for an api key as we'll use application default creds
-            /bin/true
-        else
-        fi
+      # Check if the application default credential file is in the system
+      # location.
+      if [ ! -f /etc/google/auth/application_default_credentials.json ]; then
+          # See if the instance has the correct monitoring scopes.
+          INSTANCE_SCOPES=""
+          if [ -x /usr/bin/curl ]; then
+              INSTANCE_SCOPES=$(curl --silent --connect-timeout 1 -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/scopes 2>/dev/null || /bin/true)
+          fi
+          if [ `echo $INSTANCE_SCOPES | grep -cE '(monitoring.write|monitoring|cloud-platform)'` -lt 1 ]; then
+              echo "The instance has neither the application default" \
+                "credentials file nor the correct monitoring scopes;" \
+                "The agent will likely fail." >&2
+          fi
+      fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
     ;;
 
     *)
-        echo "postinst called with unknown argument \`$1'" >&2
+        echo "Postinst called with unknown argument \`$1'" >&2
         exit 1
     ;;
 esac

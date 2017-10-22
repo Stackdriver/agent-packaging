@@ -3,9 +3,9 @@ AUTOGENERATE_COLLECTD_CONFIG="yes"
 # Default the agent to use write_gcm to send metrics.
 DETECT_GCM="yes"
 
-# url to a proxy for outbound https
+# Url to a proxy for outbound https.
 PROXY_URL=""
 
-# the location of the java libraries, for the java plugin
-# substitute the location where libjvm.so can be found
+# The location of the java libraries, for the java plugin.
+# Substitute the location where libjvm.so can be found.
 #JAVA_LIB_DIR="/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server"

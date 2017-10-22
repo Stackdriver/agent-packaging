@@ -33,9 +33,7 @@
 %if 0%{?rhel} >= 7
 %define curl_version 7.52.1
 %define docker_flag --enable-docker
-%endif
-
-%if 0%{?rhel} <= 6
+%else
 %define curl_version 7.34.0
 %define java_version 1.6.0
 %endif
@@ -173,7 +171,6 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-curl \
     --enable-df \
     --enable-disk \
-    --enable-docker \
     --enable-load \
     --enable-logfile \
     --enable-logging-metrics \
@@ -211,6 +208,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     %{mongo_flag} \
     %{varnish_flag} \
     %{gcm_flag} \
+    %{docker_flag} \
     --enable-debug
 
 %{__make} %{?_smp_mflags}
@@ -341,4 +339,4 @@ fi
 
 %changelog
 * Mon Oct 16 2017 Dhrupad Bhardwaj <dhrupad@google.com> 5.5.2-372
-- Remove --write-gcm.
+- Make --write-gcm the default.

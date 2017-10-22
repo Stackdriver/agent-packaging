@@ -17,7 +17,7 @@ MYSQL=libmysqlclient18
 endif
 
 ifeq ($(DISTRO),xenial)
-	DOCKER_FLAG="--enable-docker"
+DOCKER_FLAG="--enable-docker"
 endif
 
 CFLAGS = -g
@@ -37,7 +37,6 @@ override_dh_auto_configure:
 	--enable-cpu \
 	--enable-df \
 	--enable-disk \
-	--enable-docker \
 	--enable-load \
 	--enable-logfile \
 	--enable-logging-metrics \
