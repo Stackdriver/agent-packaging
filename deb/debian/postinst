@@ -21,18 +21,15 @@ set -e
 
 case "$1" in
     configure)
-      # Check if the application default credential file is in the system
+      # Check if the application default credentials file is in the system
       # location.
       if [ ! -f /etc/google/auth/application_default_credentials.json ]; then
           # See if the instance has the correct monitoring scopes.
-          INSTANCE_SCOPES=""
-          if [ -x /usr/bin/curl ]; then
-              INSTANCE_SCOPES=$(curl --silent --connect-timeout 1 -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/scopes 2>/dev/null || /bin/true)
-          fi
-          if [ `echo $INSTANCE_SCOPES | grep -cE '(monitoring.write|monitoring|cloud-platform)'` -lt 1 ]; then
-              echo "The instance has neither the application default" \
+          INSTANCE_SCOPES=$(curl --silent --connect-timeout 1 -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/scopes 2>/dev/null || /bin/true)
+          if [ `echo $INSTANCE_SCOPES | grep -cE '(monitoring.write|monitoring|cloud-platform)$'` -lt 1 ]; then
+              echo >&2 "The instance has neither the application default" \
                 "credentials file nor the correct monitoring scopes;" \
-                "The agent will likely fail." >&2
+                "The agent will likely fail."
           fi
       fi
     ;;
@@ -41,7 +38,7 @@ case "$1" in
     ;;
 
     *)
-        echo "Postinst called with unknown argument \`$1'" >&2
+        echo "postinst called with unknown argument \`$1'" >&2
         exit 1
     ;;
 esac

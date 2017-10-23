@@ -70,11 +70,12 @@ get_instance_id () {
     elif [ -r /opt/stackdriver/hostid ]; then
         iid=$(cat /opt/stackdriver/hostid)
     elif [ -z "$SKIP_METADATA_CHECKS" ]; then
-        # AWS: If we're on EC2, this ought to return the instance id.
-        iid=$(curl --silent --connect-timeout 1 -f http://169.254.169.254/latest/meta-data/instance-id 2>/dev/null)
+        # GCP: If we're running on GCE, this will return the instance ID.
+        iid=$(curl --silent --connect-timeout 1 -f -H 'Metadata-Flavor: Google' http://169.254.169.254/computeMetadata/v1/instance/id 2>/dev/null)
         if [ -z "$iid" ]; then
-            # that failed.  let's try to see if it looks like we're on GCE
-            iid=$(curl --silent --connect-timeout 1 -f -H 'Metadata-Flavor: Google' http://169.254.169.254/computeMetadata/v1/instance/id 2>/dev/null)
+          # Not running on GCE. Checking AWS.
+          # AWS: If we're on EC2, this ought to return the instance id.
+          iid=$(curl --silent --connect-timeout 1 -f http://169.254.169.254/latest/meta-data/instance-id 2>/dev/null)
         fi
     elif [ -r /sys/hypervisor/uuid -a $(cat /sys/hypervisor/version/extra |grep -c amazon) -eq 0 ]; then
         iid=$(cat /sys/hypervisor/uuid)

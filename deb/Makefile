@@ -12,7 +12,7 @@ srcpkg: source debian/rules
 	tar -xf stackdriver-agent_$(VERSION).orig.tar.gz
 	pushd collectd-$(VERSION) ; \
 	cp -r ../debian . ; \
-	DEBEMAIL="gcm-agent-dev@google.com" DEBFULLNAME="Stackdriver Agents" dch --package stackdriver-agent --distribution $(DISTRO) -v $(VERSION)-$(BUILD_NUM).$(DISTRO) "Automated build" ; \
+	DEBEMAIL="stackdriver-agents@google.com" DEBFULLNAME="Stackdriver Agents" dch --package stackdriver-agent --distribution $(DISTRO) -v $(VERSION)-$(BUILD_NUM).$(DISTRO) "Automated build" ; \
 	cat debian/changelog ; \
 	pushd debian ; \
 	if [ -f controls/control.$(DISTRO) ]; then cp controls/control.$(DISTRO) control ; else cp controls/control.base control ; fi ; \

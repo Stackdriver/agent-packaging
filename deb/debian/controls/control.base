@@ -1,5 +1,5 @@
 Source: stackdriver-agent
-Maintainer: Google Cloud Monitoring <gcm-agent-dev@google.com>
+Maintainer: Google Cloud Monitoring <stackdriver-engineering@google.com>
 Section: misc
 Priority: optional
 Standards-Version: 3.9.2

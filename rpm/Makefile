@@ -33,37 +33,37 @@ build: source vendor vendor-rpms
 
 OUTPUT_DIR ?= result
 vendor-dirs:
-	mkdir -p vendor-el-6/x86_64 vendor-el-6/src
+	mkdir -p vendor-epel-6/x86_64 vendor-epel-6/src
 	# Amazon Linux 2016.09 can use el6 packages.
-	rm -f vendor-amzn-2016.09 && ln -s vendor-el-6 vendor-amzn-2016.09
-	mkdir -p vendor-el-7/x86_64 vendor-el-7/src
+	rm -f vendor-amzn-2016.09 && ln -s vendor-epel-6 vendor-amzn-2016.09
+	mkdir -p vendor-epel-7/x86_64 vendor-epel-7/src
 
 # Download yajl packages for our repo;
 # These are from stock centos6.
 get-yajl: vendor-dirs
-	pushd vendor-el-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-1.0.7-3.el6.x86_64.rpm
-	pushd vendor-el-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-devel-1.0.7-3.el6.x86_64.rpm
-	pushd vendor-el-6/src && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-1.0.7-3.el6.src.rpm
+	pushd vendor-epel-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-1.0.7-3.el6.x86_64.rpm
+	pushd vendor-epel-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-devel-1.0.7-3.el6.x86_64.rpm
+	pushd vendor-epel-6/src && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-1.0.7-3.el6.src.rpm
 
 # These are from epel.
 get-hiredis: vendor-dirs
-	pushd vendor-el-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/hiredis/x86_64/hiredis-0.10.1-3.el6.x86_64.rpm
-	pushd vendor-el-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/hiredis/x86_64/hiredis-devel-0.10.1-3.el6.x86_64.rpm
-	pushd vendor-el-6/src && curl -O http://testrepo.stackdriver.com/vendor/hiredis/x86_64/hiredis-0.10.1-3.el6.src.rpm
+	pushd vendor-epel-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/hiredis/x86_64/hiredis-0.10.1-3.el6.x86_64.rpm
+	pushd vendor-epel-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/hiredis/x86_64/hiredis-devel-0.10.1-3.el6.x86_64.rpm
+	pushd vendor-epel-6/src && curl -O http://testrepo.stackdriver.com/vendor/hiredis/x86_64/hiredis-0.10.1-3.el6.src.rpm
 
 # These are from epel.
 get-psutil: vendor-dirs
-	pushd vendor-el-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-1.el6.x86_64.rpm
-	pushd vendor-el-6/src && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-1.el6.src.rpm
-	pushd vendor-el-7/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-3.el7.x86_64.rpm
-	pushd vendor-el-7/src && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-3.el7.src.rpm
+	pushd vendor-epel-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-1.el6.x86_64.rpm
+	pushd vendor-epel-6/src && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-1.el6.src.rpm
+	pushd vendor-epel-7/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-3.el7.x86_64.rpm
+	pushd vendor-epel-7/src && curl -O http://testrepo.stackdriver.com/vendor/psutil/python-psutil-0.6.1-3.el7.src.rpm
 
 # These are from epel.
 get-netifaces: vendor-dirs
-	pushd vendor-el-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-1.el6.x86_64.rpm
-	pushd vendor-el-6/src && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-1.el6.src.rpm
-	pushd vendor-el-7/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-4.el7.x86_64.rpm
-	pushd vendor-el-7/src && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-4.el7.src.rpm
+	pushd vendor-epel-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-1.el6.x86_64.rpm
+	pushd vendor-epel-6/src && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-1.el6.src.rpm
+	pushd vendor-epel-7/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-4.el7.x86_64.rpm
+	pushd vendor-epel-7/src && curl -O http://testrepo.stackdriver.com/vendor/netifaces/python-netifaces-0.5-4.el7.src.rpm
 
 # Download packages which aren't necessarily in base repos.
 vendor-rpms: get-yajl get-hiredis get-psutil get-netifaces
