@@ -1,8 +1,5 @@
-# Whether or not to autogenerate the stackdriver collectd config file.
+# Whether or not to autogenerate the Stackdriver collectd config file.
 AUTOGENERATE_COLLECTD_CONFIG="yes"
-
-# Default the agent to use write_gcm to send metrics.
-DETECT_GCM="yes"
 
 # URL to a proxy for outbound https.
 PROXY_URL=""

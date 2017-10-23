@@ -20,9 +20,8 @@ ARCH ?= `uname -m`
 
 build: source vendor vendor-rpms
 	rm -rf result
-	# This doesn't downgrade a higher version of hiredis if the package is already installed.
 	if [[ $(DISTRO) != "epel-7" ]]; then \
-		yum install -y vendor-$(DISTRO)/$(ARCH)/hiredis*-0.10.1-3.*.rpm; \
+	  yum install -y vendor-$(DISTRO)/$(ARCH)/hiredis*-0.10.1-3.*.rpm; \
 	fi
 	if [[ "$(DISTRO)" == "amzn-2016.09" ]]; then \
 	  # Stagger installs as libyajl needs to be installed before yajl-devel. \
@@ -41,8 +40,8 @@ vendor-dirs:
 	mkdir -p vendor-epel-7/x86_64 vendor-epel-7/src
 
 # Download yajl packages for our repo;
-# These are from stock centos6.
 # TODO(dhrupadb): See if all these downloads are necessary now that we are not building our own repo.
+# These are from stock centos6.
 get-yajl: vendor-dirs
 	pushd vendor-epel-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-1.0.7-3.el6.x86_64.rpm
 	pushd vendor-epel-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-devel-1.0.7-3.el6.x86_64.rpm

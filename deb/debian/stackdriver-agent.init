@@ -106,7 +106,7 @@ gen_hostid() {
 }
 
 # return:
-#   0 if config can be generated successfully.
+#   0 if config was generated successfully.
 #   1 if there is a authentication or permissions error.
 gen_config() {
     if [ "$AUTOGENERATE_COLLECTD_CONFIG" = "no" ]; then
@@ -128,7 +128,7 @@ gen_config() {
         fi
     else
       log_progress_msg "Sufficient authentication scope found to talk to the" \
-        "GCM API."
+        "Stackdriver Monitoring API."
     fi
 
     echo "$AUTOGENERATE_HEADER" > $CONFIGFILE
