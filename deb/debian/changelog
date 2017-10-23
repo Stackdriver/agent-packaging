@@ -2,5 +2,5 @@ stackdriver-agent (5.5.2-372) precise trusty xenial wheezy jessie stretch; urgen
 
   * automated build
 
- -- Google Cloud Monitoring <gcm-agent-dev@google.com>  Mon, 16 Oct 2017 18:57:02 +0000
+ -- Stackdriver Agents <stackdriver-agents@google.com>  Mon, 16 Oct 2017 18:57:02 +0000
 

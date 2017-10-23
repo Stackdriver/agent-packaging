@@ -1,3 +1,4 @@
+# Whether or not to autogenerate the stackdriver collectd config file.
 AUTOGENERATE_COLLECTD_CONFIG="yes"
 
 # Default the agent to use write_gcm to send metrics.

@@ -92,24 +92,41 @@ gen_hostid() {
     return 0
 }
 
+# return:
+#   0 if config can be generated successfully.
+#   1 if there is a authentication or permissions error.
 gen_config() {
     if [ "$AUTOGENERATE_COLLECTD_CONFIG" = "no" ]; then
         return
     fi
-
     AUTOGENERATE_HEADER="# NOTE: This file is auto-generated and will be overwritten unless you set
 #     AUTOGENERATE_COLLECTD_CONFIG=\"no\"
 # in /etc/sysconfig/stackdriver
 "
+    # Check if the application default credentials file is in the system
+    # location.
+    if [ ! -f /etc/google/auth/application_default_credentials.json ]; then
+        # See if the instance has the correct monitoring scopes.
+        INSTANCE_SCOPES=$(curl --silent --connect-timeout 1 -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/scopes 2>/dev/null || /bin/true)
+        if [ `echo $INSTANCE_SCOPES | grep -cE '(monitoring.write|monitoring|cloud-platform)$'` -lt 1 ]; then
+            log_failure_msg "The instance has neither the application default" \
+              "credentials file nor the correct monitoring scopes; Exiting."
+            return 1
+        fi
+    else
+      log_progress_msg "Sufficient authentication scope found to talk to the" \
+        "GCM API."
+    fi
+
+    echo "$AUTOGENERATE_HEADER" > $CONFIGFILE
     local IID=$(get_instance_id)
     if [ -z "$IID" ]; then
-        echo "Unable to discover instance id" >&2
-    return 1
+        log_warning_msg "Unable to discover instance id. Exiting."
+    else
+      echo "Hostname \"$IID\"" >> $CONFIGFILE
     fi
-    echo "$AUTOGENERATE_HEADER" > $CONFIG
-    echo "Hostname \"$IID\"" >> $CONFIG
-    cat $CONFIG_TEMPLATE >> $CONFIG
-    return
+    cat $CONFIG_TEMPLATE >> $CONFIGFILE
+    return 0
 }
 
 start () {

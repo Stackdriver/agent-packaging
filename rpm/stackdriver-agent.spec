@@ -303,6 +303,7 @@ fi
 %{_libdir}/libcollectdclient.so
 %{_libdir}/libcollectdclient.so.1
 %{_libdir}/libcollectdclient.so.1.0.0
+%{_libdir}/pkgconfig/libcollectdclient.pc
 %{_includedir}/collectd/client.h
 %{_includedir}/collectd/lcc_features.h
 %{_includedir}/collectd/network.h
@@ -338,5 +339,5 @@ fi
 
 
 %changelog
-* Mon Oct 16 2017 Dhrupad Bhardwaj <dhrupad@google.com> 5.5.2-372
+* Mon Oct 16 2017 Stackdriver Agents <stackdriver-agents@google.com> 5.5.2-372
 - Make --write-gcm the default.

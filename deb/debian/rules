@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 SHELL=/bin/bash
-ARCH := $(shell cat ~/.build_arch)
+ARCH := $(shell uname -m)
 DISTRO=$(shell lsb_release -a 2>/dev/null |grep Codename |awk {'printf $$2;'})
 debian_version := $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
 
