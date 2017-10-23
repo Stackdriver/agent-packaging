@@ -42,6 +42,7 @@ vendor-dirs:
 
 # Download yajl packages for our repo;
 # These are from stock centos6.
+# TODO(dhrupadb): See if all these downloads are necessary now that we are not building our own repo.
 get-yajl: vendor-dirs
 	pushd vendor-epel-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-1.0.7-3.el6.x86_64.rpm
 	pushd vendor-epel-6/x86_64 && curl -O http://testrepo.stackdriver.com/vendor/yajl/x86_64/yajl-devel-1.0.7-3.el6.x86_64.rpm
