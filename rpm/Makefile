@@ -25,7 +25,7 @@ build: source vendor vendor-rpms
 		yum install -y vendor-$(DISTRO)/$(ARCH)/hiredis*-0.10.1-3.*.rpm; \
 	fi
 	if [[ "$(DISTRO)" == "amzn-2016.09" ]]; then \
-	  # Stagger installs as libyajl needs to be installed before yajl-devel.
+	  # Stagger installs as libyajl needs to be installed before yajl-devel. \
 	  yum install -y vendor-$(DISTRO)/$(ARCH)/yajl-1*.rpm; \
 	  yum install -y vendor-$(DISTRO)/$(ARCH)/yajl-devel*.rpm; \
 	fi
