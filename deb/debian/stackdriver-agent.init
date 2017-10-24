@@ -127,8 +127,8 @@ gen_config() {
             return 1
         fi
     else
-      log_progress_msg "Sufficient authentication scope found to talk to the" \
-        "Stackdriver Monitoring API."
+        log_progress_msg "Sufficient authentication scope found to talk to the" \
+          "Stackdriver Monitoring API."
     fi
 
     echo "$AUTOGENERATE_HEADER" > $CONFIGFILE
@@ -136,7 +136,7 @@ gen_config() {
     if [ -z "$IID" ]; then
         log_warning_msg "Unable to discover instance id. Exiting."
     else
-      echo "Hostname \"$IID\"" >> $CONFIGFILE
+        echo "Hostname \"$IID\"" >> $CONFIGFILE
     fi
     cat $CONFIG_TEMPLATE >> $CONFIGFILE
     return 0
