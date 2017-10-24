@@ -202,13 +202,13 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-match_throttle_metadata_keys \
     --enable-write_log \
     --with-useragent="stackdriver_agent/%{version}-%{release}" \
+    %{docker_flag} \
     %{java_flag} \
     %{redis_flag} \
     %{curl_json_flag} \
     %{mongo_flag} \
     %{varnish_flag} \
     %{gcm_flag} \
-    %{docker_flag} \
     --enable-debug
 
 %{__make} %{?_smp_mflags}
