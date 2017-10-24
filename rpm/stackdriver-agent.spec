@@ -28,6 +28,7 @@
 %define varnish 1
 %define java_plugin 1
 %define dep_filter 1
+%define docker_flag --disable-docker
 %endif
 
 %if 0%{?rhel} >= 7
@@ -45,6 +46,7 @@
 %define varnish 1
 %define java_plugin 1
 %define dep_filter 1
+%define docker_flag --disable-docker
 %endif
 
 %if %{has_hiredis}
