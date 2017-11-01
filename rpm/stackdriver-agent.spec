@@ -13,6 +13,7 @@
 %define _initddir /etc/rc.d/init.d
 
 # some things that we enable or not based on distro version
+%define docker_flag --disable-docker
 %define has_yajl 0
 %define has_hiredis 0
 %define mongo 0
@@ -28,7 +29,6 @@
 %define varnish 1
 %define java_plugin 1
 %define dep_filter 1
-%define docker_flag --disable-docker
 %endif
 
 %if 0%{?rhel} >= 7
@@ -46,7 +46,6 @@
 %define varnish 1
 %define java_plugin 1
 %define dep_filter 1
-%define docker_flag --disable-docker
 %endif
 
 %if %{has_hiredis}
