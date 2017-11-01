@@ -167,7 +167,6 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --with-libiptc \
     --with-libmongoc=own \
     --with-libcurl=%{buildroot}/%{_prefix} \
-    --with-python \
     --enable-cpu \
     --enable-curl \
     --enable-df \
@@ -190,6 +189,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-postgresql \
     --enable-plugin_mem \
     --enable-processes \
+    --enable-python \
     --enable-ntpd \
     --enable-nfs \
     --enable-zookeeper \
