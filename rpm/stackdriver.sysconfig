@@ -1,0 +1,9 @@
+# Whether or not to autogenerate the Stackdriver collectd config file.
+AUTOGENERATE_COLLECTD_CONFIG="yes"
+
+# URL to a proxy for outbound https.
+PROXY_URL=""
+
+# The location of the Java libraries, for the java plugin.
+# Substitute the location where libjvm.so can be found.
+#JAVA_LIB_DIR="/usr/lib/jvm/jre-1.8.0-openjdk.x86_64/lib/amd64/server"
