@@ -108,7 +108,7 @@ gen_config() {
     if [ ! -f /etc/google/auth/application_default_credentials.json ]; then
         # See if the instance has the correct monitoring scopes.
         INSTANCE_SCOPES=$(curl --silent --connect-timeout 1 -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/scopes 2>/dev/null || /bin/true)
-        if [ `echo $INSTANCE_SCOPES | grep -cE '(monitoring.write|monitoring|cloud-platform)$'` -lt 1 ]; then
+        if [ `echo "$INSTANCE_SCOPES" | grep -cE '(monitoring.write|monitoring|cloud-platform)$'` -lt 1 ]; then
             log_failure_msg "The instance has neither the application default" \
               "credentials file nor the correct monitoring scopes; Exiting."
             return 1
@@ -118,14 +118,14 @@ gen_config() {
           "Stackdriver Monitoring API."
     fi
 
-    echo "$AUTOGENERATE_HEADER" > $CONFIGFILE
+    echo "$AUTOGENERATE_HEADER" > $CONFIG
     local IID=$(get_instance_id)
     if [ -z "$IID" ]; then
         log_warning_msg "Unable to discover instance id. Exiting."
     else
-        echo "Hostname \"$IID\"" >> $CONFIGFILE
+        echo "Hostname \"$IID\"" >> $CONFIG
     fi
-    cat $CONFIG_TEMPLATE >> $CONFIGFILE
+    cat $CONFIG_TEMPLATE >> $CONFIG
     return 0
 }
 

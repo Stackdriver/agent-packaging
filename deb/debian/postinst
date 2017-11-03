@@ -26,7 +26,7 @@ case "$1" in
       if [ ! -f /etc/google/auth/application_default_credentials.json ]; then
           # See if the instance has the correct monitoring scopes.
           INSTANCE_SCOPES=$(curl --silent --connect-timeout 1 -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/scopes 2>/dev/null || /bin/true)
-          if [ `echo $INSTANCE_SCOPES | grep -cE '(monitoring.write|monitoring|cloud-platform)$'` -lt 1 ]; then
+          if [ `echo "$INSTANCE_SCOPES" | grep -cE '(monitoring.write|monitoring|cloud-platform)$'` -lt 1 ]; then
               echo >&2 "The instance has neither the application default" \
                 "credentials file nor the correct monitoring scopes;" \
                 "The agent will likely fail."
