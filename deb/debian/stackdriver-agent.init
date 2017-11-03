@@ -30,7 +30,7 @@ DESC="Stackdriver metrics collection agent"
 NAME=stackdriver-agent
 DAEMON=/opt/stackdriver/collectd/sbin/stackdriver-collectd
 
-CONFIGFILE=/opt/stackdriver/collectd/etc/collectd.conf
+CONFIG=/opt/stackdriver/collectd/etc/collectd.conf
 CONFIG_TEMPLATE=/opt/stackdriver/collectd/etc/collectd.conf.tmpl
 _PIDFILE=/var/run/stackdriver-agent.pid
 
@@ -121,7 +121,7 @@ gen_config() {
     if [ ! -f /etc/google/auth/application_default_credentials.json ]; then
         # See if the instance has the correct monitoring scopes.
         INSTANCE_SCOPES=$(curl --silent --connect-timeout 1 -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/scopes 2>/dev/null || /bin/true)
-        if [ `echo $INSTANCE_SCOPES | grep -cE '(monitoring.write|monitoring|cloud-platform)$'` -lt 1 ]; then
+        if [ `echo "$INSTANCE_SCOPES" | grep -cE '(monitoring.write|monitoring|cloud-platform)$'` -lt 1 ]; then
             log_failure_msg "The instance has neither the application default" \
               "credentials file nor the correct monitoring scopes; Exiting."
             return 1
@@ -131,14 +131,14 @@ gen_config() {
           "Stackdriver Monitoring API."
     fi
 
-    echo "$AUTOGENERATE_HEADER" > $CONFIGFILE
+    echo "$AUTOGENERATE_HEADER" > $CONFIG
     local IID=$(get_instance_id)
     if [ -z "$IID" ]; then
         log_warning_msg "Unable to discover instance id. Exiting."
     else
-        echo "Hostname \"$IID\"" >> $CONFIGFILE
+        echo "Hostname \"$IID\"" >> $CONFIG
     fi
-    cat $CONFIG_TEMPLATE >> $CONFIGFILE
+    cat $CONFIG_TEMPLATE >> $CONFIG
     return 0
 }
 
@@ -147,10 +147,10 @@ gen_config() {
 #   1 if there is a syntax error
 #   2 if there is no configuration
 check_config() {
-    if test ! -e "$CONFIGFILE"; then
+    if test ! -e "$CONFIG"; then
         return 2
     fi
-    if ! $DAEMON -t -C "$CONFIGFILE"; then
+    if ! $DAEMON -t -C "$CONFIG"; then
         return 1
     fi
     return 0
@@ -186,11 +186,11 @@ d_start() {
 
     if test "$USE_COLLECTDMON" == 1; then
         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" start-stop-daemon --start --quiet --oknodo --pidfile "$_PIDFILE" \
-            --exec $COLLECTDMON_DAEMON -- -P "$_PIDFILE" -- -C "$CONFIGFILE" \
+            --exec $COLLECTDMON_DAEMON -- -P "$_PIDFILE" -- -C "$CONFIG" \
             || return 2
     else
         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" start-stop-daemon --start --quiet --oknodo --pidfile "$_PIDFILE" \
-            --exec $DAEMON -- -C "$CONFIGFILE" -P "$_PIDFILE" \
+            --exec $DAEMON -- -C "$CONFIG" -P "$_PIDFILE" \
             || return 2
     fi
     return 0
