@@ -1,0 +1,80 @@
+#!/usr/bin/make -f
+
+SHELL=/bin/bash
+DISTRO=$(shell lsb_release -a 2>/dev/null |grep Codename |awk {'printf $$2;'})
+debian_version := $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
+
+ifeq ($(DISTRO),stretch)
+HIREDIS=libhiredis0.13
+MYSQL=libmariadbclient18
+else ifeq ($(DISTRO),xenial)
+HIREDIS=libhiredis0.13
+MYSQL=libmysqlclient20
+else
+HIREDIS=libhiredis0.10
+MYSQL=libmysqlclient18
+endif
+
+CFLAGS = -g
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	echo "building for $(DISTRO)"
+	autoconf
+	dh_auto_configure -- --prefix=/opt/stackdriver/collectd \
+	--program-prefix=stackdriver- \
+	--disable-all-plugins \
+	--disable-static \
+	--disable-perl --without-libperl  --without-perl-bindings \
+	--with-libmongoc=own \
+	--enable-cpu \
+	--enable-df \
+	--enable-disk \
+	--enable-load \
+	--enable-logfile \
+	--enable-logging-metrics \
+	--enable-memory \
+	--enable-swap \
+	--enable-syslog \
+	--enable-interface \
+	--enable-tcpconns \
+	--enable-write_http \
+	--enable-aggregation \
+	--enable-csv \
+	--enable-nginx \
+	--enable-apache \
+	--enable-memcached \
+	--enable-mysql \
+	--enable-postgresql \
+	--enable-plugin_mem \
+	--enable-processes \
+	--enable-ntpd \
+	--enable-nfs \
+	--enable-zookeeper \
+	--enable-stackdriver_agent \
+	--enable-exec \
+	--enable-tail \
+	--enable-statsd \
+	--enable-network \
+	--enable-match_regex --enable-target_set \
+	--enable-target_replace --enable-target_scale \
+	--enable-match_throttle_metadata_keys \
+	--enable-write_log \
+	--with-useragent="stackdriver_agent/$(debian_version)" \
+	--enable-java --with-java=/usr/lib/jvm/default-java \
+	--enable-redis --with-libhiredis \
+	--enable-curl \
+	--enable-curl_json \
+	--enable-mongodb \
+	--enable-varnish \
+	--enable-write_gcm \
+	--enable-debug
+
+# filter out shlib deps we don't want to force on people
+override_dh_shlibdeps:
+	dh_shlibdeps --dpkg-shlibdeps-params="-x$(MYSQL) -xlibpq5 -x$(HIREDIS) -xlibvarnishapi1"
+
+override_dh_strip:
+	dh_strip --dbg-package=stackdriver-agent

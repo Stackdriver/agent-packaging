@@ -1,0 +1,10 @@
+COMPONENTS="main restricted universe multiverse"
+
+# use the cloudfront mirror for debian
+DEBIAN_MIRROR="cloudfront.debian.net"
+
+if [ "$DIST" == "wheezy" -o "$DIST" == "jessie" ]; then
+    echo "Using a Debian pbuilder environment because DIST is $DIST"
+    COMPONENTS="main contrib non-free"
+    MIRRORSITE="http://$DEBIAN_MIRROR/debian/"
+fi
