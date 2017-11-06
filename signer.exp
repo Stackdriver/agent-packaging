@@ -1,0 +1,13 @@
+#!/usr/bin/expect
+# yay signing with expect. :(
+   
+set rpms [lrange $argv 0 end]
+set rpm_str [join $rpms]
+spawn rpm --macros /usr/lib/rpm/macros:/usr/lib/rpm/%{_target}/macros:/etc/rpm/macros.*:/etc/rpm/macros:/etc/rpm/%{_target}/macros:~/.rpmmacros:macros --define "_gpg_name $env(KEYID)" --resign {*}$rpm_str
+expect -exact "Enter pass phrase: "
+send -- "$env(KEYPASSPHRASE)\r"
+expect eof
+
+# this makes expect return the exit status of 'spawn rpm'.
+catch wait result
+exit [lindex $result 3]
