@@ -200,6 +200,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-target_replace --enable-target_scale \
     --enable-match_throttle_metadata_keys \
     --enable-write_log \
+    --enable-unixsock \
     --with-useragent="stackdriver_agent/%{version}-%{release}" \
     %{java_flag} \
     %{redis_flag} \
