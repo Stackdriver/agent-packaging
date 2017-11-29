@@ -46,9 +46,10 @@ LoadPlugin stackdriver_agent
 
 <Plugin "processes">
   ProcessMatch "all" ".*"
-  Detail "ps_vm"
   Detail "ps_cputime"
   Detail "ps_disk_octets"
+  Detail "ps_rss"
+  Detail "ps_vm"
 </Plugin>
 
 <Plugin "disk">
@@ -83,7 +84,7 @@ PostCacheChain "PostCache"
   <Rule "processes">
     <Match "regex">
       Plugin "^processes$"
-      Type "^(ps_vm|ps_cputime|disk_octets)$"
+      Type "^(ps_cputime|disk_octets|ps_rss|ps_vm)$"
     </Match>
     <Target "jump">
       Chain "MaybeThrottleProcesses"
