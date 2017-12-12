@@ -187,6 +187,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-apache \
     --enable-memcached \
     --enable-mysql \
+    --enable-protocols \
     --enable-postgresql \
     --enable-plugin_mem \
     --enable-processes \
