@@ -52,6 +52,7 @@ override_dh_auto_configure:
 	--enable-apache \
 	--enable-memcached \
 	--enable-mysql \
+	--enable-protocols \
 	--enable-postgresql \
 	--enable-plugin_mem \
 	--enable-processes \
