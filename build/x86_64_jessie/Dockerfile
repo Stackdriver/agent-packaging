@@ -4,10 +4,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y && apt-get install -y \
         autoconf \
         automake \
+        bison \
         debhelper \
-	debian-keyring \
+        debian-keyring \
         default-jdk \
         devscripts \
+        flex \
         gcc \
         git \
         libcurl4-openssl-dev \

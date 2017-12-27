@@ -1,21 +1,29 @@
 FROM centos:6
 
 RUN yum update -y && yum install -y \
-	git \
-	flex \
-	bison \
-	gcc \
 	automake \
-	libtool \
-	libgcrypt-dev \
-	make \
-	rpm-build \
-	rpm-sign \
-	dejavu-sans-fonts \
-	libcurl-devel \
-	openssl-devel \
+	bison \
 	epel-release \
+	expect \
+	flex \
+	gcc \
+	git \
+	java-devel \
+	java-1.6.0-openjdk-devel \
+	libcurl-devel \
+	libtool \
+	make \
+	mysql-devel \
+	openssl-devel \
+	perl-devel \
+	postgresql-devel \
+	python-devel \
+	rpm-build \
+	which \
+	yajl-devel
 
-RUN yum update -y \
-	&& yum install -y mock \
-	&& yum -y clean all
+RUN yum install -y \
+	libgcrypt-devel \
+	perl-ExtUtils-Embed \
+	varnish-libs-devel \
+     && yum -y clean all

@@ -1,22 +1,34 @@
 FROM centos:7
 
 RUN yum update -y && yum install -y \
-	git \
-	flex \
-	bison \
-	gcc \
-	expect \
 	automake \
+	autoconf \
+	bison \
+	epel-release \
+	expect \
+	flex \
+	gcc \
+	git \
+	java-devel \
+	java-1.7.0-openjdk-devel \
+	libcurl-devel \
 	libtool \
-	libgcrypt-dev \
+	libtool-ltdl-devel \
 	make \
+	mysql-devel \
+	openssl-devel \
+	perl-devel \
+	pkg-config \
+	postgresql-devel \
+	python-devel \
 	rpm-build \
 	rpm-sign \
-	dejavu-sans-fonts \
-	libcurl-devel \
-	openssl-devel \
-	epel-release
+	which \
+	yajl-devel
 
-RUN yum update -y \
-	&& yum install -y mock \
-	&& yum -y clean all
+RUN yum install -y \
+	hiredis-devel \
+	libgcrypt-devel \
+	perl-ExtUtils-Embed \
+	varnish-libs-devel \
+     && yum -y clean all

@@ -1,20 +1,24 @@
-FROM i386/ubuntu:xenial
+FROM debian:stretch
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y && apt-get install -y \
         autoconf \
         automake \
+        bison \
         debhelper \
         debian-keyring \
-	default-jdk \
-	devscripts \
+        default-jdk \
+        default-libmysqlclient-dev \
+        devscripts \
+        flex \
         gcc \
         git \
         libcurl4-openssl-dev \
         libhiredis-dev \
         libltdl-dev \
-        libmysqlclient-dev \
         libpq-dev \
+        libpq5 \
+        libssl1.0-dev \
         libtool \
         libvarnishapi-dev \
         libyajl-dev \
