@@ -1,33 +1,33 @@
 FROM amazonlinux:2016.09
 
 RUN yum update -y && yum install -y \
-	git \
-	flex \
-	bison \
-	gcc \
-	automake \
 	autoconf \
+	automake \
+	bison \
+	epel-release \
+	flex \
+	gcc \
+	git \
+	java-devel \
+	java-1.6.0-openjdk-devel \
+	libcurl-devel \
 	libtool \
 	libtool-ltdl-devel \
 	make \
-	rpm-build \
-	libcurl-devel \
-	openssl-devel \
-	epel-release \
-	python-devel \
 	mysql-devel \
-	postgresql-devel \
-	java-1.6.0-openjdk-devel \
-	java-devel \
-	yajl-devel \
+	openssl-devel \
 	perl-devel \
 	pkg-config \
-	which
+	postgresql-devel \
+	python-devel \
+	rpm-build \
+	which \
+	yajl-devel
 
 RUN yum install -y \
 	libgcrypt-devel \
-	varnish-libs-devel \
-	perl-ExtUtils-Embed
+	perl-ExtUtils-Embed \
+	varnish-libs-devel
 
 ADD http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el6/en/x86_64/rpmforge/RPMS/rpm-macros-rpmforge-0-6.el6.rf.noarch.rpm .
 
