@@ -9,7 +9,7 @@ RUN apt-get update -y && apt-get install -y \
         debian-keyring \
         default-jdk \
         devscripts \
-        flez \
+        flex \
         gcc \
         git \
         libcurl4-openssl-dev \
