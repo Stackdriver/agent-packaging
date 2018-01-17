@@ -21,6 +21,7 @@ RUN yum update -y && yum install -y \
 	postgresql-devel \
 	python-devel \
 	rpm-build \
+	rpm-sign \
 	which \
 	yajl-devel
 
