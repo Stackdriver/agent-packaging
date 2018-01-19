@@ -331,7 +331,7 @@ fi
 %if %{bundle_yajl}
 %dir %{_libdir}/yajl/
 %{_libdir}/libyajl.so.1
-%{_libdir/yajl/libyajl.so.1
+%{_libdir}/yajl/libyajl.so.1
 %endif
 
 %if %{java_plugin}
