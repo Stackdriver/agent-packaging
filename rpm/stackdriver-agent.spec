@@ -276,7 +276,7 @@ rm -rf %{buildroot}%{_prefix}/include/curl %{buildroot}%{_prefix}/lib/libcurl*
 %if %{bundle_yajl}
 mkdir -p %{buildroot}%{_libdir}/yajl/
 cp /usr/lib64/libyajl.so.1 %{buildroot}%{_libdir}/yajl/
-cd %{buildroot}%{_libdir} && ln -s yajl/libyajl.so.1 .
+(cd %{buildroot}%{_libdir} && ln -s yajl/libyajl.so.1 .)
 cp /usr/share/doc/yajl-1.0.7/COPYING yajl.COPYING
 %endif
 
