@@ -15,6 +15,7 @@
 # some things that we enable or not based on distro version
 %define docker_flag --disable-docker
 %define has_yajl 0
+%define bundle_yajl 0
 %define has_hiredis 0
 %define mongo 0
 %define varnish 0
@@ -46,6 +47,7 @@
 %define varnish 1
 %define java_plugin 1
 %define dep_filter 1
+%define bundle_yajl 1
 %endif
 
 %if %{has_hiredis}
@@ -110,7 +112,9 @@ BuildRequires: hiredis-devel
 %endif
 %if %{has_yajl}
 BuildRequires: yajl-devel
+%if ! %{bundle_yajl}
 Requires: yajl
+%endif
 %endif
 %if %{mongo}
 BuildRequires: varnish-libs-devel
@@ -269,6 +273,13 @@ rm -rf %{buildroot}%{_prefix}/include/curl %{buildroot}%{_prefix}/lib/libcurl*
 %{__rm} -f %{buildroot}%{_prefix}/man/man5/%{programprefix}collectd-snmp.5*
 %{__rm} -f %{buildroot}%{_prefix}/bin/stackdriver-utils_vl_lookup_test
 
+%if %{bundle_yajl}
+mkdir -p %{buildroot}%{_libdir}/yajl/
+cp /usr/lib64/libyajl.so.1 %{buildroot}%{_libdir}/yajl/
+ln -s -t %{buildroot}%{_libdir} yajl/libyajl.so.1
+cp /usr/share/doc/yajl-1.0.7/COPYING yajl.COPYING
+%endif
+
 %post
 /sbin/ldconfig
 /sbin/chkconfig --add stackdriver-agent
@@ -317,6 +328,12 @@ fi
 %{_libdir}/libmongoc-priv.*
 %{_libdir}/pkgconfig/*
 
+%if %{bundle_yajl}
+%dir %{_libdir}/yajl/
+%{_libdir}/yajl/libyajl.so.1
+%{_libdir}/libyajl.so.1
+%endif
+
 %if %{java_plugin}
 %dir %{_datadir}/collectd/java
 %{_datadir}/collectd/java/collectd-api.jar
@@ -324,6 +341,11 @@ fi
 %endif
 
 %doc AUTHORS ChangeLog COPYING README
+
+%if %{bundle_yajl}
+%doc yajl.COPYING
+%endif
+
 %doc %{_mandir}/man1/%{programprefix}collectd.1*
 %doc %{_mandir}/man1/%{programprefix}collectdctl.1*
 %doc %{_mandir}/man1/%{programprefix}collectd-nagios.1*
