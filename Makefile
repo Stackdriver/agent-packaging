@@ -28,6 +28,9 @@ build: srpm vendor-rpms
 	if [[ $(DISTRO) != "epel-7" ]]; then \
 	    mock --arch $(ARCH) -r $(MOCK_ROOT) --install vendor-*/$(ARCH)/hiredis*-0.10.1-3.*.rpm ; \
 	fi ;
+	if [[ $(DISTRO) == "amzn-2014.03" ]]; then \
+	    mock --arch $(ARCH) -r $(MOCK_ROOT) --install vendor-*/$(ARCH)/yajl*-1.0.7-3.el6.$(ARCH).rpm ; \
+	fi ;
 	mock --arch $(ARCH) -r $(MOCK_ROOT) --no-clean --define "collectd_version $(VERSION)" --define "build_num $(BUILD_NUM)" --resultdir result $$(pwd)/*.src.rpm
 
 OUTPUT_DIR ?= result
