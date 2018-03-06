@@ -86,7 +86,7 @@ Source: collectd-%{version}.tar.gz
 # nss. this avoids problems of nss leaking with libcurl. sigh.
 Source1: curl-%{curl_version}.tar.bz2
 Source200: stackdriver-agent
-Source201: collectd.conf.tmpl
+Source201: collectd.conf
 Source202: stackdriver.sysconfig
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
@@ -234,7 +234,7 @@ popd
 %{__make} install DESTDIR="%{buildroot}"
 
 %{__install} -Dp -m0755 %{SOURCE200} %{buildroot}/%{_initddir}/stackdriver-agent
-%{__install} -Dp -m0644 %{SOURCE201} %{buildroot}%{_sysconfdir}/collectd.conf.tmpl
+%{__install} -Dp -m0644 %{SOURCE201} %{buildroot}%{_sysconfdir}/collectd.conf
 %{__install} -Dp -m0644 %{SOURCE202} %{buildroot}/etc/sysconfig/stackdriver
 
 %{__install} -d -m0755 %{buildroot}/%{_datadir}/collectd/collection3/
@@ -297,7 +297,7 @@ fi
 %files
 %defattr(-, root, root, -)
 %ghost %{_sysconfdir}/collectd.conf
-%config %{_sysconfdir}/collectd.conf.tmpl
+%config %{_sysconfdir}/collectd.conf
 %config(noreplace) %{_sysconfdir}/collectd.d/
 
 %{_bindir}/%{programprefix}collectd-nagios

@@ -31,7 +31,6 @@ NAME=stackdriver-agent
 DAEMON=/opt/stackdriver/collectd/sbin/stackdriver-collectd
 
 CONFIG=/opt/stackdriver/collectd/etc/collectd.conf
-CONFIG_TEMPLATE=/opt/stackdriver/collectd/etc/collectd.conf.tmpl
 _PIDFILE=/var/run/stackdriver-agent.pid
 
 MAXWAIT=30
@@ -74,31 +73,6 @@ if [ -n "$JAVA_LIB_DIR" ]; then
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$JAVA_LIB_DIR"
 fi
 
-get_instance_id () {
-    local iid
-
-    # Allow override of instance id in sysconfig file.
-    if [ -n "$INSTANCE_ID" ]; then
-        iid=$INSTANCE_ID
-    elif [ -r /opt/stackdriver/hostid ]; then
-        iid=$(cat /opt/stackdriver/hostid)
-    elif [ -z "$SKIP_METADATA_CHECKS" ]; then
-        # GCP: If we're running on GCE, this will return the instance ID.
-        iid=$(curl --silent --connect-timeout 1 -f -H 'Metadata-Flavor: Google' http://169.254.169.254/computeMetadata/v1/instance/id 2>/dev/null)
-        if [ -z "$iid" ]; then
-          # Not running on GCE. Checking AWS.
-          # AWS: If we're on EC2, this ought to return the instance id.
-          iid=$(curl --silent --connect-timeout 1 -f http://169.254.169.254/latest/meta-data/instance-id 2>/dev/null)
-        fi
-    elif [ -r /sys/hypervisor/uuid -a $(cat /sys/hypervisor/version/extra |grep -c amazon) -eq 0 ]; then
-        iid=$(cat /sys/hypervisor/uuid)
-    else
-        echo 'Unable to discover an id for this machine!' >&2
-    fi
-
-    echo $iid
-}
-
 gen_hostid() {
     echo "Generating a host id"
     uuidgen > /opt/stackdriver/hostid
@@ -106,16 +80,9 @@ gen_hostid() {
 }
 
 # return:
-#   0 if config was generated successfully.
+#   0 if the instance has the necessary credentials.
 #   1 if there is a authentication or permissions error.
-gen_config() {
-    if [ "$AUTOGENERATE_COLLECTD_CONFIG" = "no" ]; then
-        return 0
-    fi
-    AUTOGENERATE_HEADER="# NOTE: This file is auto-generated and will be overwritten unless you set
-#     AUTOGENERATE_COLLECTD_CONFIG=\"no\"
-# in /etc/default/$NAME
-"
+check_credentials() {
     # Check if the application default credentials file is in the system
     # location.
     if [ ! -f /etc/google/auth/application_default_credentials.json ]; then
@@ -130,15 +97,6 @@ gen_config() {
         log_progress_msg "Sufficient authentication scope found to talk to the" \
           "Stackdriver Monitoring API."
     fi
-
-    echo "$AUTOGENERATE_HEADER" > $CONFIG
-    local IID=$(get_instance_id)
-    if [ -z "$IID" ]; then
-        log_warning_msg "Unable to discover instance id. Exiting."
-    else
-        echo "Hostname \"$IID\"" >> $CONFIG
-    fi
-    cat $CONFIG_TEMPLATE >> $CONFIG
     return 0
 }
 
@@ -179,7 +137,12 @@ d_start() {
         export https_proxy=$PROXY_URL
     fi
 
-    if ! gen_config || ! check_config; then
+    if ! check_credentials || ! check_config; then
+        log_failure_msg "not starting, credentials error"
+        return 3
+    fi
+
+    if ! check_config; then
         log_failure_msg "not starting, configuration error"
         return 3
     fi
