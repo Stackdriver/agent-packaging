@@ -296,7 +296,6 @@ fi
 
 %files
 %defattr(-, root, root, -)
-%ghost %{_sysconfdir}/collectd.conf
 %config %{_sysconfdir}/collectd.conf
 %config(noreplace) %{_sysconfdir}/collectd.d/
 
