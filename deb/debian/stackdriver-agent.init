@@ -137,7 +137,7 @@ d_start() {
         export https_proxy=$PROXY_URL
     fi
 
-    if ! check_credentials || ! check_config; then
+    if ! check_credentials; then
         log_failure_msg "not starting, credentials error"
         return 3
     fi
