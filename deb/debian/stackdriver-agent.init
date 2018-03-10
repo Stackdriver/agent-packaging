@@ -80,9 +80,17 @@ gen_hostid() {
 }
 
 # return:
-#   0 if the instance has the necessary credentials.
-#   1 if there is a authentication or permissions error.
-check_credentials() {
+#   0 if config is fine
+#   1 if there is a syntax error
+#   2 if there is no configuration
+#   3 if the instance doesn't have the necessary permissions
+check_config() {
+    if test ! -e "$CONFIG"; then
+        return 2
+    fi
+    if ! $DAEMON -t -C "$CONFIG"; then
+        return 1
+    fi
     # Check if the application default credentials file is in the system
     # location.
     if [ ! -f /etc/google/auth/application_default_credentials.json ]; then
@@ -91,25 +99,11 @@ check_credentials() {
         if [ `echo "$INSTANCE_SCOPES" | grep -cE '(monitoring.write|monitoring|cloud-platform)$'` -lt 1 ]; then
             log_failure_msg "The instance has neither the application default" \
               "credentials file nor the correct monitoring scopes; Exiting."
-            return 1
+            return 3
         fi
     else
         log_progress_msg "Sufficient authentication scope found to talk to the" \
           "Stackdriver Monitoring API."
-    fi
-    return 0
-}
-
-# return:
-#   0 if config is fine
-#   1 if there is a syntax error
-#   2 if there is no configuration
-check_config() {
-    if test ! -e "$CONFIG"; then
-        return 2
-    fi
-    if ! $DAEMON -t -C "$CONFIG"; then
-        return 1
     fi
     return 0
 }
@@ -137,13 +131,8 @@ d_start() {
         export https_proxy=$PROXY_URL
     fi
 
-    if ! check_credentials; then
-        log_failure_msg "not starting, credentials error"
-        return 3
-    fi
-
     if ! check_config; then
-        log_failure_msg "not starting, configuration error"
+        log_failure_msg "Not starting, configuration/credentials error."
         return 3
     fi
 
