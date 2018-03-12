@@ -1,6 +1,3 @@
-# Whether or not to autogenerate the Stackdriver collectd config file.
-AUTOGENERATE_COLLECTD_CONFIG="yes"
-
 # URL to a proxy for outbound https.
 PROXY_URL=""
 
