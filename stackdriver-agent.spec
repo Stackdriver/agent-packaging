@@ -80,7 +80,7 @@ Source: collectd-%{version}.tar.gz
 %define curl_version 7.34.0
 Source1: curl-%{curl_version}.tar.bz2
 Source200: stackdriver-agent
-Source201: stackdriver-collectd.conf
+Source201: collectd.conf
 Source202: stackdriver.sysconfig
 Source203: stackdriver-collectd-gcm.conf
 BuildRequires: perl(ExtUtils::MakeMaker)
@@ -227,7 +227,7 @@ popd
 %{__make} install DESTDIR="%{buildroot}"
 
 %{__install} -Dp -m0755 %{SOURCE200} %{buildroot}/%{_initddir}/stackdriver-agent
-%{__install} -Dp -m0644 %{SOURCE201} %{buildroot}%{_sysconfdir}/collectd.conf.tmpl
+%{__install} -Dp -m0644 %{SOURCE201} %{buildroot}%{_sysconfdir}/collectd.conf
 %{__install} -Dp -m0644 %{SOURCE202} %{buildroot}/etc/sysconfig/stackdriver
 %{__install} -Dp -m0644 %{SOURCE203} %{buildroot}%{_sysconfdir}/collectd-gcm.conf.tmpl
 
@@ -285,9 +285,7 @@ fi
 
 %files
 %defattr(-, root, root, -)
-%ghost %{_sysconfdir}/collectd.conf
-%config %{_sysconfdir}/collectd.conf.tmpl
-%config %{_sysconfdir}/collectd-gcm.conf.tmpl
+%config %{_sysconfdir}/collectd.conf
 %config(noreplace) %{_sysconfdir}/collectd.d/
 
 %{_bindir}/%{programprefix}collectd-nagios
