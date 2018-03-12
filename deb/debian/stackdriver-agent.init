@@ -83,7 +83,7 @@ gen_hostid() {
 #   0 if config is fine
 #   1 if there is a syntax error
 #   2 if there is no configuration
-#   3 if the instance doesn't have the necessary permissions
+#   3 if the instance doesn't have the necessary credentials
 check_config() {
     if test ! -e "$CONFIG"; then
         return 2
