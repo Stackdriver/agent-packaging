@@ -26,6 +26,7 @@ ARGS=""
 prog="stackdriver-collectd"
 pidfile=/var/run/stackdriver-agent.pid
 CONFIG=/opt/stackdriver/collectd/etc/collectd.conf
+DAEMON=/opt/stackdriver/collectd/sbin/stackdriver-collectd
 
 JAVA_LIB_DIR=""
 
