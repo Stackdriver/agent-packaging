@@ -11,6 +11,7 @@
 %define _sysconfdir %{_prefix}/etc
 %define _mandir %{_prefix}/man
 %define _initddir /etc/rc.d/init.d
+%define _confdir /etc/stackdriver
 
 # some things that we enable or not based on distro version
 %define docker_flag --disable-docker
@@ -234,7 +235,7 @@ popd
 %{__make} install DESTDIR="%{buildroot}"
 
 %{__install} -Dp -m0755 %{SOURCE200} %{buildroot}/%{_initddir}/stackdriver-agent
-%{__install} -Dp -m0644 %{SOURCE201} %{buildroot}%{_sysconfdir}/collectd.conf
+%{__install} -Dp -m0644 %{SOURCE201} %{buildroot}/%{_confdir}/collectd.conf
 %{__install} -Dp -m0644 %{SOURCE202} %{buildroot}/etc/sysconfig/stackdriver
 
 %{__install} -d -m0755 %{buildroot}/%{_datadir}/collectd/collection3/
@@ -296,7 +297,7 @@ fi
 
 %files
 %defattr(-, root, root, -)
-%config %{_sysconfdir}/collectd.conf
+%config %{_confdir}/collectd.conf
 %config(noreplace) %{_sysconfdir}/collectd.d/
 
 %{_bindir}/%{programprefix}collectd-nagios
