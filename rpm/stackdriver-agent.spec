@@ -252,6 +252,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/collectd.d/
 
 # *.la files shouldn't be distributed.
 rm -f %{buildroot}%{_libdir}/{collectd/,}*.la
+rm -f %{buildroot}%{_sysconfdir}/collectd.conf
 rm -f %{buildroot}%{_sysconfdir}/collectd.conf.pkg-orig
 
 # now remove more libcurl stuff that was needed to finish the install
