@@ -134,7 +134,7 @@ gen_config() {
             log_progress_msg "Found sufficient authorization scope for the GCM API"
             USE_GCM_API="yes"
         # second, see if the application default credential file is in the system location
-        elif [ -f /etc/google/auth/application_default_credentials.json ]; then
+        elif [ -f "${GOOGLE_APPLICATION_CREDENTIALS:-/etc/google/auth/application_default_credentials.json}" ]; then
             log_progress_msg "Found a credentials file"
             USE_GCM_API="yes"
         else
