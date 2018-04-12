@@ -20,7 +20,7 @@ ARCHIVE_DIR="/etc/stackdriver/archive"
 
 case "$1" in
     install)
-        ;;
+      ;;
 
     upgrade)
       if [ -f "$OPT_COLLECTD/collectd.conf.tmpl" ]; then
@@ -28,18 +28,18 @@ case "$1" in
         cp "$OPT_COLLECTD/collectd.conf.tmpl" \
           "$ARCHIVE_DIR/collectd.conf.tmpl.old"
       fi
-        ;;
+      ;;
 
     abort-upgrade)
       if [ -f "$OPT_COLLECTD/collectd.conf.tmpl" && -d "$ARCHIVE_DIR" ]; then
           rm -rf "$ARCHIVE_DIR"
       fi
-        ;;
+      ;;
 
     *)
       echo "preinst called with unknown argument \`$1'" >&2
       exit 1
-        ;;
+      ;;
 esac
 
 # dh_installdeb will replace this with shell code automatically
