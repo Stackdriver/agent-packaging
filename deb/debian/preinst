@@ -24,10 +24,7 @@ case "$1" in
 
     upgrade)
       if [ -f "$OPT_COLLECTD/collectd.conf.tmpl" ]; then
-        if [ ! -d "$ARCHIVE_DIR" ]; then
-          mkdir -p "$ARCHIVE_DIR"
-        fi
-
+        [ -d "$ARCHIVE_DIR" ] || mkdir -p "$ARCHIVE_DIR"
         cp "$OPT_COLLECTD/collectd.conf.tmpl" \
           "$ARCHIVE_DIR/collectd.conf.tmpl.old"
       fi
@@ -40,8 +37,8 @@ case "$1" in
         ;;
 
     *)
-        echo "preinst called with unknown argument \`$1'" >&2
-        exit 1
+      echo "preinst called with unknown argument \`$1'" >&2
+      exit 1
         ;;
 esac
 
