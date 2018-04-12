@@ -6,9 +6,10 @@
 
 %define programprefix stackdriver-
 
-# a little unorthodox but let's get basically everything under /opt
+# Everything lives under /opt/ except config files which live in /etc/stackdriver/
 %define _prefix /opt/stackdriver/collectd
 %define _sysconfdir %{_prefix}/etc
+%define _confdir /etc/stackdriver
 %define _mandir %{_prefix}/man
 %define _initddir /etc/rc.d/init.d
 
@@ -234,7 +235,7 @@ popd
 %{__make} install DESTDIR="%{buildroot}"
 
 %{__install} -Dp -m0755 %{SOURCE200} %{buildroot}/%{_initddir}/stackdriver-agent
-%{__install} -Dp -m0644 %{SOURCE201} %{buildroot}%{_sysconfdir}/collectd.conf
+%{__install} -Dp -m0644 %{SOURCE201} %{buildroot}/%{_confdir}/collectd.conf
 %{__install} -Dp -m0644 %{SOURCE202} %{buildroot}/etc/sysconfig/stackdriver
 
 %{__install} -d -m0755 %{buildroot}/%{_datadir}/collectd/collection3/
@@ -248,9 +249,11 @@ find %{buildroot} -name perllocal.pod -exec rm {} \;
 
 # Move config contribs
 mkdir -p %{buildroot}%{_sysconfdir}/collectd.d/
+mkdir -p %{buildroot}%{_confdir}/collectd.d/
 
 # *.la files shouldn't be distributed.
 rm -f %{buildroot}%{_libdir}/{collectd/,}*.la
+rm -f %{buildroot}%{_sysconfdir}/collectd.conf
 rm -f %{buildroot}%{_sysconfdir}/collectd.conf.pkg-orig
 
 # now remove more libcurl stuff that was needed to finish the install
@@ -296,8 +299,9 @@ fi
 
 %files
 %defattr(-, root, root, -)
-%config %{_sysconfdir}/collectd.conf
+%config %{_confdir}/collectd.conf
 %config(noreplace) %{_sysconfdir}/collectd.d/
+%config(noreplace) %{_confdir}/collectd.d/
 
 %{_bindir}/%{programprefix}collectd-nagios
 %{_bindir}/%{programprefix}collectdctl
