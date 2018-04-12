@@ -23,11 +23,11 @@ case "$1" in
         ;;
 
     upgrade)
-      if [ ! -d "$ARCHIVE_DIR" ]; then
-        mkdir -p "$ARCHIVE_DIR"
-      fi
-
       if [ -f "$OPT_COLLECTD/collectd.conf.tmpl" ]; then
+        if [ ! -d "$ARCHIVE_DIR" ]; then
+          mkdir -p "$ARCHIVE_DIR"
+        fi
+
         cp "$OPT_COLLECTD/collectd.conf.tmpl" \
           "$ARCHIVE_DIR/collectd.conf.tmpl.old"
       fi

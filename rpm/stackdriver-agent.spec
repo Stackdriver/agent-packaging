@@ -6,12 +6,12 @@
 
 %define programprefix stackdriver-
 
-# a little unorthodox but let's get basically everything under /opt
+# Everything lives under /opt/ except config files which live in /etc/stackdriver/
 %define _prefix /opt/stackdriver/collectd
 %define _sysconfdir %{_prefix}/etc
+%define _confdir /etc/stackdriver
 %define _mandir %{_prefix}/man
 %define _initddir /etc/rc.d/init.d
-%define _confdir /etc/stackdriver
 
 # some things that we enable or not based on distro version
 %define docker_flag --disable-docker
@@ -300,6 +300,7 @@ fi
 %defattr(-, root, root, -)
 %config %{_confdir}/collectd.conf
 %config(noreplace) %{_sysconfdir}/collectd.d/
+%config(noreplace) %{_confdir}/collectd.d/
 
 %{_bindir}/%{programprefix}collectd-nagios
 %{_bindir}/%{programprefix}collectdctl
