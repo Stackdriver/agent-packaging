@@ -249,6 +249,7 @@ find %{buildroot} -name perllocal.pod -exec rm {} \;
 
 # Move config contribs
 mkdir -p %{buildroot}%{_sysconfdir}/collectd.d/
+mkdir -p %{buildroot}%{_confdir}/collectd.d/
 
 # *.la files shouldn't be distributed.
 rm -f %{buildroot}%{_libdir}/{collectd/,}*.la
