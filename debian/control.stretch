@@ -3,7 +3,7 @@ Maintainer: Stackdriver Engineering <engineering@stackdriver.com>
 Section: misc
 Priority: optional
 Standards-Version: 3.9.2
-Build-Depends: debhelper (>= 7.0.50), libcurl4-openssl-dev, default-libmysqlclient-dev, libpq-dev, libhiredis-dev (>= 0.10.0), autoconf, automake, libssl1.0-dev, libtool, libltdl-dev, libyajl-dev, lsb-release, libvarnishapi-dev, pkg-config, default-jdk
+Build-Depends: debhelper (>= 7.0.50), libcurl4-openssl-dev, default-libmysqlclient-dev, libpq-dev, libhiredis-dev (>= 0.10.0), autoconf, automake, libssl1.0-dev, libtool, libltdl-dev, libyajl-dev, lsb-release, libvarnishapi-dev, pkg-config, default-jdk, python-dev
 
 Package: stackdriver-agent
 Architecture: any
