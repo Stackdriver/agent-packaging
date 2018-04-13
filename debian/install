@@ -1,2 +1,1 @@
-debian/collectd.conf.tmpl opt/stackdriver/collectd/etc/
-debian/collectd-gcm.conf.tmpl opt/stackdriver/collectd/etc/
+debian/collectd.conf etc/stackdriver/
