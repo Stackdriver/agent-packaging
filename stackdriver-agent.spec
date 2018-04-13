@@ -83,7 +83,6 @@ Source1: curl-%{curl_version}.tar.bz2
 Source200: stackdriver-agent
 Source201: collectd.conf
 Source202: stackdriver.sysconfig
-Source203: stackdriver-collectd-gcm.conf
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
 BuildRequires: python-devel
