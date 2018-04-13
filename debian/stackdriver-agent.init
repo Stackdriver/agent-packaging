@@ -134,11 +134,11 @@ d_start() {
 
     if test "$USE_COLLECTDMON" == 1; then
         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" start-stop-daemon --start --quiet --oknodo --pidfile "$_PIDFILE" \
-            --exec $COLLECTDMON_DAEMON -- -P "$_PIDFILE" -- -C "$CONFIGFILE" \
+            --exec $COLLECTDMON_DAEMON -- -P "$_PIDFILE" -- -C "$CONFIG" \
             || return 2
     else
         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" start-stop-daemon --start --quiet --oknodo --pidfile "$_PIDFILE" \
-            --exec $DAEMON -- -C "$CONFIGFILE" -P "$_PIDFILE" \
+            --exec $DAEMON -- -C "$CONFIG" -P "$_PIDFILE" \
             || return 2
     fi
     return 0
