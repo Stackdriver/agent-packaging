@@ -229,7 +229,6 @@ popd
 %{__install} -Dp -m0755 %{SOURCE200} %{buildroot}/%{_initddir}/stackdriver-agent
 %{__install} -Dp -m0644 %{SOURCE201} %{buildroot}/%{_confdir}/collectd.conf
 %{__install} -Dp -m0644 %{SOURCE202} %{buildroot}/etc/sysconfig/stackdriver
-%{__install} -Dp -m0644 %{SOURCE203} %{buildroot}%{_sysconfdir}/collectd-gcm.conf.tmpl
 
 %{__install} -d -m0755 %{buildroot}/%{_datadir}/collectd/collection3/
 
