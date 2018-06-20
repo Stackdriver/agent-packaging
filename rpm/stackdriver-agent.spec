@@ -15,63 +15,7 @@
 
 # some things that we enable or not based on distro version
 %define docker_flag --disable-docker
-%define has_yajl 0
-%define bundle_yajl 0
-%define has_hiredis 0
-%define mongo 0
-%define varnish 0
-%define java_plugin 0
-%define dep_filter 0
-%define java_version 1.7.0
-
-%if 0%{?rhel} >= 6
-%define has_yajl 1
-%define has_hiredis 1
-%define mongo 1
-%define varnish 1
-%define java_plugin 1
-%define dep_filter 1
-%endif
-
-%if 0%{?rhel} >= 7
-%define curl_version 7.52.1
-%define docker_flag --enable-docker
-%else
-%define curl_version 7.34.0
-%define java_version 1.6.0
-%endif
-
-%if 0%{?amzn} >= 1
-%define has_yajl 1
-%define has_hiredis 1
-%define mongo 1
-%define varnish 1
-%define java_plugin 1
-%define dep_filter 1
-%define bundle_yajl 1
-%endif
-
-%if %{has_hiredis}
-%define redis_flag --enable-redis --with-libhiredis
-%endif
-
-%if %{has_yajl}
-%define curl_json_flag --enable-curl_json
-%define gcm_flag --enable-write_gcm
-%endif
-
-%if %{mongo}
-%define mongo_flag  --enable-mongodb
-%endif
-
-%if %{varnish}
-%define varnish_flag --enable-varnish
-%endif
-
-%if %{java_plugin}
-%define java_flag --enable-java --with-java=/usr/lib/jvm/java
-%endif
-
+%define java_version 1_7_0
 
 
 Summary: Stackdriver system metrics collection daemon
@@ -83,43 +27,34 @@ Group: System Environment/Daemons
 URL: http://www.stackdriver.com/
 
 Source: collectd-%{version}.tar.gz
-# embed libcurl so we know it's linked against openssl instead of
-# nss. this avoids problems of nss leaking with libcurl. sigh.
-Source1: curl-%{curl_version}.tar.bz2
 Source200: stackdriver-agent
 Source201: collectd.conf
 Source202: stackdriver.sysconfig
-BuildRequires: perl(ExtUtils::MakeMaker)
-BuildRequires: perl(ExtUtils::Embed)
+#BuildRequires: perl(ExtUtils::MakeMaker)
+#BuildRequires: perl(ExtUtils::Embed)
 BuildRequires: python-devel
 BuildRequires: libgcrypt-devel
-BuildRequires: autoconf, automake
-BuildRequires: mysql-devel
+BuildRequires: flex
+BuildRequires: bison
+BuildRequires: autoconf, automake >= 1.14
+BuildRequires: libtool
+BuildRequires: rpm-build
+BuildRequires: libcurl-devel
+BuildRequires: libyajl-devel
+BuildRequires: postgresql-devel
+BuildRequires: libmysqlclient-devel
 # this is in the main mysql package sometimes but -devel ends up
 # just depending on libs.
 BuildRequires: /usr/bin/mysql_config
-BuildRequires: postgresql-devel
 BuildRequires: git
 BuildRequires: openssl-devel
-
-%if %{java_plugin}
+BuildRequires: hiredis-devel
+BuildRequires: libyajl-devel
 BuildRequires: java-%{java_version}-openjdk-devel
 BuildRequires: java-%{java_version}-openjdk
 BuildRequires: java-devel
-%endif
 
-%if %{has_hiredis}
-BuildRequires: hiredis-devel
-%endif
-%if %{has_yajl}
-BuildRequires: yajl-devel
-%if ! %{bundle_yajl}
 Requires: yajl
-%endif
-%endif
-%if %{mongo}
-BuildRequires: varnish-libs-devel
-%endif
 Requires: curl
 Requires: sed
 Requires(preun): /sbin/chkconfig
@@ -129,19 +64,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %define    _use_internal_dependency_generator 0
 
-# NOTE: this will only work for EL6.  If we want to support EL5, we'll
-# have to do some more work
-%if %{dep_filter}
-%filter_requires_in mysql
-%filter_requires_in postgresql
-%filter_requires_in redis
-%filter_requires_in curl_json
-%filter_requires_in varnish
-%filter_requires_in write_gcm
-%filter_requires_in java
-%filter_setup
-%endif
-
 %description
 The Stackdriver system metrics daemon collects system statistics and
 sends them to the Stackdriver service.
@@ -150,30 +72,20 @@ Currently includes collectd.
 
 %prep
 # update for aarch64
-%setup -q -n collectd-%{version} -a 1
+%setup -q -n collectd-%{version}
 
 %build
-# build libcurl first
-pushd curl-%{curl_version}
-./configure --prefix=%{buildroot}%{_prefix} --with-ssl --disable-threaded-resolver --enable-ipv6 \
-    --with-libidn --disable-shared --enable-static --disable-manual \
-    --with-ca-bundle=/etc/pki/tls/certs/ca-bundle.crt
-%{__make} %{?_smp_mflags}
-%{__make} install
-popd
 export PATH=%{buildroot}/%{_prefix}/bin:$PATH
 
 # install mongo-c-driver into mongodb-mongo-c-driver/build
-%configure CFLAGS="%{optflags} -DLT_LAZY_OR_NOW='RTLD_NOW|RTLD_GLOBAL' -Icurl-%{curl_version}/include" \
+%configure CFLAGS="%{optflags} -DLT_LAZY_OR_NOW='RTLD_NOW|RTLD_GLOBAL'" \
     --program-prefix=stackdriver- \
     --disable-all-plugins \
     --disable-static \
     --disable-perl --without-libperl  --without-perl-bindings \
     --with-libiptc \
     --with-libmongoc=own \
-    --with-libcurl=%{buildroot}/%{_prefix} \
     --enable-cpu \
-    --enable-curl \
     --enable-df \
     --enable-disk \
     --enable-load \
@@ -210,27 +122,23 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-write_log \
     --enable-unixsock \
     --with-useragent="stackdriver_agent/%{version}-%{release}" \
-    %{docker_flag} \
-    %{java_flag} \
-    %{redis_flag} \
-    %{curl_json_flag} \
-    %{mongo_flag} \
-    %{varnish_flag} \
-    %{gcm_flag} \
-    --enable-debug
+    --enable-java --with-java=/usr/lib64/jvm/java \
+    --enable-redis --with-libhiredis \
+    --enable-curl \
+    --enable-curl_json \
+    --enable-mongodb \
+    --enable-varnish \
+    --enable-write_gcm \
+    --enable-debug \
+    %{docker_flag}
+
+#    --with-libcurl=%{buildroot}/%{_prefix} \
 
 %{__make} %{?_smp_mflags}
 
 
 %install
 # we have to reinstall as %%install cleans the buildroot
-pushd curl-%{curl_version}
-%{__make} install
-# now remove things to avoid unpackaged files
-rm -rf %{buildroot}/%{_prefix}/bin %{buildroot}/%{_prefix}/man
-rm -rf %{buildroot}/%{_prefix}/share %{buildroot}/%{_prefix}/lib*/pkgconfig
-popd
-
 %{__rm} -rf contrib/SpamAssassin
 %{__make} install DESTDIR="%{buildroot}"
 
@@ -275,13 +183,6 @@ rm -rf %{buildroot}%{_prefix}/include/curl %{buildroot}%{_prefix}/lib/libcurl*
 %{__rm} -f %{buildroot}%{_prefix}/man/man5/%{programprefix}collectd-perl.5*
 %{__rm} -f %{buildroot}%{_prefix}/man/man5/%{programprefix}collectd-snmp.5*
 %{__rm} -f %{buildroot}%{_prefix}/bin/stackdriver-utils_vl_lookup_test
-
-%if %{bundle_yajl}
-mkdir -p %{buildroot}%{_libdir}/yajl/
-cp /usr/lib64/libyajl.so.1 %{buildroot}%{_libdir}/yajl/
-ln -s -t %{buildroot}%{_libdir} yajl/libyajl.so.1
-cp /usr/share/doc/yajl-1.0.7/COPYING yajl.COPYING
-%endif
 
 %post
 /sbin/ldconfig
@@ -331,23 +232,11 @@ fi
 %{_libdir}/libmongoc-priv.*
 %{_libdir}/pkgconfig/*
 
-%if %{bundle_yajl}
-%dir %{_libdir}/yajl/
-%{_libdir}/yajl/libyajl.so.1
-%{_libdir}/libyajl.so.1
-%endif
-
-%if %{java_plugin}
 %dir %{_datadir}/collectd/java
 %{_datadir}/collectd/java/collectd-api.jar
 %{_datadir}/collectd/java/generic-jmx.jar
-%endif
 
 %doc AUTHORS ChangeLog COPYING README
-
-%if %{bundle_yajl}
-%doc yajl.COPYING
-%endif
 
 %doc %{_mandir}/man1/%{programprefix}collectd.1*
 %doc %{_mandir}/man1/%{programprefix}collectdctl.1*
