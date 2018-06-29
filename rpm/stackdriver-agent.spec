@@ -11,7 +11,7 @@
 %define _sysconfdir %{_prefix}/etc
 %define _confdir /etc/stackdriver
 %define _mandir %{_prefix}/man
-%define _initddir /etc/rc.d/init.d
+%define _initddir /etc/init.d
 
 # some things that we enable or not based on distro version
 %define docker_flag --disable-docker
