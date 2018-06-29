@@ -18,8 +18,7 @@
 # Default-Stop: 0 1 6
 ### END INIT INFO
 
-# Source function library.
-. /etc/init.d/functions
+. /lib/lsb/init-functions
 
 RETVAL=0
 ARGS=""
@@ -116,7 +115,7 @@ start () {
     fi
 
     if [ -r "$CONFIG" ]; then
-        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" daemon /opt/stackdriver/collectd/sbin/stackdriver-collectd -C "$CONFIG" -P "$pidfile"
+        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" start_daemon /opt/stackdriver/collectd/sbin/stackdriver-collectd -C "$CONFIG" -P "$pidfile"
         RETVAL=$?
         echo
         [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$prog
