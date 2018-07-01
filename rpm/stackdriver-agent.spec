@@ -1,6 +1,9 @@
 %global _hardened_build 1
 %global __provides_exclude_from .*/collectd/.*\\.so$
 
+# we expect the distro suffix
+%global dist .sles12
+
 # we have some references to the buildroot in the binaries for the include path
 %define __arch_install_post %{nil}
 
