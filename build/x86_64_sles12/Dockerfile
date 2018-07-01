@@ -6,6 +6,7 @@ RUN zypper addrepo https://download.opensuse.org/repositories/devel:libraries:c_
 	autoconf \
 	automake \
 	bison \
+	expect \
 	flex \
 	gcc \
 	git \
