@@ -51,12 +51,11 @@ BuildRequires: /usr/bin/mysql_config
 BuildRequires: git
 BuildRequires: openssl-devel
 BuildRequires: hiredis-devel
-BuildRequires: libyajl-devel
 BuildRequires: java-%{java_version}-openjdk-devel
 BuildRequires: java-%{java_version}-openjdk
 BuildRequires: java-devel
 
-Requires: yajl
+Requires: libyajl2
 Requires: curl
 Requires: sed
 Requires(preun): /sbin/chkconfig
