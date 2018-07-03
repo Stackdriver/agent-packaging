@@ -1,5 +1,4 @@
 %global _hardened_build 1
-%global __provides_exclude_from .*/collectd/.*\\.so$
 
 # we expect the distro suffix
 %global dist .sles12
@@ -65,7 +64,39 @@ Requires(post): /sbin/chkconfig
 Requires(post): /bin/grep
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
-%define    _use_internal_dependency_generator 0
+%define _use_internal_dependency_generator 0
+
+##### This section has been copied from redhat/macros.
+# prevent anything matching from being scanned for provides
+%define filter_provides_in(P) %{expand: \
+%global __filter_prov_cmd %{?__filter_prov_cmd} %{__grep} -v %{-P} '%*' | \
+}
+
+# prevent anything matching from being scanned for requires
+%define filter_requires_in(P) %{expand: \
+%global __filter_req_cmd %{?__filter_req_cmd} %{__grep} -v %{-P} '%*' | \
+}
+
+# actually set up the filtering bits
+%define filter_setup %{expand: \
+%global _use_internal_dependency_generator 0 \
+%global __deploop() while read FILE; do echo "${FILE}" | /usr/lib/rpm/rpmdeps -%{1}; done | /bin/sort -u \
+%global __find_provides /bin/sh -c "%{?__filter_prov_cmd} %{__deploop P} %{?__filter_from_prov}" \
+%global __find_requires /bin/sh -c "%{?__filter_req_cmd}  %{__deploop R} %{?__filter_from_req}" \
+}
+##### End section
+
+%filter_provides_in .*/collectd/.*\.so$
+
+%filter_requires_in mysql
+%filter_requires_in postgresql
+%filter_requires_in redis
+%filter_requires_in curl_json
+%filter_requires_in varnish
+%filter_requires_in write_gcm
+%filter_requires_in java
+%filter_requires_in python
+%filter_setup
 
 %description
 The Stackdriver system metrics daemon collects system statistics and
