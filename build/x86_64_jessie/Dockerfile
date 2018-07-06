@@ -1,7 +1,8 @@
 FROM debian:jessie
 
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update -y && apt-get install -y \
+RUN apt-get update -y \
+    && apt-get install -y \
         autoconf \
         automake \
         bison \
@@ -23,4 +24,4 @@ RUN apt-get update -y && apt-get install -y \
         make \
         pkg-config \
         python-dev \
-  && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*

@@ -1,6 +1,8 @@
 FROM amazonlinux:2016.09
 
-RUN yum update -y && yum install -y \
+ADD http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el6/en/x86_64/rpmforge/RPMS/rpm-macros-rpmforge-0-6.el6.rf.noarch.rpm .
+RUN yum update -y \
+    && yum install -y \
         autoconf \
         automake \
         bison \
@@ -23,17 +25,12 @@ RUN yum update -y && yum install -y \
         rpm-build \
         rpm-sign \
         which \
-        yajl-devel
-
-RUN yum install -y \
+        yajl-devel \
+    && yum install -y \
         libgcrypt-devel \
         perl-ExtUtils-Embed \
-        varnish-libs-devel
-
-ADD http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el6/en/x86_64/rpmforge/RPMS/rpm-macros-rpmforge-0-6.el6.rf.noarch.rpm .
-
-RUN rpm -Uvh rpm-macros-rpmforge*.rpm \
-        && yum install rpm-macros-rpmforge \
-        && yum -y clean all
-
-RUN sed -i 's/el6/amzn1/' /etc/rpm/macros.rpmforge
+        varnish-libs-devel \
+    && rpm -Uvh rpm-macros-rpmforge*.rpm \
+    && yum install rpm-macros-rpmforge \
+    && yum -y clean all \
+    && sed -i 's/el6/amzn1/' /etc/rpm/macros.rpmforge

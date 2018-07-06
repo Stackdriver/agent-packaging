@@ -1,6 +1,7 @@
 FROM centos:6
 
-RUN yum update -y && yum install -y \
+RUN yum update -y \
+    && yum install -y \
         automake \
         autconf \
         bison \
@@ -21,10 +22,9 @@ RUN yum update -y && yum install -y \
         python-devel \
         rpm-build \
         which \
-        yajl-devel
-
-RUN yum install -y \
+        yajl-devel \
+    && yum install -y \
         libgcrypt-devel \
         perl-ExtUtils-Embed \
         varnish-libs-devel \
-     && yum -y clean all
+    && yum -y clean all

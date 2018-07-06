@@ -1,6 +1,7 @@
 FROM centos:7
 
-RUN yum update -y && yum install -y \
+RUN yum update -y \
+    && yum install -y \
         autoconf \
         automake \
         bison \
@@ -24,11 +25,10 @@ RUN yum update -y && yum install -y \
         rpm-build \
         rpm-sign \
         which \
-        yajl-devel
-
-RUN yum install -y \
+        yajl-devel \
+    && yum install -y \
         hiredis-devel \
         libgcrypt-devel \
         perl-ExtUtils-Embed \
         varnish-libs-devel \
-     && yum -y clean all
+    && yum -y clean all
