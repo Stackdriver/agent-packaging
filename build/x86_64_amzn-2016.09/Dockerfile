@@ -1,8 +1,8 @@
 FROM amazonlinux:2016.09
 
 ADD http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el6/en/x86_64/rpmforge/RPMS/rpm-macros-rpmforge-0-6.el6.rf.noarch.rpm .
-RUN yum update -y \
- && yum install -y \
+RUN yum -y update \
+ && yum -y install \
         autoconf \
         automake \
         bison \

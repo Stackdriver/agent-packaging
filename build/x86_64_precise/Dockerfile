@@ -1,8 +1,8 @@
 FROM ubuntu:precise
 
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update -y \
- && apt-get install -y \
+RUN apt-get -y update \
+ && apt-get -y install \
         autoconf \
         automake \
         bison \
