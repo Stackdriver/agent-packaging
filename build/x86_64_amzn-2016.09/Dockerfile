@@ -2,7 +2,7 @@ FROM amazonlinux:2016.09
 
 ADD http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el6/en/x86_64/rpmforge/RPMS/rpm-macros-rpmforge-0-6.el6.rf.noarch.rpm .
 RUN yum update -y \
-    && yum install -y \
+ && yum install -y \
         autoconf \
         automake \
         bison \
@@ -29,7 +29,7 @@ RUN yum update -y \
         varnish-libs-devel \
         which \
         yajl-devel \
-    && rpm -Uvh rpm-macros-rpmforge*.rpm \
-    && yum install rpm-macros-rpmforge \
-    && sed -i 's/el6/amzn1/' /etc/rpm/macros.rpmforge \
-    && yum -y clean all
+ && rpm -Uvh rpm-macros-rpmforge*.rpm \
+ && yum install rpm-macros-rpmforge \
+ && sed -i 's/el6/amzn1/' /etc/rpm/macros.rpmforge \
+ && yum -y clean all

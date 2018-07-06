@@ -1,7 +1,7 @@
 FROM centos:6
 
 RUN yum update -y \
-    && yum install -y \
+ && yum install -y \
         autoconf \
         automake \
         bison \
@@ -26,4 +26,4 @@ RUN yum update -y \
         varnish-libs-devel \
         which \
         yajl-devel \
-    && yum -y clean all
+ && yum -y clean all
