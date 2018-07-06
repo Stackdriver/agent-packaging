@@ -13,24 +13,23 @@ RUN yum update -y \
         java-devel \
         java-1.6.0-openjdk-devel \
         libcurl-devel \
+        libgcrypt-devel \
         libtool \
         libtool-ltdl-devel \
         make \
         mysql-devel \
         openssl-devel \
         perl-devel \
+        perl-ExtUtils-Embed \
         pkg-config \
         postgresql-devel \
         python-devel \
         rpm-build \
         rpm-sign \
+        varnish-libs-devel \
         which \
         yajl-devel \
-    && yum install -y \
-        libgcrypt-devel \
-        perl-ExtUtils-Embed \
-        varnish-libs-devel \
     && rpm -Uvh rpm-macros-rpmforge*.rpm \
     && yum install rpm-macros-rpmforge \
-    && yum -y clean all \
-    && sed -i 's/el6/amzn1/' /etc/rpm/macros.rpmforge
+    && sed -i 's/el6/amzn1/' /etc/rpm/macros.rpmforge \
+    && yum -y clean all
