@@ -32,8 +32,6 @@ Source: collectd-%{version}.tar.gz
 Source200: stackdriver-agent
 Source201: collectd.conf
 Source202: stackdriver.sysconfig
-#BuildRequires: perl(ExtUtils::MakeMaker)
-#BuildRequires: perl(ExtUtils::Embed)
 BuildRequires: python-devel
 BuildRequires: libgcrypt-devel
 BuildRequires: flex
@@ -164,8 +162,6 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-write_gcm \
     --enable-debug \
     %{docker_flag}
-
-#    --with-libcurl=%{buildroot}/%{_prefix} \
 
 %{__make} %{?_smp_mflags}
 
