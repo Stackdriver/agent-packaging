@@ -88,7 +88,7 @@ check_config() {
     if test ! -e "$CONFIG"; then
         return 2
     fi
-    if ! $DAEMON -t -C "$CONFIG"; then
+    if ! "$DAEMON" -t -C "$CONFIG"; then
         return 1
     fi
     # Check if the application default credentials file is in the system
@@ -142,7 +142,7 @@ d_start() {
             || return 2
     else
         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" start-stop-daemon --start --quiet --oknodo --pidfile "$_PIDFILE" \
-            --exec $DAEMON -- -C "$CONFIG" -P "$_PIDFILE" \
+            --exec "$DAEMON" -- -C "$CONFIG" -P "$_PIDFILE" \
             || return 2
     fi
     return 0
