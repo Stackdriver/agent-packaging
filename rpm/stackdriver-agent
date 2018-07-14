@@ -76,7 +76,7 @@ check_config() {
     if test ! -e "$CONFIG"; then
         return 2
     fi
-    if ! "$DAEMON" -t -C "$CONFIG"; then
+    if ! LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" "$DAEMON" -t -C "$CONFIG"; then
         return 1
     fi
     # Check if the application default credentials file is in the system
