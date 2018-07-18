@@ -4,6 +4,8 @@ SHELL=/bin/bash
 ARCH := $(shell uname -m)
 DISTRO=$(shell lsb_release -a 2>/dev/null |grep Codename |awk {'printf $$2;'})
 debian_version := $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
+ENABLE_MONGO_FLAG="--enable-mongodb"
+WITH_OWN_LIBMONGOC_FLAG="--with-libmongoc=own"
 
 ifeq ($(DISTRO),stretch)
 HIREDIS=libhiredis0.13
@@ -20,6 +22,11 @@ ifeq ($(DISTRO),xenial)
 DOCKER_FLAG="--enable-docker"
 endif
 
+ifeq ($(DISTRO),bionic)
+ENABLE_MONGO_FLAG=""
+WITH_OWN_LIBMONGOC_FLAG="--with-libmongoc=no"
+endif
+
 CFLAGS = -g
 
 %:
@@ -33,7 +40,6 @@ override_dh_auto_configure:
 	--disable-all-plugins \
 	--disable-static \
 	--disable-perl --without-libperl  --without-perl-bindings \
-	--with-libmongoc=own \
 	--enable-cpu \
 	--enable-df \
 	--enable-disk \
@@ -75,11 +81,12 @@ override_dh_auto_configure:
 	--enable-redis --with-libhiredis \
 	--enable-curl \
 	--enable-curl_json \
-	--enable-mongodb \
 	--enable-varnish \
 	--enable-write_gcm \
 	--enable-debug \
-	$(DOCKER_FLAG)
+	$(DOCKER_FLAG) \
+	$(WITH_OWN_LIBMONGOC_FLAG) \
+	$(ENABLE_MONGO_FLAG)
 
 # filter out shlib deps we don't want to force on people
 override_dh_shlibdeps:
