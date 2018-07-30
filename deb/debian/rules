@@ -4,8 +4,7 @@ SHELL=/bin/bash
 ARCH := $(shell uname -m)
 DISTRO=$(shell lsb_release -a 2>/dev/null |grep Codename |awk {'printf $$2;'})
 debian_version := $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
-ENABLE_MONGO_FLAG="--enable-mongodb"
-WITH_OWN_LIBMONGOC_FLAG="--with-libmongoc=own"
+MONGO_FLAG=--enable-mongodb --with-libmongoc=own
 
 ifeq ($(DISTRO),stretch)
 HIREDIS=libhiredis0.13
@@ -23,8 +22,7 @@ DOCKER_FLAG="--enable-docker"
 endif
 
 ifeq ($(DISTRO),bionic)
-ENABLE_MONGO_FLAG=""
-WITH_OWN_LIBMONGOC_FLAG="--with-libmongoc=no"
+MONGO_FLAG=--with-libmongoc=no
 endif
 
 CFLAGS = -g
@@ -85,8 +83,7 @@ override_dh_auto_configure:
 	--enable-write_gcm \
 	--enable-debug \
 	$(DOCKER_FLAG) \
-	$(WITH_OWN_LIBMONGOC_FLAG) \
-	$(ENABLE_MONGO_FLAG)
+	$(MONGO_FLAG)
 
 # filter out shlib deps we don't want to force on people
 override_dh_shlibdeps:
