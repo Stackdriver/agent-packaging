@@ -8,7 +8,7 @@ Build-Depends: autoconf, automake, debhelper (>= 10), default-jdk, libcurl4-open
 Package: stackdriver-agent
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libcurl4, libltdl7, libyajl2
-Suggests: libmysqlclient20, libpq5, libhiredis0.13, default-jre
+Suggests: default-jre, libhiredis0.13, libmysqlclient20, libpq5
 Description: Stackdriver system metrics collection daemon
   The Stackdriver system metrics daemon collects system statistics and
   sends them to the Stackdriver service.
