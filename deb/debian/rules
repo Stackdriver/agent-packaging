@@ -4,7 +4,6 @@ SHELL=/bin/bash
 ARCH := $(shell uname -m)
 DISTRO=$(shell lsb_release -a 2>/dev/null |grep Codename |awk {'printf $$2;'})
 debian_version := $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
-MONGO_FLAG=--enable-mongodb --with-libmongoc=own
 
 ifeq ($(DISTRO),stretch)
 HIREDIS=libhiredis0.13
@@ -21,8 +20,12 @@ ifeq ($(DISTRO),xenial)
 DOCKER_FLAG="--enable-docker"
 endif
 
+# Disable MongoDB plugin for Ubuntu Bionic until the monitoring agent's bundled
+# libmongoc is updated to support OpenSSL 1.1
 ifeq ($(DISTRO),bionic)
-MONGO_FLAG=--with-libmongoc=no
+MONGO_FLAG=--disable-mongodb
+else 
+MONGO_FLAG=--enable-mongodb --with-libmongoc=own
 endif
 
 CFLAGS = -g
