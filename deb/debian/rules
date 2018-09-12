@@ -20,6 +20,14 @@ ifeq ($(DISTRO),xenial)
 DOCKER_FLAG="--enable-docker"
 endif
 
+ifeq ($(DISTRO),bionic)
+# Disable MongoDB plugin for Ubuntu Bionic until the monitoring agent's vendored
+# libmongoc is updated to support OpenSSL 1.1.
+MONGO_FLAG=--disable-mongodb
+else 
+MONGO_FLAG=--enable-mongodb --with-libmongoc=own
+endif
+
 CFLAGS = -g
 
 %:
@@ -33,7 +41,6 @@ override_dh_auto_configure:
 	--disable-all-plugins \
 	--disable-static \
 	--disable-perl --without-libperl  --without-perl-bindings \
-	--with-libmongoc=own \
 	--enable-cpu \
 	--enable-df \
 	--enable-disk \
@@ -75,11 +82,11 @@ override_dh_auto_configure:
 	--enable-redis --with-libhiredis \
 	--enable-curl \
 	--enable-curl_json \
-	--enable-mongodb \
 	--enable-varnish \
 	--enable-write_gcm \
 	--enable-debug \
-	$(DOCKER_FLAG)
+	$(DOCKER_FLAG) \
+	$(MONGO_FLAG)
 
 # filter out shlib deps we don't want to force on people
 override_dh_shlibdeps:
