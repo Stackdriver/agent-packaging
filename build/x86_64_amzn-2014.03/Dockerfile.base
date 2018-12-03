@@ -1,0 +1,15 @@
+FROM centos:6
+
+ADD amzn-2014.03.repo /etc/yum.repos.d/amzn-2014.03.repo
+
+RUN mkdir -p /amzn-2014.03 /amzn-2014.03/var/lib/rpm \
+ && rpm --rebuilddb --root=/amzn-2014.03
+#RUN yum --installroot=/amzn-2014.03 --disablerepo=base --disablerepo=extras --disablerepo=updates install -y basesystem-10.0-4.9.amzn1.noarch
+RUN yum install -y --downloadonly --downloaddir=/ basesystem-10.0-4.9.amzn1.noarch
+#RUN yum --installroot=/amzn-2014.03 localinstall -y /basesystem-10.0-4.9.amzn1.noarch.rpm
+RUN rpm -i --root=/amzn-2014.03 --nodeps /basesystem-10.0-4.9.amzn1.noarch.rpm
+RUN yum --installroot=/amzn-2014.03 --disablerepo=base --disablerepo=extras --disablerepo=updates install -y yum-3.4.3-137.51.amzn1.noarch
+
+ADD amzn-2014.03.repo /amzn-2014.03/etc/yum.repos.d/amzn-2014.03.repo
+
+CMD ["/bin/tar", "-C", "/amzn-2014.03", "-cf", "-", "."]

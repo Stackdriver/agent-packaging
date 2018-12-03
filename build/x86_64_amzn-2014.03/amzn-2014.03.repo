@@ -1,0 +1,12 @@
+[amzn-2014.03-base]
+name=Amazon Linux 2014.03 base
+mirrorlist=http://repo.us-east-1.amazonaws.com/2014.03/main/mirror.list
+mirror_expire=300
+metadata_expire=300
+priority=10
+failovermethod=priority
+fastestmirror_enabled=0
+gpgcheck=0
+enabled=1
+retries=5
+timeout=10
