@@ -21,7 +21,7 @@ RUN yum -y update \
         openssl-devel \
         perl-devel \
         perl-ExtUtils-Embed \
-        pkg-config \
+        pkgconfig \
         postgresql-devel \
         python-devel \
         rpm-build \
