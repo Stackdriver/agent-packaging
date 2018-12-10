@@ -7,9 +7,7 @@ source:
 	# this is run from inside our collectd fork so we clone a clean copy to work off of
 	git clone ../../ collectd-$(VERSION).git
 	pushd collectd-$(VERSION).git ; \
-	if [[ $(DISTRO) == "epel-6" ]]; then \
-	    ./clean.sh && ./build.sh && git commit -a -m "Clean and build" ; \
-	fi ; \
+	./clean.sh && ./build.sh && git commit -a -m "Clean and build" ; \
 	git archive --format tar --prefix=collectd-$(VERSION)/ HEAD | gzip > ../collectd-$(VERSION).tar.gz  ; \
 	popd
 
@@ -28,9 +26,7 @@ ARCH ?= `uname -m`
 
 build: srpm vendor-rpms
 	rm -rf result
-	if [[ $(DISTRO) == "epel-6" ]]; then \
-	    mock --arch $(ARCH) -r $(MOCK_ROOT) --install flex bison ; \
-	fi ;
+	mock --arch $(ARCH) -r $(MOCK_ROOT) --install flex bison ;
 	if [[ $(DISTRO) != "epel-7" ]]; then \
 	    mock --arch $(ARCH) -r $(MOCK_ROOT) --install vendor-*/$(ARCH)/hiredis*-0.10.1-3.*.rpm ; \
 	fi ;
