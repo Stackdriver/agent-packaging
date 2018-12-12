@@ -15,6 +15,7 @@ RUN yum -y update \
         libcurl-devel \
         libgcrypt-devel \
         libtool \
+        libtool-ltdl-devel \
         make \
         mysql-devel \
         openssl-devel \
