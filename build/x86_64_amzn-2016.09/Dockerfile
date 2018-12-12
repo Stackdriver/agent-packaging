@@ -7,6 +7,7 @@ RUN yum -y update \
         autoconf \
         automake \
         bison \
+        expect \
         flex \
         gcc \
         git \
