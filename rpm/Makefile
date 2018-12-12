@@ -3,6 +3,7 @@ source:
 	# this is run from inside our collectd fork so we clone a clean copy to work off of
 	git clone ../../ collectd-$(VERSION).git
 	pushd collectd-$(VERSION).git ; \
+	./clean.sh && ./build.sh && git commit -a -m "Clean and build" ; \
 	git archive --format tar --prefix=collectd-$(VERSION)/ HEAD | gzip > ../collectd-$(VERSION).tar.gz  ; \
 	popd
 
