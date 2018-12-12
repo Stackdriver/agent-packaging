@@ -7,6 +7,7 @@ RUN yum -y update \
         autoconf \
         automake \
         bison \
+        expect \
         flex \
         gcc \
         git \
@@ -32,4 +33,5 @@ RUN yum -y update \
  && rpm -Uvh rpm-macros-rpmforge*.rpm \
  && yum install rpm-macros-rpmforge \
  && sed -i 's/el6/amzn1/' /etc/rpm/macros.rpmforge \
+ && rm /rpm-macros-rpmforge-0-6.el6.rf.noarch.rpm \
  && yum -y clean all
