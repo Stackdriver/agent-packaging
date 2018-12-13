@@ -24,4 +24,5 @@ RUN apt-get -y update \
         lsb-release \
         make \
         pkg-config \
+        python-dev \
  && rm -rf /var/lib/apt/lists/*
