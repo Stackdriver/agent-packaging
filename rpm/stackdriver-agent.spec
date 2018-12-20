@@ -89,6 +89,7 @@ Source1: curl-%{curl_version}.tar.bz2
 Source200: stackdriver-agent
 Source201: collectd.conf
 Source202: stackdriver.sysconfig
+Source203: stack-config
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
 BuildRequires: python-devel
@@ -237,6 +238,7 @@ popd
 %{__install} -Dp -m0755 %{SOURCE200} %{buildroot}/%{_initddir}/stackdriver-agent
 %{__install} -Dp -m0644 %{SOURCE201} %{buildroot}/%{_confdir}/collectd.conf
 %{__install} -Dp -m0644 %{SOURCE202} %{buildroot}/etc/sysconfig/stackdriver
+%{__install} -Dp -m0755 %{SOURCE203} %{buildroot}/opt/stackdriver/stack-config
 
 %{__install} -d -m0755 %{buildroot}/%{_datadir}/collectd/collection3/
 
@@ -365,6 +367,9 @@ fi
 %{_initddir}/stackdriver-agent
 %config(noreplace) /etc/sysconfig/stackdriver
 
+# Backward compatibility.
+%dir /opt/stackdriver
+/opt/stackdriver/stack-config
 
 %changelog
 * Mon Oct 16 2017 Stackdriver Agents <stackdriver-agents@google.com> 5.5.2-372
