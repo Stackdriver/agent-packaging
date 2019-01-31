@@ -21,10 +21,9 @@ DOCKER_FLAG="--enable-docker"
 endif
 
 ifeq ($(DISTRO),bionic)
-# Disable MongoDB plugin for Ubuntu Bionic until the monitoring agent's vendored
-# libmongoc is updated to support OpenSSL 1.1.
-MONGO_FLAG=--disable-mongodb
-else 
+# Use system libmongoc on Ubuntu Bionic.
+MONGO_FLAG=--enable-mongodb --with-libmongoc=yes
+else
 MONGO_FLAG=--enable-mongodb --with-libmongoc=own
 endif
 
