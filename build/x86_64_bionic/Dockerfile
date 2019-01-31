@@ -14,9 +14,11 @@ RUN apt-get update -y \
         flex \
         gcc \
         git \
+        libbson-dev \
         libcurl4-openssl-dev \
         libhiredis-dev \
         libltdl-dev \
+        libmongoc-dev \
         libmysqlclient-dev \
         libpq-dev \
         libssl-dev \
