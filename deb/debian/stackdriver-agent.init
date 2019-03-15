@@ -68,7 +68,17 @@ find_libjvm_so () {
     echo $java_lib_dir
 }
 
-[ -n "$JAVA_LIB_DIR" ] || JAVA_LIB_DIR=$(find_libjvm_so)
+find_libjvm_so_jdk () {
+    local java_lib_dir
+    local java_home=$(dirname "$(readlink -f "$(bash -lc "which java 2>/dev/null")")")/..
+    if [ -f "$java_home/lib/server/libjvm.so" ]; then
+        java_lib_dir="$java_home/lib/server"
+    fi
+    echo $java_lib_dir
+}
+
+JAVA_LIB_DIR=$(find_libjvm_so)
+[ ! -z "$JAVA_LIB_DIR" ] || JAVA_LIB_DIR=$(find_libjvm_so_jdk)
 if [ -n "$JAVA_LIB_DIR" ]; then
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$JAVA_LIB_DIR"
 fi
