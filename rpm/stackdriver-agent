@@ -5,7 +5,7 @@
 # description: System metrics collection agent for Stackdriver
 # processname: stackdriver-collectd
 # config: /etc/sysconfig/stackdriver
-# config: /opt/stackdriver/collectd/etc/collectd.conf
+# config: /etc/stackdriver/collectd.conf
 # pidfile: /var/run/stackdriver-agent.pid
 
 ### BEGIN INIT INFO
