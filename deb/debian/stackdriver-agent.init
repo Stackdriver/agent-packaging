@@ -54,7 +54,7 @@ find_libjvm_so () {
     local java_lib_dir
     local java_home=$(dirname "$(readlink -f "$(bash -lc "which java 2>/dev/null")")")/..
     [ "$java_home" = "./.." ] && return
-    local lib_subdirs=("lib/amd64/server" "lib/x64/server" "lib/i386/server")
+    local lib_subdirs=("lib/amd64/server" "lib/x64/server" "lib/i386/server" "lib/server")
     local lib_subdirs_with_jre=()
     for subdir in "${lib_subdirs[@]}"; do
         lib_subdirs_with_jre+=("$subdir" "jre/$subdir")
