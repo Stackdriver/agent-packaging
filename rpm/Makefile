@@ -72,4 +72,4 @@ get-netifaces: vendor-dirs
 vendor-rpms: get-yajl get-hiredis get-psutil get-netifaces
 
 clean:
-	rm -rf result *rpm collectd-5.5.2 *.tar.bz2 collectd-5.5.2.git *.tar.gz
+	rm -rf result *rpm collectd-$(VERSION) *.tar.bz2 collectd-$(VERSION).git *.tar.gz
