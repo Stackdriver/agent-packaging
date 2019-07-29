@@ -33,4 +33,4 @@ OUTPUT_DIR ?= result
 vendor-debs:
 
 clean:
-	rm -rf *.dsc *.deb *.tar.gz *.tar.bz2 collectd-$(VERSION) result apt
+	rm -rf *.dsc *.deb *.tar.gz *.tar.bz2 collectd-$(VERSION) collectd-$(VERSION).git result apt
