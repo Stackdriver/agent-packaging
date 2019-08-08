@@ -34,7 +34,7 @@ CFLAGS = -g
 
 override_dh_auto_configure:
 	echo "building for $(DISTRO)-$(ARCH)"
-	autoconf
+	./clean.sh && ./build.sh
 	dh_auto_configure -- --prefix=/opt/stackdriver/collectd \
 	--program-prefix=stackdriver- \
 	--disable-all-plugins \
