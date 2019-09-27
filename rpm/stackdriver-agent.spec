@@ -15,39 +15,30 @@
 
 # some things that we enable or not based on distro version
 %define docker_flag --disable-docker
-%define has_yajl 0
-%define bundle_yajl 0
-%define has_hiredis 0
-%define mongo 0
-%define varnish 0
-%define java_plugin 0
-%define dep_filter 0
-%define java_version 1.7.0
-
-%if 0%{?rhel} >= 6
 %define has_yajl 1
+%define bundle_yajl 0
 %define has_hiredis 1
 %define mongo 1
+%define bundle_mongo 1
 %define varnish 1
 %define java_plugin 1
 %define dep_filter 1
-%endif
-
-%if 0%{?rhel} >= 7
-%define curl_version 7.52.1
-%define docker_flag --enable-docker
-%else
 %define curl_version 7.34.0
 %define java_version 1.6.0
+%define has_python36 0
+
+%if 0%{?rhel} >= 7
+%define java_version 1.7.0
+%define curl_version 7.52.1
+%define docker_flag --enable-docker
+%endif
+
+%if 0%{?rhel} >= 8
+%define java_version 1.8.0
+%define has_python36 1
 %endif
 
 %if 0%{?amzn} >= 1
-%define has_yajl 1
-%define has_hiredis 1
-%define mongo 1
-%define varnish 1
-%define java_plugin 1
-%define dep_filter 1
 %define bundle_yajl 1
 %endif
 
@@ -62,6 +53,11 @@
 
 %if %{mongo}
 %define mongo_flag  --enable-mongodb
+%if %{bundle_mongo}
+%define libmongoc_flag --with-libmongoc=own --with-libbson=bundled
+%else
+%define libmongoc_flag --with-libmongoc=yes
+%endif
 %endif
 
 %if %{varnish}
@@ -91,7 +87,11 @@ Source201: collectd.conf
 Source202: stackdriver.sysconfig
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
+%if ! %{has_python36}
 BuildRequires: python-devel
+%else
+BuildRequires: python36-devel
+%endif
 BuildRequires: libgcrypt-devel
 BuildRequires: autoconf, automake
 BuildRequires: mysql-devel
@@ -119,6 +119,10 @@ Requires: yajl
 %endif
 %if %{mongo}
 BuildRequires: varnish-libs-devel
+%if ! %{bundle_mongo}
+BuildRequires: mongo-c-driver-devel, cyrus-sasl-devel
+Requires: mongo-c-driver-libs
+%endif
 %endif
 Requires: curl
 Requires: sed
@@ -170,7 +174,6 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --disable-static \
     --disable-perl --without-libperl  --without-perl-bindings \
     --with-libiptc \
-    --with-libmongoc=own \
     --with-libcurl=%{buildroot}/%{_prefix} \
     --enable-cpu \
     --enable-curl \
@@ -214,6 +217,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     %{java_flag} \
     %{redis_flag} \
     %{curl_json_flag} \
+    %{libmongoc_flag} \
     %{mongo_flag} \
     %{varnish_flag} \
     %{gcm_flag} \
@@ -259,6 +263,7 @@ rm -f %{buildroot}%{_sysconfdir}/collectd.conf.pkg-orig
 # now remove more libcurl stuff that was needed to finish the install
 rm -rf %{buildroot}%{_prefix}/include/curl %{buildroot}%{_prefix}/lib/libcurl*
 
+%if %{bundle_mongo}
 # remove libmongoc and libbson includes and doc files
 %{__rm} -rf %{buildroot}%{_prefix}/include/libmongoc-1.0
 %{__rm} -rf %{buildroot}%{_prefix}/include/libbson-1.0
@@ -267,6 +272,7 @@ rm -rf %{buildroot}%{_prefix}/include/curl %{buildroot}%{_prefix}/lib/libcurl*
 %{__rm} -rf %{buildroot}%{_prefix}/share/doc/libbson
 
 %{__rm} -f %{buildroot}%{_prefix}/bin/stackdriver-mongoc-stat
+%endif
 
 # Remove files that are laying about that rpmbuild is complaining about.
 %{__rm} -f %{buildroot}%{_prefix}/man/man5/%{programprefix}collectd-email.5*
@@ -326,9 +332,11 @@ fi
 %{_includedir}/collectd/network.h
 %{_includedir}/collectd/network_buffer.h
 
+%if %{bundle_mongo}
 %{_libdir}/libbson-1.0.*
 %{_libdir}/libmongoc-1.0.*
 %{_libdir}/libmongoc-priv.*
+%endif
 %{_libdir}/pkgconfig/*
 
 %if %{bundle_yajl}
