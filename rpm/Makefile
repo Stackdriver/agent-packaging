@@ -7,10 +7,10 @@ source:
 	git archive --format tar --prefix=collectd-$(VERSION)/ HEAD | gzip > ../collectd-$(VERSION).tar.gz  ; \
 	popd
 
-ifeq ($(DISTRO), epel-7)
-CURL_VERSION=7.52.1
-else
+ifneq ($(filter epel-6 amzn-%,$(DISTRO)),)
 CURL_VERSION=7.34.0
+else
+CURL_VERSION=7.52.1
 endif
 
 vendor:
@@ -21,7 +21,7 @@ ARCH ?= `uname -m`
 
 build: source vendor vendor-rpms
 	rm -rf result
-	if [[ $(DISTRO) != "epel-7" ]]; then \
+	if [[ $(DISTRO) == "epel-6" || $(DISTRO) = amzn-* ]]; then \
 	  yum install -y vendor-$(DISTRO)/$(ARCH)/hiredis*-0.10.1-3.*.rpm; \
 	fi
 	if [[ "$(DISTRO)" == "amzn-2016.09" ]]; then \
