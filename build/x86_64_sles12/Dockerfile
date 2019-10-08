@@ -28,7 +28,7 @@ RUN zypper addrepo https://download.opensuse.org/repositories/devel:libraries:c_
         varnish-devel \
         wget \
         which \
- && wget ftp://ftp.pbone.net/mirror/ftp.gwdg.de/pub/opensuse/repositories/home:/Herbster0815/openSUSE_Leap_15.1/noarch/automake-1.16.1-lp151.92.1.noarch.rpm \
+ && wget https://ftp.gwdg.de/pub/opensuse/repositories/home%3A/Herbster0815/openSUSE_Leap_15.1/noarch/automake-1.16.1-lp151.92.1.noarch.rpm \
  && rpm --force -Uvh automake-1.16.1-lp151.92.1.noarch.rpm \
  && rm automake-1.16.1-lp151.92.1.noarch.rpm \
  && /bin/sed -i -e 's/VERSION = 42.3/VERSION = 12/' /etc/SuSE-release \
