@@ -30,5 +30,9 @@ RUN zypper addrepo https://download.opensuse.org/repositories/devel:/libraries:/
         varnish-devel \
         wget \
         which \
+ && wget https://ftp.gwdg.de/pub/opensuse/repositories/home%3A/Herbster0815/openSUSE_Leap_15.1/noarch/automake-1.16.1-lp151.92.1.noarch.rpm \
+ && rpm --force -Uvh automake-1.16.1-lp151.92.1.noarch.rpm \
+ && rm automake-1.16.1-lp151.92.1.noarch.rpm \
+ # Pretend we are on SLES 15.
  && /bin/sed -i -e 's/VERSION="15.1"/VERSION="15-SP1"/' /etc/os-release \
  && zypper -n clean
