@@ -10,8 +10,10 @@ RUN zypper addrepo https://download.opensuse.org/repositories/devel:/libraries:/
         flex \
         gcc \
         git \
-        java-1_7_0-openjdk-devel \
+        java-1_8_0-openjdk-devel \
+        libcurl4-7.66.0-lp151.270.1.x86_64 \
         libcurl-devel \
+        libgcrypt20-1.8.5-lp151.161.1.x86_64 \
         libgcrypt-devel \
         libtool \
         libtool-ltdl-devel \
