@@ -3,7 +3,12 @@
 
 %if 0%{?suse_version} > 0
 # we expect the distro suffix
+%if 0%{?suse_version} < 1500
 %global dist .sles12
+%endif
+%if 0%{?suse_version} >= 1500
+%global dist .sles15
+%endif
 %endif
 
 # we have some references to the buildroot in the binaries for the include path
@@ -56,8 +61,14 @@
 %if 0%{?suse_version} > 0
 %define dep_filter 0
 %define bundle_curl 0
-%define java_version 1.7.0
 %define java_lib_location /usr/lib64/jvm/java
+%if 0%{?suse_version} < 1500
+%define java_version 1.7.0
+%endif
+%if 0%{?suse_version} >= 1500
+# Yes, SLES really has underscores.
+%define java_version 1_8_0
+%endif
 %endif
 
 %if %{has_hiredis}
