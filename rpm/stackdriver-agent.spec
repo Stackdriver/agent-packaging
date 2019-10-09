@@ -186,6 +186,9 @@ Requires: sed
 Requires(preun): /sbin/chkconfig
 Requires(post): /sbin/chkconfig
 Requires(post): /bin/grep
+%if 0%{?suse_version} > 0
+Requires(post): %insserv_prereq
+%endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %define    _use_internal_dependency_generator 0
@@ -384,6 +387,10 @@ cp /usr/share/doc/yajl-1.0.7/COPYING yajl.COPYING
 %post
 /sbin/ldconfig
 /sbin/chkconfig --add stackdriver-agent
+%if 0%{?suse_version} > 0
+# Enable the service by default.
+%{fillup_and_insserv -f -y stackdriver-agent}
+%endif
 
 %preun
 if [ $1 -eq 0 ]; then
