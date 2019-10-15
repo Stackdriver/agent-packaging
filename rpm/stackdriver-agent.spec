@@ -167,6 +167,9 @@ pushd curl-%{curl_version}
 popd
 export PATH=%{buildroot}/%{_prefix}/bin:$PATH
 
+# re-generate build files
+./clean.sh && ./build.sh
+
 # install mongo-c-driver into mongodb-mongo-c-driver/build
 %configure CFLAGS="%{optflags} -DLT_LAZY_OR_NOW='RTLD_NOW|RTLD_GLOBAL' -Icurl-%{curl_version}/include" \
     --program-prefix=stackdriver- \
