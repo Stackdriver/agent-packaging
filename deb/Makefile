@@ -1,18 +1,18 @@
 # this assumes it is being built from inside the stackdriver collectd git fork
 SHELL=/bin/bash
-
 source:
-	[ -d collectd-$(VERSION).git ] && rm -rf collectd-$(VERSION).git || true # return true so we don't error out because the test condition fails
-	git clone ../../ collectd-$(VERSION).git
-	pushd collectd-$(VERSION).git ; \
-	git archive --format tar --prefix=collectd-$(VERSION)/ HEAD | gzip > ../stackdriver-agent_$(VERSION).orig.tar.gz  ; \
+	[ -d collectd-5.8.1.git ] && rm -rf collectd-5.8.1.git || true # return true so we don't error out because the test condition fails
+	git clone ../../ collectd-5.8.1.git
+	PKG_VERSION=$(shell cat VERSION)
+	pushd collectd-5.8.1.git ; \
+	git archive --format tar --prefix=collectd-5.8.1/ HEAD | gzip > ../stackdriver-agent_$(PKG_VERSION).orig.tar.gz  ; \
 	popd
 
 srcpkg: source debian/rules
-	tar -xf stackdriver-agent_$(VERSION).orig.tar.gz
-	pushd collectd-$(VERSION) ; \
+	tar -xf stackdriver-agent_$(PKG_VERSION).orig.tar.gz
+	pushd collectd-5.8.1 ; \
 	cp -r ../debian . ; \
-	DEBEMAIL="stackdriver-agents@google.com" DEBFULLNAME="Stackdriver Agents" dch --package stackdriver-agent --distribution $(DISTRO) -v $(VERSION)-$(BUILD_NUM).$(DISTRO) "Automated build" ; \
+	DEBEMAIL="stackdriver-agents@google.com" DEBFULLNAME="Stackdriver Agents" dch --package stackdriver-agent --distribution $(DISTRO) -v $(PKG_VERSION)-1.$(DISTRO) "Automated build" ; \
 	cat debian/changelog ; \
 	pushd debian ; \
 	if [ -f controls/control.$(DISTRO) ]; then cp controls/control.$(DISTRO) control ; else cp controls/control.base control ; fi ; \
@@ -20,10 +20,10 @@ srcpkg: source debian/rules
 	popd ; \
 
 build: srcpkg
-	pushd collectd-$(VERSION) ; \
+	pushd collectd-5.8.1 ; \
 	debuild -us -uc; \
 	popd ; \
-	rm -rf collectd-$(VERSION)
+	rm -rf collectd-5.8.1
 
 DISTRO?=`lsb_release -a 2>/dev/null |grep Codename |awk {'print $2;'}`
 ARCH?=`uname -i`
@@ -33,4 +33,4 @@ OUTPUT_DIR ?= result
 vendor-debs:
 
 clean:
-	rm -rf *.dsc *.deb *.tar.gz *.tar.bz2 collectd-$(VERSION) collectd-$(VERSION).git result apt
+	rm -rf *.dsc *.deb *.tar.gz *.tar.bz2 collectd-5.8.1 collectd-5.8.1.git result apt

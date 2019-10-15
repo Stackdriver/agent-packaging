@@ -1,4 +1,4 @@
-stackdriver-agent (5.5.2-372) precise trusty xenial wheezy jessie stretch; urgency=low
+stackdriver-agent (6.0.0-1) precise trusty xenial wheezy jessie stretch; urgency=low
 
   * automated build
 

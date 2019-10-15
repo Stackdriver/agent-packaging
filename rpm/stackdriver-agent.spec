@@ -68,17 +68,17 @@
 %define java_flag --enable-java --with-java=/usr/lib/jvm/java
 %endif
 
-
+%define PKG_VERSION %(cat VERSION)
 
 Summary: Stackdriver system metrics collection daemon
 Name: stackdriver-agent
-Version: %{collectd_version}
+Version: %{PKG_VERSION} 
 Release: %{build_num}%{?dist}
 License: GPLv2
 Group: System Environment/Daemons
 URL: http://www.stackdriver.com/
 
-Source: collectd-%{version}.tar.gz
+Source: collectd-5.8.1.tar.gz
 # embed libcurl so we know it's linked against openssl instead of
 # nss. this avoids problems of nss leaking with libcurl. sigh.
 Source1: curl-%{curl_version}.tar.bz2
@@ -129,7 +129,7 @@ Requires: sed
 Requires(preun): /sbin/chkconfig
 Requires(post): /sbin/chkconfig
 Requires(post): /bin/grep
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot: %{_tmppath}/%{name}-%{PKG_VERSION}-1-root
 
 %define    _use_internal_dependency_generator 0
 
@@ -154,7 +154,7 @@ Currently includes collectd.
 
 %prep
 # update for aarch64
-%setup -q -n collectd-%{version} -a 1
+%setup -q -n collectd-5.8.1 -a 1
 
 %build
 # build libcurl first
@@ -215,7 +215,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-match_throttle_metadata_keys \
     --enable-write_log \
     --enable-unixsock \
-    --with-useragent="stackdriver_agent/%{version}-%{release}" \
+    --with-useragent="stackdriver_agent/%{PKG_VERSION}-1" \
     %{docker_flag} \
     %{java_flag} \
     %{redis_flag} \
