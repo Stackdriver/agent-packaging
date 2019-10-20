@@ -1,1 +1,2 @@
 debian/collectd.conf etc/stackdriver/
+debian/stack-config opt/stackdriver/
