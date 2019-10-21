@@ -1,1 +1,6 @@
-6.0.0
+# The base collectd version we are using (this is not a branch).
+VERSION=5.8.1
+
+# The release version and build number of the stackdriver-agent package.
+PKG_VERSION=6.0.0
+PKG_BUILD=1
