@@ -326,14 +326,9 @@ fi
 %{_datadir}/collectd/postgresql_default.conf
 
 # collectdclient - TBD reintroduce -devel subpackage?
-%{_libdir}/libcollectdclient.so
-%{_libdir}/libcollectdclient.so.1
-%{_libdir}/libcollectdclient.so.1.0.0
+%{_libdir}/libcollectdclient.so*
 %{_libdir}/pkgconfig/libcollectdclient.pc
-%{_includedir}/collectd/client.h
-%{_includedir}/collectd/lcc_features.h
-%{_includedir}/collectd/network.h
-%{_includedir}/collectd/network_buffer.h
+%{_includedir}/collectd/*.h
 
 %if %{bundle_mongo}
 %{_libdir}/libbson-1.0.*
