@@ -1,4 +1,4 @@
-# The base collectd version we are using (this is not a branch).
+# The base collectd version we are using (this doesn't specify a git branch).
 VERSION=5.5.2
 
 # The release version and build number of the stackdriver-agent package.
