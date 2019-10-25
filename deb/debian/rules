@@ -21,7 +21,7 @@ DOCKER_FLAG="--enable-docker"
 endif
 
 ifneq (,$(filter $(DISTRO),bionic buster))
-# Use system libmongoc on Ubuntu Bionic.
+# Use system libmongoc on newer distros.
 MONGO_FLAG=--enable-mongodb --with-libmongoc=yes
 else
 MONGO_FLAG=--enable-mongodb --with-libmongoc=own
