@@ -5,10 +5,10 @@ ARCH := $(shell uname -m)
 DISTRO=$(shell lsb_release -a 2>/dev/null |grep Codename |awk {'printf $$2;'})
 debian_version := $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
 
-ifeq ($(DISTRO),stretch)
+ifneq (,$(filter $(DISTRO),buster stretch))
 HIREDIS=libhiredis0.13
 MYSQL=libmariadbclient18
-else ifeq ($(DISTRO),xenial)
+else ifneq (,$(filter $(DISTRO),xenial bionic))
 HIREDIS=libhiredis0.13
 MYSQL=libmysqlclient20
 else
@@ -20,8 +20,8 @@ ifeq ($(DISTRO),xenial)
 DOCKER_FLAG="--enable-docker"
 endif
 
-ifeq ($(DISTRO),bionic)
-# Use system libmongoc on Ubuntu Bionic.
+ifneq (,$(filter $(DISTRO),bionic buster))
+# Use system libmongoc where available.
 MONGO_FLAG=--enable-mongodb --with-libmongoc=yes
 else
 MONGO_FLAG=--enable-mongodb --with-libmongoc=own
