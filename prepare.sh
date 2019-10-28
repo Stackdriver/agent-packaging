@@ -4,4 +4,4 @@ if [[ "${PKGFORMAT-}" != "deb" && "${PKGFORMAT-}" != "rpm" ]]; then
   exit 1
 fi
 set -x
-cp collectd.conf "${PKGFORMAT}"
+cp collectd.conf VERSION "${PKGFORMAT}"

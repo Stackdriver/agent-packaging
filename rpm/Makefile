@@ -1,9 +1,11 @@
+include VERSION
+
 source:
 	[ -d collectd-$(VERSION).git ] && rm -rf collectd-$(VERSION).git || true # return true so we don't error out because the test condition fails
 	# this is run from inside our collectd fork so we clone a clean copy to work off of
 	git clone ../../ collectd-$(VERSION).git
 	pushd collectd-$(VERSION).git ; \
-	git archive --format tar --prefix=collectd-$(VERSION)/ HEAD | gzip > ../collectd-$(VERSION).tar.gz  ; \
+	git archive --format tar --prefix=collectd-$(VERSION)/ HEAD | gzip > ../stackdriver-agent-$(PKG_VERSION).orig.tar.gz  ; \
 	popd
 
 ifneq ($(filter epel-6 amzn-%,$(DISTRO)),)
@@ -28,7 +30,7 @@ build: source vendor vendor-rpms
 	  yum install -y vendor-$(DISTRO)/$(ARCH)/yajl-1*.rpm; \
 	  yum install -y vendor-$(DISTRO)/$(ARCH)/yajl-devel*.rpm; \
 	fi
-	rpmbuild --define "_source_filedigest_algorithm md5" --define "_sourcedir $$(pwd)" --define "_srcrpmdir $$(pwd)" --define "collectd_version $(VERSION)" --define "build_num $(BUILD_NUM)" -ba stackdriver-agent.spec
+	rpmbuild --define "_source_filedigest_algorithm md5" --define "_sourcedir $$(pwd)" --define "_srcrpmdir $$(pwd)" --define "collectd_version $(VERSION)" --define "package_version $(PKG_VERSION)" --define "build_num $(PKG_BUILD)" -ba stackdriver-agent.spec
 	mkdir result
 	cp /root/rpmbuild/RPMS/$(ARCH)/stackdriver-agent-*.rpm result/
 

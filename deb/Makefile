@@ -1,23 +1,26 @@
 # this assumes it is being built from inside the stackdriver collectd git fork
 SHELL=/bin/bash
 
+include VERSION
+
 source:
 	[ -d collectd-$(VERSION).git ] && rm -rf collectd-$(VERSION).git || true # return true so we don't error out because the test condition fails
+	# this is run from inside our collectd fork so we clone a clean copy to work off of
 	git clone ../../ collectd-$(VERSION).git
 	pushd collectd-$(VERSION).git ; \
-	git archive --format tar --prefix=collectd-$(VERSION)/ HEAD | gzip > ../stackdriver-agent_$(VERSION).orig.tar.gz  ; \
+	git archive --format tar --prefix=collectd-$(VERSION)/ HEAD | gzip > ../stackdriver-agent_$(PKG_VERSION).orig.tar.gz  ; \
 	popd
 
 srcpkg: source debian/rules
-	tar -xf stackdriver-agent_$(VERSION).orig.tar.gz
+	tar -xf stackdriver-agent_$(PKG_VERSION).orig.tar.gz
 	pushd collectd-$(VERSION) ; \
 	cp -r ../debian . ; \
-	DEBEMAIL="stackdriver-agents@google.com" DEBFULLNAME="Stackdriver Agents" dch --package stackdriver-agent --distribution $(DISTRO) -v $(VERSION)-$(BUILD_NUM).$(DISTRO) "Automated build" ; \
+	DEBEMAIL="stackdriver-agents@google.com" DEBFULLNAME="Stackdriver Agents" dch --package stackdriver-agent --distribution $(DISTRO) -v $(PKG_VERSION)-$(PKG_BUILD).$(DISTRO) "Automated build" ; \
 	cat debian/changelog ; \
 	pushd debian ; \
 	if [ -f controls/control.$(DISTRO) ]; then cp controls/control.$(DISTRO) control ; else cp controls/control.base control ; fi ; \
 	popd ; \
-	popd ; \
+	popd
 
 build: srcpkg
 	pushd collectd-$(VERSION) ; \
