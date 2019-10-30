@@ -174,8 +174,14 @@ Requires: yajl
 %endif
 %endif
 %endif
-%if %{mongo}
+%if %{varnish}
+%if 0%{?suse_version} > 0
+BuildRequires: varnish-devel
+%else
 BuildRequires: varnish-libs-devel
+%endif
+%endif
+%if %{mongo}
 %if ! %{bundle_mongo}
 BuildRequires: mongo-c-driver-devel, cyrus-sasl-devel
 Requires: mongo-c-driver-libs
