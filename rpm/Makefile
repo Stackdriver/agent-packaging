@@ -27,7 +27,7 @@ endif
 TOPDIR=/root/rpmbuild
 
 build: source vendor vendor-rpms
-	rm -rf $(OUTPUT_DIR)
+	[ -n "$(DIR_TO_RM)" ] && rm -rf "$(DIR_TO_RM)" || true # return true so we don't error out because the test condition fails
 	if [[ $(DISTRO) == "epel-6" || $(DISTRO) == amzn-* ]]; then \
 	  yum install -y vendor-$(DISTRO)/$(ARCH)/hiredis*-0.10.1-3.*.rpm; \
 	fi
@@ -37,12 +37,18 @@ build: source vendor vendor-rpms
 	  yum install -y vendor-$(DISTRO)/$(ARCH)/yajl-devel*.rpm; \
 	fi
 	rpmbuild --define "_topdir $(TOPDIR)" --define "_source_filedigest_algorithm md5" --define "_sourcedir $$(pwd)" --define "_srcrpmdir $$(pwd)" --define "collectd_version $(VERSION)" --define "package_version $(PKG_VERSION)" --define "build_num $(PKG_BUILD)" -ba stackdriver-agent.spec
-	mkdir $(OUTPUT_DIR)
+	mkdir -p $(OUTPUT_DIR)
 	cp $(TOPDIR)/RPMS/$(ARCH)/stackdriver-agent-*.rpm $(OUTPUT_DIR)/
 
 ARCH ?= `uname -m`
 
 OUTPUT_DIR ?= result
+
+ifeq ($(filter %.,$(shell realpath --relative-to . $(OUTPUT_DIR))),)  # Avoid trying to rm . or ..
+DIR_TO_RM := $(OUTPUT_DIR)
+else
+DIR_TO_RM :=
+endif
 
 ifeq ($(filter sles%,$(DISTRO)),)
 vendor-dirs:
@@ -86,4 +92,4 @@ vendor-rpms:; true
 endif
 
 clean:
-	rm -rf $(OUTPUT_DIR)/ *rpm collectd-$(VERSION) *.tar.bz2 collectd-$(VERSION).git *.tar.gz
+	rm -rf $(DIR_TO_RM) *rpm collectd-$(VERSION) *.tar.bz2 collectd-$(VERSION).git *.tar.gz
