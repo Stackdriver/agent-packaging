@@ -129,7 +129,7 @@ BuildRequires: python-devel
 BuildRequires: python36-devel
 %endif
 BuildRequires: libgcrypt-devel
-BuildRequires: autoconf, automake >= 1.13
+BuildRequires: autoconf, automake
 %if 0%{?suse_version} > 0
 BuildRequires: bison
 BuildRequires: flex
