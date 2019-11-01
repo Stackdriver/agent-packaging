@@ -8,15 +8,16 @@ source:
 	git archive --format tar --prefix=collectd-$(VERSION)/ HEAD | gzip > ../stackdriver-agent-$(PKG_VERSION).orig.tar.gz  ; \
 	popd
 
-ifneq ($(filter epel-6 amzn-%,$(DISTRO)),)
+# $(filter) will return all matching entries from the first list, or empty if none match.
+ifneq ($(filter epel-6 amzn-%,$(DISTRO)),)  # If DISTRO is epel-6 or amzn-*.
 CURL_VERSION=7.34.0
 else
-ifeq ($(filter sles%,$(DISTRO)),)
+ifeq ($(filter sles%,$(DISTRO)),)  # If DISTRO is not sles*.
 CURL_VERSION=7.52.1
 endif
 endif
 
-ifeq ($(filter sles%,$(DISTRO)),)
+ifeq ($(filter sles%,$(DISTRO)),)  # If DISTRO is not sles*.
 vendor:
 	[ -f curl-$(CURL_VERSION).tar.bz2 ] || curl -O https://curl.haxx.se/download/curl-$(CURL_VERSION).tar.bz2
 	sha1sum -c curl-$(CURL_VERSION).sha1
@@ -44,13 +45,14 @@ ARCH ?= `uname -m`
 
 OUTPUT_DIR ?= result
 
-ifeq ($(filter %.,$(shell realpath --relative-to . $(OUTPUT_DIR))),)  # Avoid trying to rm . or ..
-DIR_TO_RM := $(OUTPUT_DIR)
+# Any realpath that ends with a . is in the current directory's parent tree.
+ifneq ($(filter %.,$(shell realpath --relative-to . $(OUTPUT_DIR))),)
+DIR_TO_RM :=  # Avoid trying to rm . or ..
 else
-DIR_TO_RM :=
+DIR_TO_RM := $(OUTPUT_DIR)
 endif
 
-ifeq ($(filter sles%,$(DISTRO)),)
+ifeq ($(filter sles%,$(DISTRO)),)  # If DISTRO is not sles*.
 vendor-dirs:
 	mkdir -p vendor-epel-6/x86_64 vendor-epel-6/src
 	# Amazon Linux 2016.09 can use el6 packages.

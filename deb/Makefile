@@ -36,10 +36,11 @@ ARCH?=`uname -i`
 
 OUTPUT_DIR ?= result
 
-ifeq ($(filter %.,$(shell realpath --relative-to . $(OUTPUT_DIR))),)  # Avoid trying to rm . or ..
-DIR_TO_RM := $(OUTPUT_DIR)
+# Any realpath that ends with a . is in the current directory's parent tree.
+ifneq ($(filter %.,$(shell realpath --relative-to . $(OUTPUT_DIR))),)
+DIR_TO_RM :=  # Avoid trying to rm . or ..
 else
-DIR_TO_RM :=
+DIR_TO_RM := $(OUTPUT_DIR)
 endif
 
 clean:
