@@ -45,9 +45,8 @@ ARCH ?= `uname -m`
 
 OUTPUT_DIR ?= result
 
-# Any realpath that ends with a . is in the current directory's parent tree.
-ifneq ($(filter %.,$(shell realpath --relative-to . $(OUTPUT_DIR))),)
-DIR_TO_RM :=  # Avoid trying to rm . or ..
+ifeq ($(findstring $(abspath $(OUTPUT_DIR)),$(CURDIR)),)
+DIR_TO_RM :=  # Avoid trying to rm any prefix of the current directory.
 else
 DIR_TO_RM := $(OUTPUT_DIR)
 endif
