@@ -225,7 +225,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 #%filter_provides_in .*/collectd/.*\.so$
 #%endif
 
-%if %{dep_filter}
 %filter_requires_in mysql
 %filter_requires_in postgresql
 %filter_requires_in redis
@@ -235,7 +234,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 %filter_requires_in java
 %filter_requires_in python
 %filter_setup
-%endif
 
 %description
 The Stackdriver system metrics daemon collects system statistics and
