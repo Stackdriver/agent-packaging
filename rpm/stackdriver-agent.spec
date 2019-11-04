@@ -197,7 +197,7 @@ Requires(post): %insserv_prereq
 %endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
-%define    _use_internal_dependency_generator 0
+%define _use_internal_dependency_generator 0
 
 %if ! %{dep_filter}
 ##### This section has been copied from redhat/macros.
@@ -220,10 +220,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 }
 ##### End section
 %endif
-
-#%if 0%{?suse_version} > 0
-#%filter_provides_in .*/collectd/.*\.so$
-#%endif
 
 %filter_requires_in mysql
 %filter_requires_in postgresql
