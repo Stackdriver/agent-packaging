@@ -45,7 +45,7 @@ ARCH ?= `uname -m`
 
 OUTPUT_DIR ?= result
 
-ifeq ($(findstring $(abspath $(OUTPUT_DIR)),$(CURDIR)),)
+ifneq ($(findstring $(abspath $(OUTPUT_DIR)),$(CURDIR)),)
 DIR_TO_RM :=  # Avoid trying to rm any prefix of the current directory.
 else
 DIR_TO_RM := $(OUTPUT_DIR)
