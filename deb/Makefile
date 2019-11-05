@@ -23,17 +23,24 @@ srcpkg: source debian/rules
 	popd
 
 build: srcpkg
+	[ -n "$(DIR_TO_RM)" ] && rm -rf "$(DIR_TO_RM)" || true # return true so we don't error out because the test condition fails
 	pushd collectd-$(VERSION) ; \
 	debuild -us -uc; \
 	popd ; \
 	rm -rf collectd-$(VERSION)
+	mkdir -p $(OUTPUT_DIR)
+	[ "$(OUTPUT_DIR)" != "." ] && mv ./stackdriver-agent_*.deb $(OUTPUT_DIR)/ || true # return true so we don't error out because the test condition fails
 
 DISTRO?=`lsb_release -a 2>/dev/null |grep Codename |awk {'print $2;'}`
 ARCH?=`uname -i`
 
 OUTPUT_DIR ?= result
 
-vendor-debs:
+ifneq ($(findstring $(abspath $(OUTPUT_DIR)),$(CURDIR)),)
+DIR_TO_RM :=  # Avoid trying to rm any prefix of the current directory.
+else
+DIR_TO_RM := $(OUTPUT_DIR)
+endif
 
 clean:
-	rm -rf *.dsc *.deb *.tar.gz *.tar.bz2 collectd-$(VERSION) collectd-$(VERSION).git result apt
+	rm -rf $(DIR_TO_RM) *.dsc *.deb *.tar.gz *.tar.bz2 collectd-$(VERSION) collectd-$(VERSION).git result apt

@@ -19,7 +19,14 @@
 ### END INIT INFO
 
 # Source function library.
-. /etc/init.d/functions
+if [[ -f /lib/lsb/init-functions ]]; then
+  . /lib/lsb/init-functions
+else
+  . /etc/init.d/functions
+  function start_daemon() {
+    daemon "$@"
+  }
+fi
 
 RETVAL=0
 ARGS=""
@@ -116,7 +123,7 @@ start () {
     fi
 
     if [ -r "$CONFIG" ]; then
-        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" daemon "$DAEMON" -C "$CONFIG" -P "$pidfile"
+        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" start_daemon "$DAEMON" -C "$CONFIG" -P "$pidfile"
         RETVAL=$?
         echo
         [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$prog

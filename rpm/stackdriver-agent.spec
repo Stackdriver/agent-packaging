@@ -1,5 +1,16 @@
 %global _hardened_build 1
+# Not all platforms support __provides_exclude_from; see dep_filter below.
 %global __provides_exclude_from .*/collectd/.*\\.so$
+
+%if 0%{?suse_version} > 0
+# we expect the distro suffix
+%if 0%{?suse_version} < 1500
+%global dist .sles12
+%endif
+%if 0%{?suse_version} >= 1500
+%global dist .sles15
+%endif
+%endif
 
 # we have some references to the buildroot in the binaries for the include path
 %define __arch_install_post %{nil}
@@ -11,7 +22,11 @@
 %define _sysconfdir %{_prefix}/etc
 %define _confdir /etc/stackdriver
 %define _mandir %{_prefix}/man
+%if 0%{?suse_version} > 0
+%define _initddir /etc/init.d
+%else
 %define _initddir /etc/rc.d/init.d
+%endif
 
 # some things that we enable or not based on distro version
 %define docker_flag --disable-docker
@@ -22,28 +37,52 @@
 %define bundle_mongo 1
 %define varnish 1
 %define java_plugin 1
-%define dep_filter 1
+%define bundle_curl 1
 %define curl_version 7.34.0
 %define java_version 1.6.0
+%define java_lib_location /usr/lib/jvm/java
 %define has_python36 0
+# Enabled for systems that don't support the __provides_exclude_from global.
+%define dep_filter 1
 
 %if 0%{?rhel} >= 7
 %define java_version 1.7.0
 %define curl_version 7.52.1
 %define docker_flag --enable-docker
+%define dep_filter 0
 %endif
 
 %if 0%{?rhel} >= 8
 %define java_version 1.8.0
 %define has_python36 1
+%define dep_filter 0
 %endif
 
 %if 0%{?amzn} >= 1
 %define bundle_yajl 1
+%define dep_filter 0
+%endif
+
+%if 0%{?suse_version} > 0
+%define bundle_curl 0
+%define java_lib_location /usr/lib64/jvm/java
+%if 0%{?suse_version} < 1500
+%define java_version 1.7.0
+%endif
+%if 0%{?suse_version} >= 1500
+# Yes, SLES really has underscores.
+%define java_version 1_8_0
+%define dep_filter 0
+%endif
 %endif
 
 %if %{has_hiredis}
 %define redis_flag --enable-redis --with-libhiredis
+%endif
+
+%if %{bundle_curl}
+%define curl_include -Icurl-%{curl_version}/include
+%define libcurl_flag --with-libcurl=%{buildroot}/%{_prefix}
 %endif
 
 %if %{has_yajl}
@@ -65,7 +104,7 @@
 %endif
 
 %if %{java_plugin}
-%define java_flag --enable-java --with-java=/usr/lib/jvm/java
+%define java_flag --enable-java --with-java=%{java_lib_location}
 %endif
 
 Summary: Stackdriver system metrics collection daemon
@@ -77,14 +116,18 @@ Group: System Environment/Daemons
 URL: http://www.stackdriver.com/
 
 Source: stackdriver-agent-%{version}.orig.tar.gz
+%if %{bundle_curl}
 # embed libcurl so we know it's linked against openssl instead of
 # nss. this avoids problems of nss leaking with libcurl. sigh.
 Source1: curl-%{curl_version}.tar.bz2
+%endif
 Source200: stackdriver-agent
 Source201: collectd.conf
 Source202: stackdriver.sysconfig
+%if 0%{?suse_version} == 0
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
+%endif
 %if ! %{has_python36}
 BuildRequires: python-devel
 %else
@@ -92,7 +135,20 @@ BuildRequires: python36-devel
 %endif
 BuildRequires: libgcrypt-devel
 BuildRequires: autoconf, automake
+%if 0%{?suse_version} > 0
+BuildRequires: bison
+BuildRequires: flex
+BuildRequires: libtool
+BuildRequires: rpm-build
+%endif
+%if ! %{bundle_curl}
+BuildRequires: libcurl-devel
+%endif
+%if 0%{?suse_version} > 0
+BuildRequires: libmysqlclient-devel
+%else
 BuildRequires: mysql-devel
+%endif
 # this is in the main mysql package sometimes but -devel ends up
 # just depending on libs.
 BuildRequires: /usr/bin/mysql_config
@@ -110,13 +166,27 @@ BuildRequires: java-devel
 BuildRequires: hiredis-devel
 %endif
 %if %{has_yajl}
+%if 0%{?suse_version} > 0
+BuildRequires: libyajl-devel
+%else
 BuildRequires: yajl-devel
+%endif
 %if ! %{bundle_yajl}
+%if 0%{?suse_version} > 0
+Requires: libyajl2
+%else
 Requires: yajl
 %endif
 %endif
-%if %{mongo}
+%endif
+%if %{varnish}
+%if 0%{?suse_version} > 0
+BuildRequires: varnish-devel
+%else
 BuildRequires: varnish-libs-devel
+%endif
+%endif
+%if %{mongo}
 %if ! %{bundle_mongo}
 BuildRequires: mongo-c-driver-devel, cyrus-sasl-devel
 Requires: mongo-c-driver-libs
@@ -127,13 +197,39 @@ Requires: sed
 Requires(preun): /sbin/chkconfig
 Requires(post): /sbin/chkconfig
 Requires(post): /bin/grep
+%if 0%{?suse_version} > 0
+Requires(post): %insserv_prereq
+%endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
-%define    _use_internal_dependency_generator 0
+%define _use_internal_dependency_generator 0
 
-# NOTE: this will only work for EL6.  If we want to support EL5, we'll
-# have to do some more work
+%if 0%{?suse_version} > 0
+##### This section has been copied from redhat/macros.
+# prevent anything matching from being scanned for provides
+%define filter_provides_in(P) %{expand: \
+%global __filter_prov_cmd %{?__filter_prov_cmd} %{__grep} -v %{-P} '%*' | \
+}
+
+# prevent anything matching from being scanned for requires
+%define filter_requires_in(P) %{expand: \
+%global __filter_req_cmd %{?__filter_req_cmd} %{__grep} -v %{-P} '%*' | \
+}
+
+# actually set up the filtering bits
+%define filter_setup %{expand: \
+%global _use_internal_dependency_generator 0 \
+%global __deploop() while read FILE; do echo "${FILE}" | /usr/lib/rpm/rpmdeps -%{1}; done | /bin/sort -u \
+%global __find_provides /bin/sh -c "%{?__filter_prov_cmd} %{__deploop P} %{?__filter_from_prov}" \
+%global __find_requires /bin/sh -c "%{?__filter_req_cmd}  %{__deploop R} %{?__filter_from_req}" \
+}
+##### End section
+%endif
+
 %if %{dep_filter}
+%filter_provides_in .*/collectd/.*\.so$
+%endif
+
 %filter_requires_in mysql
 %filter_requires_in postgresql
 %filter_requires_in redis
@@ -141,8 +237,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 %filter_requires_in varnish
 %filter_requires_in write_gcm
 %filter_requires_in java
+%filter_requires_in python
 %filter_setup
-%endif
 
 %description
 The Stackdriver system metrics daemon collects system statistics and
@@ -151,10 +247,14 @@ sends them to the Stackdriver service.
 Currently includes collectd.
 
 %prep
+%setup -q -n collectd-%{collectd_version}
 # update for aarch64
+%if %{bundle_curl}
 %setup -q -n collectd-%{collectd_version} -a 1
+%endif
 
 %build
+%if %{bundle_curl}
 # build libcurl first
 pushd curl-%{curl_version}
 ./configure --prefix=%{buildroot}%{_prefix} --with-ssl --disable-threaded-resolver --enable-ipv6 \
@@ -163,19 +263,20 @@ pushd curl-%{curl_version}
 %{__make} %{?_smp_mflags}
 %{__make} install
 popd
+%endif
 export PATH=%{buildroot}/%{_prefix}/bin:$PATH
 
 # re-generate build files
 ./clean.sh && ./build.sh
 
 # install mongo-c-driver into mongodb-mongo-c-driver/build
-%configure CFLAGS="%{optflags} -DLT_LAZY_OR_NOW='RTLD_NOW|RTLD_GLOBAL' -Icurl-%{curl_version}/include" \
+%configure CFLAGS="%{optflags} -DLT_LAZY_OR_NOW='RTLD_NOW|RTLD_GLOBAL' %{?curl_include}" \
     --program-prefix=stackdriver- \
     --disable-all-plugins \
     --disable-static \
     --disable-perl --without-libperl  --without-perl-bindings \
     --with-libiptc \
-    --with-libcurl=%{buildroot}/%{_prefix} \
+    %{?libcurl_flag} \
     --enable-cpu \
     --enable-curl \
     --enable-df \
@@ -229,12 +330,14 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
 
 %install
 # we have to reinstall as %%install cleans the buildroot
+%if %{bundle_curl}
 pushd curl-%{curl_version}
 %{__make} install
 # now remove things to avoid unpackaged files
 rm -rf %{buildroot}/%{_prefix}/bin %{buildroot}/%{_prefix}/man
 rm -rf %{buildroot}/%{_prefix}/share %{buildroot}/%{_prefix}/lib*/pkgconfig
 popd
+%endif
 
 %{__rm} -rf contrib/SpamAssassin
 %{__make} install DESTDIR="%{buildroot}"
@@ -293,6 +396,10 @@ cp /usr/share/doc/yajl-1.0.7/COPYING yajl.COPYING
 %post
 /sbin/ldconfig
 /sbin/chkconfig --add stackdriver-agent
+%if 0%{?suse_version} > 0
+# Enable the service by default.
+%{fillup_and_insserv -f -y stackdriver-agent}
+%endif
 
 %preun
 if [ $1 -eq 0 ]; then
