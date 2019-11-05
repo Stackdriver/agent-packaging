@@ -1,4 +1,5 @@
 %global _hardened_build 1
+# Not all platforms support __provides_exclude_from; see dep_filter below.
 %global __provides_exclude_from .*/collectd/.*\\.so$
 
 %if 0%{?suse_version} > 0
@@ -36,30 +37,33 @@
 %define bundle_mongo 1
 %define varnish 1
 %define java_plugin 1
-%define dep_filter 1
 %define bundle_curl 1
 %define curl_version 7.34.0
 %define java_version 1.6.0
 %define java_lib_location /usr/lib/jvm/java
 %define has_python36 0
+# Enabled for systems that don't support the __provides_exclude_from global.
+%define dep_filter 1
 
 %if 0%{?rhel} >= 7
 %define java_version 1.7.0
 %define curl_version 7.52.1
 %define docker_flag --enable-docker
+%define dep_filter 0
 %endif
 
 %if 0%{?rhel} >= 8
 %define java_version 1.8.0
 %define has_python36 1
+%define dep_filter 0
 %endif
 
 %if 0%{?amzn} >= 1
 %define bundle_yajl 1
+%define dep_filter 0
 %endif
 
 %if 0%{?suse_version} > 0
-%define dep_filter 0
 %define bundle_curl 0
 %define java_lib_location /usr/lib64/jvm/java
 %if 0%{?suse_version} < 1500
@@ -68,6 +72,7 @@
 %if 0%{?suse_version} >= 1500
 # Yes, SLES really has underscores.
 %define java_version 1_8_0
+%define dep_filter 0
 %endif
 %endif
 
@@ -199,7 +204,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %define _use_internal_dependency_generator 0
 
-%if ! %{dep_filter}
+%if 0%{?suse_version} > 0
 ##### This section has been copied from redhat/macros.
 # prevent anything matching from being scanned for provides
 %define filter_provides_in(P) %{expand: \
@@ -219,6 +224,10 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 %global __find_requires /bin/sh -c "%{?__filter_req_cmd}  %{__deploop R} %{?__filter_from_req}" \
 }
 ##### End section
+%endif
+
+%if %{dep_filter}
+%filter_provides_in .*/collectd/.*\.so$
 %endif
 
 %filter_requires_in mysql
