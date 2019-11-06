@@ -247,10 +247,10 @@ sends them to the Stackdriver service.
 Currently includes collectd.
 
 %prep
-%setup -q -n collectd-%{collectd_version}
+%setup -q -n collectd-pristine
 # update for aarch64
 %if %{bundle_curl}
-%setup -q -n collectd-%{collectd_version} -a 1
+%setup -q -n collectd-pristine -a 1
 %endif
 
 %build

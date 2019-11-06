@@ -1,11 +1,11 @@
 include VERSION
 
 source:
-	[ -d collectd-$(VERSION).git ] && rm -rf collectd-$(VERSION).git || true # return true so we don't error out because the test condition fails
+	[ -d collectd-pristine.git ] && rm -rf collectd-pristine.git || true # return true so we don't error out because the test condition fails
 	# this is run from inside our collectd fork so we clone a clean copy to work off of
-	git clone ../../ collectd-$(VERSION).git
-	pushd collectd-$(VERSION).git ; \
-	git archive --format tar --prefix=collectd-$(VERSION)/ HEAD | gzip > ../stackdriver-agent-$(PKG_VERSION).orig.tar.gz  ; \
+	git clone ../../ collectd-pristine.git
+	pushd collectd-pristine.git ; \
+	git archive --format tar --prefix=collectd-pristine/ HEAD | gzip > ../stackdriver-agent-$(PKG_VERSION).orig.tar.gz  ; \
 	popd
 
 # $(filter) will return all matching entries from the first list, or empty if none match.
@@ -37,7 +37,7 @@ build: source vendor vendor-rpms
 	  yum install -y vendor-$(DISTRO)/$(ARCH)/yajl-1*.rpm; \
 	  yum install -y vendor-$(DISTRO)/$(ARCH)/yajl-devel*.rpm; \
 	fi
-	rpmbuild --define "_topdir $(TOPDIR)" --define "_source_filedigest_algorithm md5" --define "_sourcedir $$(pwd)" --define "_srcrpmdir $$(pwd)" --define "collectd_version $(VERSION)" --define "package_version $(PKG_VERSION)" --define "build_num $(PKG_BUILD)" -ba stackdriver-agent.spec
+	rpmbuild --define "_topdir $(TOPDIR)" --define "_source_filedigest_algorithm md5" --define "_sourcedir $$(pwd)" --define "_srcrpmdir $$(pwd)" --define "package_version $(PKG_VERSION)" --define "build_num $(PKG_BUILD)" -ba stackdriver-agent.spec
 	mkdir -p $(OUTPUT_DIR)
 	cp $(TOPDIR)/RPMS/$(ARCH)/stackdriver-agent-*.rpm $(OUTPUT_DIR)/
 
@@ -93,4 +93,4 @@ vendor-rpms:; true
 endif
 
 clean:
-	rm -rf $(DIR_TO_RM) *rpm collectd-$(VERSION) *.tar.bz2 collectd-$(VERSION).git *.tar.gz
+	rm -rf $(DIR_TO_RM) *rpm collectd-pristine *.tar.bz2 collectd-pristine.git *.tar.gz
