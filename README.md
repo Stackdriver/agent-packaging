@@ -6,11 +6,11 @@ Combined packaging scripts for the Stackdriver monitoring agent.
 
 * `master`
 
-  We use this branch to build the 6.X.X agent DEB and RPM packages for the Cloud Rapture repos.
+  We use this branch to build the `6.X.X` agent DEB and RPM packages for the Cloud Rapture repos.
 
 * `stackdriver-agent-5.5.2`
 
-  We use this branch to build the 5.2.2-X agent DEB and RPM packages for the Cloud Rapture repos.
+  We use this branch to build the `5.2.2-X` agent DEB and RPM packages for the Cloud Rapture repos.
 
 * `legacy-agent-rpm`
 
