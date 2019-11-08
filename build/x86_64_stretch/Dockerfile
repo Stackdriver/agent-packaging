@@ -21,7 +21,6 @@ RUN apt-get -y update \
         libpq5 \
         libssl1.0-dev \
         libtool \
-        libvarnishapi-dev \
         libyajl-dev \
         make \
         pkg-config \

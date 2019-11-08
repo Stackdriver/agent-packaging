@@ -33,9 +33,6 @@
 %define has_yajl 1
 %define bundle_yajl 0
 %define has_hiredis 1
-%define mongo 1
-%define bundle_mongo 1
-%define varnish 1
 %define java_plugin 1
 %define bundle_curl 1
 %define curl_version 7.34.0
@@ -90,19 +87,6 @@
 %define gcm_flag --enable-write_gcm
 %endif
 
-%if %{mongo}
-%define mongo_flag  --enable-mongodb
-%if %{bundle_mongo}
-%define libmongoc_flag --with-libmongoc=own --with-libbson=bundled
-%else
-%define libmongoc_flag --with-libmongoc=yes
-%endif
-%endif
-
-%if %{varnish}
-%define varnish_flag --enable-varnish
-%endif
-
 %if %{java_plugin}
 %define java_flag --enable-java --with-java=%{java_lib_location}
 %endif
@@ -152,7 +136,6 @@ BuildRequires: mysql-devel
 # this is in the main mysql package sometimes but -devel ends up
 # just depending on libs.
 BuildRequires: /usr/bin/mysql_config
-BuildRequires: postgresql-devel
 BuildRequires: git
 BuildRequires: openssl-devel
 
@@ -177,19 +160,6 @@ Requires: libyajl2
 %else
 Requires: yajl
 %endif
-%endif
-%endif
-%if %{varnish}
-%if 0%{?suse_version} > 0
-BuildRequires: varnish-devel
-%else
-BuildRequires: varnish-libs-devel
-%endif
-%endif
-%if %{mongo}
-%if ! %{bundle_mongo}
-BuildRequires: mongo-c-driver-devel, cyrus-sasl-devel
-Requires: mongo-c-driver-libs
 %endif
 %endif
 Requires: curl
@@ -231,10 +201,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 %endif
 
 %filter_requires_in mysql
-%filter_requires_in postgresql
 %filter_requires_in redis
 %filter_requires_in curl_json
-%filter_requires_in varnish
 %filter_requires_in write_gcm
 %filter_requires_in java
 %filter_requires_in python
@@ -269,7 +237,6 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
 # re-generate build files
 ./clean.sh && ./build.sh
 
-# install mongo-c-driver into mongodb-mongo-c-driver/build
 %configure CFLAGS="%{optflags} -DLT_LAZY_OR_NOW='RTLD_NOW|RTLD_GLOBAL' %{?curl_include}" \
     --program-prefix=stackdriver- \
     --disable-all-plugins \
@@ -297,13 +264,11 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-memcached \
     --enable-mysql \
     --enable-protocols \
-    --enable-postgresql \
     --enable-plugin_mem \
     --enable-processes \
     --enable-python \
     --enable-ntpd \
     --enable-nfs \
-    --enable-zookeeper \
     --enable-stackdriver_agent \
     --enable-exec \
     --enable-tail \
@@ -319,9 +284,6 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     %{java_flag} \
     %{redis_flag} \
     %{curl_json_flag} \
-    %{libmongoc_flag} \
-    %{mongo_flag} \
-    %{varnish_flag} \
     %{gcm_flag} \
     --enable-debug
 
@@ -366,17 +328,6 @@ rm -f %{buildroot}%{_sysconfdir}/collectd.conf.pkg-orig
 
 # now remove more libcurl stuff that was needed to finish the install
 rm -rf %{buildroot}%{_prefix}/include/curl %{buildroot}%{_prefix}/lib/libcurl*
-
-%if %{bundle_mongo}
-# remove libmongoc and libbson includes and doc files
-%{__rm} -rf %{buildroot}%{_prefix}/include/libmongoc-1.0
-%{__rm} -rf %{buildroot}%{_prefix}/include/libbson-1.0
-
-%{__rm} -rf %{buildroot}%{_prefix}/share/doc/mongo-c-driver
-%{__rm} -rf %{buildroot}%{_prefix}/share/doc/libbson
-
-%{__rm} -f %{buildroot}%{_prefix}/bin/stackdriver-mongoc-stat
-%endif
 
 # Remove files that are laying about that rpmbuild is complaining about.
 %{__rm} -f %{buildroot}%{_prefix}/man/man5/%{programprefix}collectd-email.5*
@@ -435,11 +386,6 @@ fi
 %{_libdir}/pkgconfig/libcollectdclient.pc
 %{_includedir}/collectd/*.h
 
-%if %{bundle_mongo}
-%{_libdir}/libbson-1.0.*
-%{_libdir}/libmongoc-1.0.*
-%{_libdir}/libmongoc-priv.*
-%endif
 %{_libdir}/pkgconfig/*
 
 %if %{bundle_yajl}

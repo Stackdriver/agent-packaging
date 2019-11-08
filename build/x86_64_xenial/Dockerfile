@@ -19,7 +19,6 @@ RUN apt-get -y update \
         libmysqlclient-dev \
         libpq-dev \
         libtool \
-        libvarnishapi-dev \
         libyajl-dev \
         lsb-release \
         make \
