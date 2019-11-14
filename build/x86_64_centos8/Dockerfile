@@ -1,8 +1,5 @@
 FROM centos:8
 
-ADD https://rpms.remirepo.net/RPM-GPG-KEY-remi2018 /etc/pki/rpm-gpg/RPM-GPG-KEY-remi.el8
-COPY remi.repo /etc/yum.repos.d/
-
 RUN yum -y update \
  && dnf -y install 'dnf-command(config-manager)' \
  && yum config-manager --set-enabled PowerTools \
