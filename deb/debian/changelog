@@ -1,6 +1,6 @@
-stackdriver-agent (5.5.2-372) precise trusty xenial wheezy jessie stretch; urgency=low
+stackdriver-agent (0.0.0-0) precise trusty xenial bionic wheezy jessie stretch; urgency=low
 
   * automated build
 
- -- Stackdriver Agents <stackdriver-agents@google.com>  Mon, 16 Oct 2017 18:57:02 +0000
+ -- Stackdriver Agents <stackdriver-agents@google.com>  Thu, 01 Jan 1970 00:00:00 +0000
 
