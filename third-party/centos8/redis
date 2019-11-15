@@ -1,0 +1,10 @@
+#!/bin/bash
+set -xe
+
+sudo yum -y install redis
+curl -LO http://rpms.famillecollet.com/enterprise/remi-release-8.rpm
+yum -y install remi-release-8.rpm
+yum -y install hiredis
+sudo systemctl start redis
+
+set +xe

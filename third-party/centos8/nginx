@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -xe
+
+sudo yum -y install nginx
+(cd /etc/nginx/conf.d/ && sudo curl -O https://raw.githubusercontent.com/Stackdriver/stackdriver-agent-service-configs/master/etc/nginx/conf.d/status.conf)
+sudo service nginx reload
+
+set +xe
