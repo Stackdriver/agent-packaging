@@ -22,8 +22,6 @@ sed -i 's/password=.*/password=Ss123%321/' config-user
 
 mysql --defaults-extra-file=config-user -Bse "CREATE DATABASE DATABASE_NAME;" --connect-expired-password
 
-mysql --defaults-extra-file=config-user -Bse "CREATE USER 'STATS_USER'@'localhost' IDENTIFIED BY 'STATS_pASS1';"
-
 mysql --defaults-extra-file=config-user -Bse "GRANT REPLICATION CLIENT ON *.* TO 'STATS_USER'@'localhost';"
 
 set +xe
