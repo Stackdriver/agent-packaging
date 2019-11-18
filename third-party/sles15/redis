@@ -2,7 +2,7 @@
 set -xe
 
 sudo zypper addrepo https://download.opensuse.org/repositories/server:database/SLE_15/server:database.repo
-sudo zypper refresh
+sudo zypper --no-gpg-checks refresh
 sudo zypper install -y redis
 sudo zypper install -y hiredis
 sudo zypper install -y libhiredis0_13
