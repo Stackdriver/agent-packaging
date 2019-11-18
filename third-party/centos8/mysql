@@ -18,7 +18,7 @@ sed -i 's/password= /password=/' config-user
 
 mysql --defaults-extra-file=config-user -Bse "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Ss123%321'" --connect-expired-password
 
-sed 's/^password=.*$/password=Ss123%321/' config-user
+sed 's/password=.*/password=Ss123%321/' config-user
 
 mysql --defaults-extra-file=config-user -Bse "CREATE DATABASE DATABASE_NAME;" --connect-expired-password
 
