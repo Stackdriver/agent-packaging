@@ -4,6 +4,18 @@ set -xe
 
 sudo zypper install -y java-1_8_0-openjdk
 sudo zypper install -y java-1_8_0-openjdk-devel
-java -ea -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 -cp /usr/lib/jvm/java-1.8.0/lib/tools.jar sun.tools.jar.Main t
+cat << EOF > hello.java
+class HelloWorld
+{ 
+   public static void main(String args[])
+    {
+       while(true){
+        System.out.println("Hello, World");
+        }
+    }
+}
+EOF
+javac hello.java
+java -ea -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 HelloWorld &
 
 set +xe
