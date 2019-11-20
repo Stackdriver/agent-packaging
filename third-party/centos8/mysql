@@ -6,15 +6,13 @@ sudo dnf -y install https://dev.mysql.com/get/mysql80-community-release-el8-1.no
 sudo dnf --disablerepo=AppStream install -y mysql-community-server
 sudo service mysqld start
 m=$(sudo grep 'temporary password' /var/log/mysqld.log)
-pwd=${m##*:}
+pwd=${m##*: }
 
 cat > config-user <<EOF
 [client]
 user=root
 password=$pwd
 EOF
-
-sed -i 's/password= /password=/' config-user
 
 mysql --defaults-extra-file=config-user -Bse "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Ss123%321'" --connect-expired-password
 
