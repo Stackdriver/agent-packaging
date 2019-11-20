@@ -7,6 +7,6 @@ sudo zypper install -y redis
 sudo zypper install -y hiredis
 sudo zypper install -y libhiredis0_13
 sudo service redis start
-sudo redis-server
+sudo redis-server > /dev/null 2>&1 &
 
 set +xe
