@@ -1,0 +1,7 @@
+#!/bin/bash
+set -xe
+
+sudo zypper install -y memcached
+sudo service memcached start
+
+set +xe
