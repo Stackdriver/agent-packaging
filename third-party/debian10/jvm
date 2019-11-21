@@ -1,0 +1,22 @@
+  
+#!/bin/bash
+set -xe
+
+sudo apt update
+sudo apt install -y openjdk-11-jdk
+sudo apt install -y java-1.8.0-openjdk-devel
+cat << EOF > hello.java
+class HelloWorld
+{ 
+   public static void main(String args[])
+    {
+       while(true){
+        System.out.println("Hello, World");
+        }
+    }
+}
+EOF
+javac hello.java
+java -ea -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 HelloWorld > /dev/null 2>&1 &
+
+set +xe
