@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -xe
+
+sudo apt update
+sudo apt install -y wget
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.14-1_all.deb
+sudo DEBIAN_FRONTEND=noninteractive dpkg -i mysql-apt-config_0.8.14-1_all.deb
+sudo apt update
+sudo debconf-set-selections <<< 'mysql-community-server mysql-community-server/root-pass password your_password'
+sudo debconf-set-selections <<< 'mysql-community-server mysql-community-server/re-root-pass password your_password'
+sudo debconf-set-selections <<< 'mysql-community-server mysql-server/default-auth-override select Use Legacy Authentication Method (Retain MySQL 5.x Compatibility)'
+
+sudo apt install -y mysql-server
+
+sudo service mysql start
+
+set +xe
