@@ -1,0 +1,8 @@
+#!/bin/bash
+set -xe
+
+sudo apt update
+sudo apt install -y redis
+sudo systemctl start redis
+
+set +xe
