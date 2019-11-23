@@ -1,0 +1,9 @@
+#!/bin/bash
+set -xe
+
+sudo yum -y install redis
+sudo yum -y install epel-release
+sudo yum --enablerepo="epel" -y install hiredis
+sudo systemctl start redis
+sudo service redis status
+set +xe
