@@ -2,9 +2,9 @@
 set -xe
 
 sudo yum -y install redis
-sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-sudo dnf update
-sudo dnf --enablerepo="epel" install hiredis
+sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo dnf -y update
+sudo dnf --enablerepo="epel" -y install hiredis
 sudo systemctl start redis
 sudo service redis status
 set +xe
