@@ -4,4 +4,5 @@ sudo yum -y install httpd
 sudo systemctl enable httpd
 (cd /etc/httpd/conf.d/ && sudo curl -O https://raw.githubusercontent.com/Stackdriver/stackdriver-agent-service-configs/master/etc/httpd/conf.d/status.conf)
 sudo systemctl start httpd
+sudo service httpd status
 set +xe
