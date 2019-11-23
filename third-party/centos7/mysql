@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -xe
+
+sudo yum -y install wget
+sudo wget https://repo.mysql.com/mysql80-community-release-el7-1.noarch.rpm
+sudo yum -y localinstall mysql80-community-release-el7-1.noarch.rpm
+sudo dnf -y config-manager --enable mysql80-community
+sudo yum -y install mysql-community-server
+sudo service mysqld start
+
+m=$(sudo grep 'temporary password' /var/log/mysqld.log)
+pwd=${m##*: }
+
+cat > config-user <<EOF
+[client]
+user=root
+password=$pwd
+EOF
+
+mysql --defaults-extra-file=config-user -Bse "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Ss123%321'" --connect-expired-password
+sudo service mysqld status
+set +xe
