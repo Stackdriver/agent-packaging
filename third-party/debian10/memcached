@@ -4,5 +4,5 @@ set -xe
 sudo apt update
 sudo apt install -y memcached
 sudo systemctl start memcached
-
+sudo service memcached status
 set +xe
