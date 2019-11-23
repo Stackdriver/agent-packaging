@@ -2,7 +2,7 @@
 set -xe
 
 sudo apt update
-sudo apt install -y openjdk-9-jdk
+sudo apt install -y openjdk-8-jdk
 cat << EOF > hello.java
 class HelloWorld
 { 
