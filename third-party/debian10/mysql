@@ -14,5 +14,5 @@ sudo debconf-set-selections <<< 'mysql-community-server mysql-server/default-aut
 sudo apt install -y mysql-server
 
 sudo service mysql start
-
+sudo service mysql status
 set +xe
