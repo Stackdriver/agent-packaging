@@ -6,5 +6,5 @@ curl -LO http://rpms.famillecollet.com/enterprise/remi-release-8.rpm
 sudo yum -y install remi-release-8.rpm
 sudo yum -y install hiredis
 sudo systemctl start redis
-
+sudo service redis status
 set +xe
