@@ -5,6 +5,8 @@ set -xe
 sudo yum -y install wget
 sudo wget https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
 sudo yum -y localinstall mysql80-community-release-el8-1.noarch.rpm
+sudo dnf -y config-manager --enable mysql80-community
+sudo yum -y module disable mysql
 sudo yum -y install mysql-community-server
 sudo service mysqld start
 
