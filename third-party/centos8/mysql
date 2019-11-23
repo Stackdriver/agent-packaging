@@ -2,9 +2,12 @@
 
 set -xe
 
-sudo dnf -y install https://dev.mysql.com/get/mysql80-community-release-el8-1.noarch.rpm
-sudo dnf --disablerepo=AppStream install -y mysql-community-server
+sudo yum -y install wget
+sudo wget https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
+sudo yum localinstall mysql80-community-release-el8-1.noarch.rpm
+yum -y install mysql-community-server
 sudo service mysqld start
+
 m=$(sudo grep 'temporary password' /var/log/mysqld.log)
 pwd=${m##*: }
 
