@@ -7,5 +7,5 @@ sudo a2enmod mod_status
 sudo a2enmod mod_access_compat
 sudo systemctl start apache2
 sudo service apache2 reload
-
+sudo service apache2 status
 set +xe
