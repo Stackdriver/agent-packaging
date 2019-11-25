@@ -3,5 +3,6 @@ set -xe
 
 sudo zypper install -y memcached
 sudo service memcached start
+sudo service memcached status
 
 set +xe
