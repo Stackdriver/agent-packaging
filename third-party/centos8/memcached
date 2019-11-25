@@ -2,7 +2,7 @@
 set -xe
 
 sudo yum -y install memcached
-sudo systemctl start memcached
+sudo service memcached start
 sudo service memcached status
 
 set +xe
