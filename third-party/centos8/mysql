@@ -16,7 +16,7 @@ pwd=${m##*: }
 cat > config-user <<EOF
 [client]
 user=root
-password=$pwd
+password='$pwd'
 EOF
 
 mysql --defaults-extra-file=config-user -Bse "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Ss123%321'" --connect-expired-password
