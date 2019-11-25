@@ -6,5 +6,6 @@ sudo zypper install -y nginx
 sudo service nginx start
 (cd /etc/nginx/conf.d/ && sudo curl -O https://raw.githubusercontent.com/Stackdriver/stackdriver-agent-service-configs/master/etc/nginx/conf.d/status.conf)
 sudo service nginx reload
+sudo service nginx status
 
 set +xe
