@@ -1,6 +1,6 @@
 #!/bin/bash
 set -xe
-
+sleep 3m
 sudo yum -y install memcached
 sudo service memcached start
 sudo service memcached status
