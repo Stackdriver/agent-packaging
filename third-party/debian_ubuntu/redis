@@ -1,8 +1,17 @@
 #!/bin/bash
 set -xe
 
+if [[ -f /etc/os-release ]]; then
+  . /etc/os-release
+fi
+
 sudo apt update
-sudo apt install -y redis
+if [ ${VERSION_ID} == 10 ]; then  
+  sudo apt install -y redis
+else
+  sudo apt install -y redis-server
+fi
+
 sudo systemctl start redis
 sudo service redis status
 set +xe
