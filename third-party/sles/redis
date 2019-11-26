@@ -1,5 +1,6 @@
 #!/bin/bash
 set -xe
+sleep 3m
 
 sudo zypper addrepo https://download.opensuse.org/repositories/server:database/SLE_15/server:database.repo
 sudo zypper --no-gpg-checks refresh
