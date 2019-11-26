@@ -7,11 +7,10 @@ if [[ -f /etc/os-release ]]; then
 fi
 SUSE_VERSION=${VERSION%%-*}
 mysql_pkg_name=''
-if ${SUSE_VERSION}==12; then
-  mysql_pkg_name=mysql80-community-release-sles12-1.noarch.rpm
-fi
 
-if ${SUSE_VERSION}==15; then
+if [ ${SUSE_VERSION} == 12 ]; then
+  mysql_pkg_name=mysql80-community-release-sles12-1.noarch.rpm
+elif [ ${SUSE_VERSION} == 15 ]; then
   mysql_pkg_name=mysql80-community-release-sl15-1.noarch.rpm
 fi
 
