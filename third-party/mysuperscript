@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#distros=(ubuntu-1804-bionic-lts ubuntu-1604-xenial-lts debian-9 debian-10 sles-15 sles-12 centos-6 centos-7 centos-8)
+#distros_project=(ubuntu-os-cloud ubuntu-os-cloud debian-cloud debian-cloud sles-cloud sles-cloud centos-cloud centos-cloud centos-cloud)
+
+debian_distros=(["debian-9"]="debian-cloud" ["debian-10"]="debian-cloud")
+echo ${#debian_distros[@]}
+for distro in ${!debian_distros[@]}
+do
+ echo "$distro - ${debian_distros[$distro]}"
+done
