@@ -1,12 +1,17 @@
 #!/bin/bash
 
 set -xe
+if [[ -f /etc/os-release ]]; then
+  . /etc/os-release
+fi
 
 sudo yum -y install wget
-sudo wget https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
-sudo yum -y localinstall mysql80-community-release-el8-1.noarch.rpm
-sudo dnf -y config-manager --enable mysql80-community
-sudo yum -y module disable mysql
+sudo wget https://repo.mysql.com/mysql80-community-release-el${VERSION_ID}-1.noarch.rpm
+sudo yum -y localinstall mysql80-community-release-el${VERSION_ID}-1.noarch.rpm
+
+if [ ${VERSION_ID} == 8 ]; then  
+  sudo yum -y module disable mysql
+fi
 sudo yum -y install mysql-community-server
 sudo service mysqld start
 
