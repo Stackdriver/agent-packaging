@@ -2,8 +2,17 @@
 #!/bin/bash
 set -xe
 
+if [[ -f /etc/os-release ]]; then
+  . /etc/os-release
+fi
+JDK_VERSION=''
+if [ ${VERSION_ID} == 16.04 ]; then  
+  JDK_VERSION=8
+else
+  JDK_VERSION=11
+fi
 sudo apt update
-sudo apt install -y openjdk-11-jdk
+sudo apt install -y openjdk-${JDK_VERSION}-jdk
 cat << EOF > hello.java
 class HelloWorld
 { 
