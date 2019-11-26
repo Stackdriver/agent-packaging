@@ -1,6 +1,7 @@
 #/bin/bash
 
 set -xe
+sleep 3m
 
 sudo zypper install -y java-1_8_0-openjdk
 sudo zypper install -y java-1_8_0-openjdk-devel
