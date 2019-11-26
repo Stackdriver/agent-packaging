@@ -2,8 +2,21 @@
 
 set -xe
 
-sudo curl -LO https://dev.mysql.com/get/mysql80-community-release-sl15-1.noarch.rpm
-sudo rpm -Uvh mysql80-community-release-sl15-1.noarch.rpm
+if [[ -f /etc/os-release ]]; then
+  . /etc/os-release
+fi
+SUSE_VERSION=${VERSION%%-*}
+mysql_pkg_name=''
+if ${SUSE_VERSION}==12; then
+  mysql_pkg_name=mysql80-community-release-sles12-1.noarch.rpm
+fi
+
+if ${SUSE_VERSION}==15; then
+  mysql_pkg_name=mysql80-community-release-sl15-1.noarch.rpm
+fi
+
+sudo curl -LO https://dev.mysql.com/get/${mysql_pkg_name}
+sudo rpm -Uvh ${mysql_pkg_name}
 sudo rpm --import /etc/RPM-GPG-KEY-mysql
 sudo zypper refresh
 sudo zypper install -y mysql-community-server
