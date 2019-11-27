@@ -19,13 +19,13 @@
 ### END INIT INFO
 
 # Source function library.
-if [[ -f /lib/lsb/init-functions ]]; then
-  . /lib/lsb/init-functions
-else
+if [[ -f /etc/init.d/functions ]]; then
   . /etc/init.d/functions
   function start_daemon() {
     daemon "$@"
   }
+else
+  . /lib/lsb/init-functions
 fi
 
 RETVAL=0
