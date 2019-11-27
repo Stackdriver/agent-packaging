@@ -19,6 +19,9 @@
 ### END INIT INFO
 
 # Source function library.
+# Even though `/lib/lsb/init-functions` is the recommended path, we are using `/etc/init.d/functions`
+# as default. Because there is a bug is the way `service stackdriver-agent status` is implemented. It
+# does not work well with `/lib/lsb/init-functions`.
 if [[ -f /etc/init.d/functions ]]; then
   . /etc/init.d/functions
   function start_daemon() {
