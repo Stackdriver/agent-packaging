@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ (cd /opt/stackdriver/collectd/etc/collectd.d/ && sudo curl -O https://raw.githubusercontent.com/Stackdriver/stackdriver-agent-service-configs/master/etc/collectd.d/jvm-sun-hotspot.conf)
+ sudo sed -i 's/localhost:JMX_PORT/localhost:9010/' /opt/stackdriver/collectd/etc/collectd.d/jvm-sun-hotspot.conf
+ sudo service stackdriver-agent restart

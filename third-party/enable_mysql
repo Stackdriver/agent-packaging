@@ -1,0 +1,7 @@
+#!/bin/bash
+
+(cd /opt/stackdriver/collectd/etc/collectd.d/ && sudo curl -O https://raw.githubusercontent.com/Stackdriver/stackdriver-agent-service-configs/master/etc/collectd.d/mysql.conf)
+sudo sed -i 's/DATABASE_NAME/mysql/' /opt/stackdriver/collectd/etc/collectd.d/mysql.conf
+sudo sed -i 's/STATS_USER/root/' /opt/stackdriver/collectd/etc/collectd.d/mysql.conf
+sudo sed -i 's/STATS_PASS/Ss123%321/' /opt/stackdriver/collectd/etc/collectd.d/mysql.conf
+sudo service stackdriver-agent restart
