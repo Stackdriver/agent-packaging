@@ -1,0 +1,14 @@
+#!/bin/bash
+
+declare -a arr
+
+arr=(amzn bionic buster centos6 centos7 centos8 jessie precise sles12 sles15 stretch trusty wheezy xenial)
+
+for i in "${arr[@]}";do
+  echo ${i}
+  stubby call blade:kokoro-api KokoroApi.Build <<EOF
+full_job_name: "stackdriver_agents/monitoring/x86_64_${i}/release"
+env_vars { key: "BRANCH" value: "stackdriver-agent-5.8.1" }
+env_vars { key: "PKG_BRANCH" value: "master" }
+EOF
+done

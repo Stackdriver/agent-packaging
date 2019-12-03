@@ -1,0 +1,19 @@
+#!/bin/bash
+set -x
+declare -A arr
+
+arr=(["sles-15"]=suse-cloud)
+
+apps=(jvm mysql apache nginx redis memcached)
+for key in ${!arr[@]}; do
+  echo ${key} ${arr[${key}]}
+  for app in ${apps[@]}; do
+    echo ${app}
+    gcloud compute instances create ${key}-${app}-test --project sophieyfang-test --machine-type n1-standard-4  --image-family $key --image-project ${arr[${key}]} --metadata-from-file startup-script=sles/${app} --zone us-central1-a
+    gcloud compute ssh --zone us-central1-a --project sophieyfang-test ${key}-${app}-test --command 'curl -sSO https://dl.google.com/cloudagents/install-monitoring-agent.sh && sudo REPO_SUFFIX=20191202-2 bash install-monitoring-agent.sh'
+    gcloud compute scp enable_${app} ${key}-${app}-test:./enable_app --scp-flag=-o --scp-flag=ConnectionAttempts=10 --zone us-central1-a --project sophieyfang-test
+    gcloud compute ssh --zone us-central1-a --project sophieyfang-test ${key}-${app}-test --command 'sudo bash ./enable_app'
+    #gcloud compute instances get-serial-port-output ${key}-${app}-test-yo
+  done
+done
+set +x
