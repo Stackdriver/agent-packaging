@@ -21,7 +21,9 @@ sudo rpm --import /etc/RPM-GPG-KEY-mysql
 sudo zypper refresh
 sudo zypper install -y mysql-community-server
 
-if [ ${SUSE_VERSION} == 15 ]; then
+if [ ${SUSE_VERSION} == 12 ]; then
+  sudo zypper install -y libmysqlclient18 
+elif [ ${SUSE_VERSION} == 15 ]; then
   sudo zypper install -y libmariadb3
 fi
 
