@@ -9,10 +9,14 @@ for key in ${!arr[@]}; do
   echo ${key} ${arr[${key}]}
   for app in ${apps[@]}; do
     echo ${app}
-    gcloud compute instances create ${key}-${app}-test --project sophieyfang-test --machine-type n1-standard-4  --image-family $key --image-project ${arr[${key}]} --metadata-from-file startup-script=sles/${app} --zone us-central1-a
-    gcloud compute ssh --zone us-central1-a --project sophieyfang-test ${key}-${app}-test --command 'curl -sSO https://dl.google.com/cloudagents/install-monitoring-agent.sh && sudo REPO_SUFFIX=20191202-2 bash install-monitoring-agent.sh'
-    gcloud compute scp enable_${app} ${key}-${app}-test:./enable_app --scp-flag=-o --scp-flag=ConnectionAttempts=10 --zone us-central1-a --project sophieyfang-test
-    gcloud compute ssh --zone us-central1-a --project sophieyfang-test ${key}-${app}-test --command 'sudo bash ./enable_app'
+    cat sles/${app} installation enable_${app} > startup_${key}-${app}
+    gcloud compute instances create ${key}-${app}-test --project stackdriver-kubernetes-1337 --machine-type n1-standard-4  --image-family $key --image-project ${arr[${key}]} --metadata-from-file startup-script=startup_${key}-${app} --zone us-central1-a
+    #gcloud compute ssh --zone us-central1-a --project sophieyfang-test ${key}-${app}-test --command 'curl -sSO https://dl.google.com/cloudagents/install-monitoring-agent.sh && sudo REPO_SUFFIX=20191202-2 bash install-monitoring-agent.sh'
+    #gcloud compute scp enable_${app} ${key}-${app}-test:./enable_app --scp-flag=-o --scp-flag=ConnectionAttempts=10 --zone us-central1-a --project sophieyfang-test
+    #gcloud compute ssh --zone us-central1-a --project sophieyfang-test ${key}-${app}-test --command 'sudo bash ./enable_app'
+    instance_id=gcloud compute instances describe sophieyfang-google-fluentd-sles-15-vm --project stackdriver-kubernetes-1337 --zone us-central1-a --format='value(id)'
+    echo $instance_id >> sophie.txt
+    echo ${app} >> sophie.txt
     #gcloud compute instances get-serial-port-output ${key}-${app}-test-yo
   done
 done
