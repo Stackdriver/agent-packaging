@@ -1,0 +1,4 @@
+#!/bin/bash
+
+curl -sSO https://dl.google.com/cloudagents/install-monitoring-agent.sh
+sudo REPO_SUFFIX=20191202-2 bash install-monitoring-agent.sh'
