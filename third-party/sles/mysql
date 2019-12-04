@@ -20,6 +20,11 @@ sudo rpm -Uvh ${mysql_pkg_name}
 sudo rpm --import /etc/RPM-GPG-KEY-mysql
 sudo zypper refresh
 sudo zypper install -y mysql-community-server
+
+if [ ${SUSE_VERSION} == 15 ]; then
+  sudo zypper install -y libmariadb3
+fi
+
 sudo service mysql start
 
 m=$(sudo grep 'temporary password' /var/log/mysql/mysqld.log)
