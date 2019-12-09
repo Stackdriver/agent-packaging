@@ -19,7 +19,6 @@ RUN apt-get update -y \
         libhiredis-dev \
         libltdl-dev \
         libmysqlclient-dev \
-        libpq-dev \
         libssl-dev \
         libtool \
         libyajl-dev \

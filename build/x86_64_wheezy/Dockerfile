@@ -17,7 +17,6 @@ RUN apt-get -y update \
         libhiredis-dev \
         libltdl-dev \
         libmysqlclient-dev \
-        libpq-dev \
         libtool \
         libyajl-dev \
         make \
