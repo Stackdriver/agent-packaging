@@ -1,6 +1,7 @@
 FROM opensuse/leap:42.3
 
 RUN zypper addrepo https://download.opensuse.org/repositories/Apache/SLE_12_SP4/Apache.repo \
+ && zypper addrepo https://download.opensuse.org/repositories/server:database/SLE_15/server:database.repo \
  && zypper -n --gpg-auto-import-keys refresh \
  && zypper -n install \
         autoconf \
@@ -18,6 +19,7 @@ RUN zypper addrepo https://download.opensuse.org/repositories/Apache/SLE_12_SP4/
         libyajl2 \
         libyajl-devel \
         libmysqlclient-devel \
+        libhiredis0_13 \
         make \
         openssl-devel \
         postgresql-devel \
