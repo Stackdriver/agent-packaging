@@ -29,4 +29,5 @@ RUN apt-get update -y \
         make \
         pkg-config \
         python-dev \
+ && apt-get -y clean \
  && rm -rf /var/lib/apt/lists/*
