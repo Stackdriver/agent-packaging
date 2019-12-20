@@ -23,11 +23,9 @@ RUN yum -y update \
         perl-devel \
         perl-ExtUtils-Embed \
         pkgconfig \
-        postgresql-devel \
         python-devel \
         rpm-build \
         rpm-sign \
-        varnish-libs-devel \
         which \
         yajl-devel \
  && rpm -Uvh rpm-macros-rpmforge*.rpm \

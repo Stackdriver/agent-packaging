@@ -20,12 +20,6 @@ ifeq ($(DISTRO),xenial)
 DOCKER_FLAG="--enable-docker"
 endif
 
-ifneq (,$(filter $(DISTRO),bionic buster))
-# Use system libmongoc where available.
-MONGO_FLAG=--enable-mongodb --with-libmongoc=yes
-else
-MONGO_FLAG=--enable-mongodb --with-libmongoc=own
-endif
 
 CFLAGS = -g
 
@@ -59,13 +53,11 @@ override_dh_auto_configure:
 	--enable-memcached \
 	--enable-mysql \
 	--enable-protocols \
-	--enable-postgresql \
 	--enable-plugin_mem \
 	--enable-processes \
 	--enable-python \
 	--enable-ntpd \
 	--enable-nfs \
-	--enable-zookeeper \
 	--enable-stackdriver_agent \
 	--enable-exec \
 	--enable-tail \
@@ -81,15 +73,13 @@ override_dh_auto_configure:
 	--enable-redis --with-libhiredis \
 	--enable-curl \
 	--enable-curl_json \
-	--enable-varnish \
 	--enable-write_gcm \
 	--enable-debug \
-	$(DOCKER_FLAG) \
-	$(MONGO_FLAG)
+	$(DOCKER_FLAG)
 
 # filter out shlib deps we don't want to force on people
 override_dh_shlibdeps:
-	dh_shlibdeps --dpkg-shlibdeps-params="-x$(MYSQL) -xlibpq5 -x$(HIREDIS) -xlibvarnishapi1"
+	dh_shlibdeps --dpkg-shlibdeps-params="-x$(MYSQL) -x$(HIREDIS)"
 
 override_dh_strip:
 	dh_strip --dbg-package=stackdriver-agent

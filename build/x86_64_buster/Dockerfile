@@ -17,12 +17,8 @@ RUN apt-get -y update \
         libcurl4-openssl-dev \
         libhiredis-dev \
         libltdl-dev \
-        libmongoc-dev \
-        libpq-dev \
-        libpq5 \
         libssl-dev \
         libtool \
-        libvarnishapi-dev \
         libyajl-dev \
         make \
         pkg-config \

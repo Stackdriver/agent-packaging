@@ -22,12 +22,10 @@ RUN zypper addrepo https://download.opensuse.org/repositories/devel:/libraries:/
         libmysqlclient-devel \
         make \
         openssl-devel \
-        postgresql-devel \
         hiredis-devel \
         pkg-config \
         python-devel \
         rpm-build \
-        varnish-devel \
         wget \
         which \
  && wget https://ftp.gwdg.de/pub/opensuse/repositories/home%3A/Herbster0815/openSUSE_Leap_15.1/noarch/automake-1.16.1-lp151.92.1.noarch.rpm \
