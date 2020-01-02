@@ -101,7 +101,7 @@ check_config() {
 # return:
 #   0 if the daemon has been started
 #   2 if the daemon could not be started
-#   3 if the daemon was not supposed to be started
+#   3 if the daemon was not supposed to be started due to user configuration
 start() {
     GOOGLE_MONITORING_ENABLE=$(curl --silent --connect-timeout 1 -f -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/attributes/google-monitoring-enable 2>/dev/null)
     if [ -n "$GOOGLE_MONITORING_ENABLE" -a "$GOOGLE_MONITORING_ENABLE" = "0" ]; then
@@ -137,7 +137,7 @@ stop() {
 #   0 if the daemon has been restarted
 #   1 if the daemon could not be stopped
 #   2 if the daemon could not be started
-#   3 if the daemon was not supposed to be restarted
+#   3 if the daemon was not supposed to be restarted due to user configuration
 restart() {
     if ! check_config; then
         log_failure_msg "not restarting, configuration/credentials error"
