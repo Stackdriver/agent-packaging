@@ -1,7 +1,7 @@
 FROM opensuse/leap:42.3
 
 RUN zypper addrepo https://download.opensuse.org/repositories/Apache/SLE_12_SP4/Apache.repo \
- # Add SLES 15 repo to install libhiredis0_13
+ # Add SLES 15 repo to install libhiredis0_13 from hiredis-devel
  && zypper addrepo https://download.opensuse.org/repositories/server:database/SLE_15/server:database.repo \
  && zypper -n --gpg-auto-import-keys refresh \
  && zypper -n install \
