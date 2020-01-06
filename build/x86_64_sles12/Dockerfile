@@ -20,7 +20,6 @@ RUN zypper addrepo https://download.opensuse.org/repositories/Apache/SLE_12_SP4/
         libyajl2 \
         libyajl-devel \
         libmysqlclient-devel \
-        libhiredis0_13 \
         make \
         openssl-devel \
         postgresql-devel \
