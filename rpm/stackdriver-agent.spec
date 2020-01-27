@@ -348,9 +348,9 @@ cp /usr/share/doc/yajl-1.0.7/COPYING yajl.COPYING
 /sbin/ldconfig
 /sbin/chkconfig --add stackdriver-agent
 %if 0%{?suse_version} > 0
+systemctl daemon-reload
 # Enable the service by default.
 %{fillup_and_insserv -f -y stackdriver-agent}
-systemctl daemon-reload
 %endif
 
 %preun
