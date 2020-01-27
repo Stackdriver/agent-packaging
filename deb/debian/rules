@@ -11,6 +11,9 @@ MYSQL=libmariadbclient18
 else ifneq (,$(filter $(DISTRO),xenial bionic))
 HIREDIS=libhiredis0.13
 MYSQL=libmysqlclient20
+else ifneq (,$(filter $(DISTRO),eoan))
+HIREDIS=libhiredis0.14
+MYSQL=libmysqlclient21
 else
 HIREDIS=libhiredis0.10
 MYSQL=libmysqlclient18
