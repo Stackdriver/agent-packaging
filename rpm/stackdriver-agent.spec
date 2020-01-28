@@ -124,7 +124,6 @@ BuildRequires: bison
 BuildRequires: flex
 BuildRequires: libtool
 BuildRequires: rpm-build
-BuildRequires: systemd-rpm-macros
 %endif
 %if ! %{bundle_curl}
 BuildRequires: libcurl-devel
@@ -351,7 +350,6 @@ cp /usr/share/doc/yajl-1.0.7/COPYING yajl.COPYING
 %if 0%{?suse_version} > 0
 # Enable the service by default.
 %{fillup_and_insserv -f -y stackdriver-agent}
-%service_add_post stackdriver-agent.service
 systemctl daemon-reload
 %endif
 
