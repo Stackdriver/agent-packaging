@@ -168,7 +168,7 @@ Requires(preun): /sbin/chkconfig
 Requires(post): /sbin/chkconfig
 Requires(post): /bin/grep
 %if 0%{?suse_version} > 0
-Requires(post): %insserv_prereq
+Requires(post): %insserv_prereq %fillup_prereq
 %endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
@@ -344,13 +344,15 @@ ln -s -t %{buildroot}%{_libdir} yajl/libyajl.so.1
 cp /usr/share/doc/yajl-1.0.7/COPYING yajl.COPYING
 %endif
 
+BuildRequires: systemd-rpm-macros
 %post
 /sbin/ldconfig
 /sbin/chkconfig --add stackdriver-agent
 %if 0%{?suse_version} > 0
-systemctl daemon-reload
 # Enable the service by default.
-%{fillup_and_insserv -f -y stackdriver-agent}
+%{fillup_and_insserv -y stackdriver-agent}
+%service_add_post stackdriver-agent.service
+systemctl daemon-reload
 %endif
 
 %preun
