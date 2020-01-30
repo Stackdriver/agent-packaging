@@ -132,7 +132,7 @@ start() {
 stop() {
     DAEMON_NAME=${DAEMON##*/}
     DAEMON_NAME=${DAEMON_NAME:0:15}
-    killproc -p "$_PIDFILE" "$DAEMON"
+    killproc -p "$_PIDFILE" "$DAEMON_NAME"
 }
 
 # return:
