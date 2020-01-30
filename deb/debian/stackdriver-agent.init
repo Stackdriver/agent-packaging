@@ -130,6 +130,8 @@ start() {
 #   1 if the daemon could not be stopped
 #   3 if the daemon was already stopped
 stop() {
+    DAEMON_NAME=${DAEMON##*/}
+    DAEMON_NAME=${DAEMON_NAME:0:15}
     killproc -p "$_PIDFILE" "$DAEMON"
 }
 
