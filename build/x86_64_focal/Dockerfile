@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update \
@@ -23,6 +23,6 @@ RUN apt-get -y update \
         lsb-release \
         make \
         pkg-config \
-        python-dev \
+        python-dev-is-python2 \
  && apt-get -y clean \
  && rm -rf /var/lib/apt/lists/*
