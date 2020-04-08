@@ -1,8 +1,10 @@
 FROM opensuse/leap:15.1
 
 RUN zypper addrepo https://download.opensuse.org/repositories/devel:/libraries:/c_c++/openSUSE_Leap_15.1/devel:libraries:c_c++.repo \
+ # Add Herbster0815 repo to install the latest automake.
+ && zypper addrepo https://download.opensuse.org/pub/opensuse/repositories/home:/Herbster0815/openSUSE_Leap_15.2/home:Herbster0815.repo \
  && zypper -n --gpg-auto-import-keys refresh \
- && zypper -n install \
+ && zypper -n install --allow-vendor-change \
         autoconf \
         automake \
         bison \
@@ -11,9 +13,9 @@ RUN zypper addrepo https://download.opensuse.org/repositories/devel:/libraries:/
         gcc \
         git \
         java-1_8_0-openjdk-devel \
-        libcurl4-7.66.0-lp151.270.1.x86_64 \
+        libcurl4 \
         libcurl-devel \
-        libgcrypt20-1.8.5-lp151.161.1.x86_64 \
+        libgcrypt20 \
         libgcrypt-devel \
         libtool \
         libtool-ltdl-devel \
@@ -28,11 +30,7 @@ RUN zypper addrepo https://download.opensuse.org/repositories/devel:/libraries:/
         python-devel \
         rpm-build \
         varnish-devel \
-        wget \
         which \
- && wget https://ftp.gwdg.de/pub/opensuse/repositories/home%3A/Herbster0815/openSUSE_Leap_15.1/noarch/automake-1.16.1-lp151.92.1.noarch.rpm \
- && rpm --force -Uvh automake-1.16.1-lp151.92.1.noarch.rpm \
- && rm automake-1.16.1-lp151.92.1.noarch.rpm \
  # Pretend we are on SLES 15.
  && /bin/sed -i -e 's/VERSION="15.1"/VERSION="15-SP1"/' /etc/os-release \
  && zypper -n clean
