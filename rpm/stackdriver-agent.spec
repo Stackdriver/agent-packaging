@@ -239,6 +239,8 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
 
 %configure CFLAGS="%{optflags} -DLT_LAZY_OR_NOW='RTLD_NOW|RTLD_GLOBAL' %{?curl_include}" \
     --program-prefix=stackdriver- \
+    --with-useragent="stackdriver_agent/%{version}-%{release}" \
+    --with-data-max-name-len=256 \
     --disable-all-plugins \
     --disable-static \
     --disable-perl --without-libperl  --without-perl-bindings \
@@ -279,7 +281,6 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-match_throttle_metadata_keys \
     --enable-write_log \
     --enable-unixsock \
-    --with-useragent="stackdriver_agent/%{version}-%{release}" \
     %{docker_flag} \
     %{java_flag} \
     %{redis_flag} \

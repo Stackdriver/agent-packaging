@@ -34,6 +34,8 @@ override_dh_auto_configure:
 	./clean.sh && ./build.sh
 	dh_auto_configure -- --prefix=/opt/stackdriver/collectd \
 	--program-prefix=stackdriver- \
+	--with-useragent="stackdriver_agent/$(debian_version)" \
+	--with-data-max-name-len=256 \
 	--disable-all-plugins \
 	--disable-static \
 	--disable-perl --without-libperl  --without-perl-bindings \
@@ -71,7 +73,6 @@ override_dh_auto_configure:
 	--enable-match_throttle_metadata_keys \
 	--enable-write_log \
 	--enable-unixsock \
-	--with-useragent="stackdriver_agent/$(debian_version)" \
 	--enable-java --with-java=/usr/lib/jvm/default-java \
 	--enable-redis --with-libhiredis \
 	--enable-curl \
