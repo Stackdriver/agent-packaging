@@ -19,10 +19,6 @@ HIREDIS=libhiredis0.10
 MYSQL=libmysqlclient18
 endif
 
-ifeq ($(DISTRO),xenial)
-DOCKER_FLAG="--enable-docker"
-endif
-
 
 CFLAGS = -g
 
@@ -78,8 +74,7 @@ override_dh_auto_configure:
 	--enable-curl \
 	--enable-curl_json \
 	--enable-write_gcm \
-	--enable-debug \
-	$(DOCKER_FLAG)
+	--enable-debug
 
 # filter out shlib deps we don't want to force on people
 override_dh_shlibdeps:
