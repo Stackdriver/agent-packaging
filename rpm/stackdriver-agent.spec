@@ -29,7 +29,6 @@
 %endif
 
 # some things that we enable or not based on distro version
-%define docker_flag --disable-docker
 %define has_yajl 1
 %define bundle_yajl 0
 %define has_hiredis 1
@@ -45,7 +44,6 @@
 %if 0%{?rhel} >= 7
 %define java_version 1.7.0
 %define curl_version 7.52.1
-%define docker_flag --enable-docker
 %define dep_filter 0
 %endif
 
@@ -281,7 +279,6 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-match_throttle_metadata_keys \
     --enable-write_log \
     --enable-unixsock \
-    %{docker_flag} \
     %{java_flag} \
     %{redis_flag} \
     %{curl_json_flag} \
