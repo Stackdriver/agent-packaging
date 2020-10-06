@@ -244,7 +244,7 @@ case "$1" in
         exit "$rc"
         ;;
     condrestart|try-restart)
-        if test "$1" = "condrestart"; then
+        if [[ "$1" == "condrestart" ]]; then
             log_warning_msg "Use try-restart rather than condrestart"
         fi
         log_daemon_msg "Trying to restart $DESC" "$NAME"
