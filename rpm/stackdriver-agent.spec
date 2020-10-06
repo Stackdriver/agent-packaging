@@ -359,7 +359,7 @@ fi
 
 %postun
 /sbin/ldconfig
-/sbin/service stackdriver-agent condrestart &>/dev/null || :
+/sbin/service stackdriver-agent try-restart &>/dev/null || :
 
 %files
 %defattr(-, root, root, -)
