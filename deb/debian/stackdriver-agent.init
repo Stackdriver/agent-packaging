@@ -197,9 +197,6 @@ case "$1" in
         exit "$rc"
         ;;
     condrestart|try-restart)
-        if [[ "$1" == "condrestart" ]]; then
-            log_warning_msg "Use try-restart rather than condrestart"
-        fi
         log_daemon_msg "Trying to restart $DESC" "$NAME"
         pidofproc -p "$_PIDFILE" "$DAEMON" >/dev/null
         case "$rc" in
@@ -218,7 +215,7 @@ case "$1" in
         exit "$rc"
         ;;
     *)
-        echo "Usage: $0 {start|stop|status|restart|force-reload|try-restart}"
+        echo "Usage: $0 {start|stop|status|restart|force-reload|condrestart|try-restart}"
         exit 3
         ;;
 esac
