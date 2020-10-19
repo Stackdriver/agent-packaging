@@ -258,6 +258,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-tcpconns \
     --enable-write_http \
     --enable-aggregation \
+    --enable-conntrack \
     --enable-csv \
     --enable-nginx \
     --enable-apache \
