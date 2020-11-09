@@ -121,7 +121,7 @@ start() {
     fi
 
     LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" \
-        start_daemon -p "$_PIDFILE" "$COLLECTDMON" -P "$_PIDFILE" -c "$DAEMON" -- -C "$CONFIG"\
+        start_daemon -p "$_PIDFILE" "$COLLECTDMON" -P "$_PIDFILE" -c "$DAEMON" -- -C "$CONFIG" \
         || return 2
     return 0
 }
