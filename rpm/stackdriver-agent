@@ -80,7 +80,7 @@ _PIDFILE=/var/run/collectdmon.pid
 JAVA_LIB_DIR=""
 
 # Gracefully exit if the package has been removed.
-test -x "$DAEMON" || exit 0
+test -x "$COLLECTDMON" || exit 0
 
 if [ -r "/etc/default/${NAME}" ]; then
     . "/etc/default/${NAME}"
@@ -128,7 +128,7 @@ check_config() {
     if test ! -r "$CONFIG"; then
         return 2
     fi
-    if ! LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" "$DAEMON" -t -C "$CONFIG"; then
+    if ! LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" "$COLLECTDMON" -t -C "$CONFIG"; then
         return 1
     fi
     # Check if the application default credentials file is in the system
@@ -180,7 +180,7 @@ start() {
 #   1 if the daemon could not be stopped
 #   3 if the daemon was already stopped
 stop() {
-    killproc -p "$_PIDFILE" "$DAEMON"
+    killproc -p "$_PIDFILE" "$COLLECTDMON"
 }
 
 # return:
@@ -223,7 +223,7 @@ case "$1" in
         esac
         ;;
     status)
-        pidofproc -p "$_PIDFILE" "$DAEMON" >/dev/null
+        pidofproc -p "$_PIDFILE" "$COLLECTDMON" >/dev/null
         rc="$?"
         case "$rc" in
             0) log_success_msg "$NAME is running" ;;
@@ -246,7 +246,7 @@ case "$1" in
         ;;
     condrestart|try-restart)
         log_daemon_msg "Trying to restart $DESC" "$NAME"
-        pidofproc -p "$_PIDFILE" "$DAEMON" >/dev/null
+        pidofproc -p "$_PIDFILE" "$COLLECTDMON" >/dev/null
         case "$rc" in
             0) ;;
             4) log_end_msg 1; exit "$rc" ;;
