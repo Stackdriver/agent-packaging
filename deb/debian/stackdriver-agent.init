@@ -27,9 +27,10 @@ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
 DESC="Stackdriver metrics collection agent"
 NAME=stackdriver-agent
 DAEMON=/opt/stackdriver/collectd/sbin/stackdriver-collectd
+COLLECTDMON=/opt/stackdriver/collectd/sbin/stackdriver-collectdmon
 
 CONFIG=/etc/stackdriver/collectd.conf
-_PIDFILE=/var/run/stackdriver-agent.pid
+_PIDFILE=/var/run/collectdmon.pid
 
 JAVA_LIB_DIR=""
 
@@ -120,7 +121,7 @@ start() {
     fi
 
     LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/stackdriver/collectd/lib64:/opt/stackdriver/collectd/lib" \
-        start_daemon -p "$_PIDFILE" "$DAEMON" -C "$CONFIG" -P "$_PIDFILE" \
+        start_daemon -p "$_PIDFILE" "$COLLECTDMON" -P "$_PIDFILE" -c "$DAEMON" -- -C "$CONFIG"\
         || return 2
     return 0
 }
