@@ -6,7 +6,7 @@
 # processname: stackdriver-collectd
 # config: /etc/sysconfig/stackdriver
 # config: /etc/stackdriver/collectd.conf
-# pidfile: /var/run/stackdriver-agent.pid
+# pidfile: /var/run/collectdmon.pid
 
 ### BEGIN INIT INFO
 # Provides:          stackdriver-agent
