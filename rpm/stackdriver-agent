@@ -75,7 +75,7 @@ DAEMON=/opt/stackdriver/collectd/sbin/stackdriver-collectd
 COLLECTDMON=/opt/stackdriver/collectd/sbin/stackdriver-collectdmon
 
 CONFIG=/etc/stackdriver/collectd.conf
-_PIDFILE=/var/run/collectdmon.pid
+_PIDFILE=/var/run/stackdriver-agent.pid
 
 JAVA_LIB_DIR=""
 
