@@ -36,6 +36,7 @@ JAVA_LIB_DIR=""
 
 # Gracefully exit if the package has been removed.
 test -x "$COLLECTDMON" || exit 0
+test -x "$DAEMON" || exit 0
 
 if [ -r "/etc/default/${NAME}" ]; then
     . "/etc/default/${NAME}"
