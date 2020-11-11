@@ -24,8 +24,8 @@ RUN apt-get -y update \
         make \
         pkg-config \
         python-dev-is-python2 \
- && curl -sSO http://security.ubuntu.com/ubuntu/pool/main/c/coreutils/coreutils_8.30-3ubuntu2_amd64.deb \
- && dpkg -i coreutils_8.30-3ubuntu2_amd64.deb \
- && apt-get install -f \
+ && echo 'deb http://archive.ubuntu.com/ubuntu/ focal main' >/etc/apt/sources.list.d/focal.list \
+ && apt-get -y update \
+ && apt-get -y install --allow-downgrades coreutils=8.30-3ubuntu2 \
  && apt-get -y clean \
  && rm -rf /var/lib/apt/lists/*
