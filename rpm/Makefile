@@ -19,7 +19,7 @@ endif
 
 ifeq ($(filter sles%,$(DISTRO)),)  # If DISTRO is not sles*.
 vendor:
-	[ -f curl-$(CURL_VERSION).tar.bz2 ] || curl -O https://curl.haxx.se/download/curl-$(CURL_VERSION).tar.bz2
+	[ -f curl-$(CURL_VERSION).tar.bz2 ] || curl -LO https://curl.haxx.se/download/curl-$(CURL_VERSION).tar.bz2
 	sha1sum -c curl-$(CURL_VERSION).sha1
 else
 vendor:;true
