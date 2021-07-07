@@ -166,6 +166,8 @@ Requires(preun): /sbin/chkconfig
 Requires(post): /sbin/chkconfig
 Requires(post): /bin/grep
 %if 0%{?suse_version} > 0
+# sysvinit-tools is required by insserv-compat, but isn't a dependency.
+Requires: insserv-compat sysvinit-tools
 Requires(post): %insserv_prereq
 %endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
