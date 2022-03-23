@@ -1,8 +1,13 @@
 FROM centos:8
 
-RUN yum -y update \
- && dnf -y install 'dnf-command(config-manager)' \
- && yum config-manager --set-enabled PowerTools \
+# CentOS 8 is EOL, so we have to switch to the vault repos.
+RUN sed -i \
+        -e 's%^mirrorlist%#mirrorlist%' \
+        -e 's%^# *baseurl=http://mirror%baseurl=http://vault%' \
+        /etc/yum.repos.d/CentOS-*.repo
+
+RUN dnf -y install 'dnf-command(config-manager)' \
+ && yum config-manager --set-enabled powertools \
  && yum -y install epel-release \
  && yum -y install \
         autoconf \
