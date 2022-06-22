@@ -26,6 +26,7 @@ RUN apt-get -y update \
         libyajl-dev \
         make \
         pkg-config \
-        python-dev \
+        python2-dev \
+        python3-dev \
  && apt-get -y clean \
  && rm -rf /var/lib/apt/lists/*
