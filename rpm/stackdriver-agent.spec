@@ -37,7 +37,6 @@
 %define curl_version 7.34.0
 %define java_version 1.6.0
 %define java_lib_location /usr/lib/jvm/java
-%define has_python36 0
 # Enabled for systems that don't support the __provides_exclude_from global.
 %define dep_filter 1
 
@@ -49,7 +48,6 @@
 
 %if 0%{?rhel} >= 8
 %define java_version 1.8.0
-%define has_python36 1
 %define dep_filter 0
 %endif
 
@@ -110,11 +108,7 @@ Source202: stackdriver.sysconfig
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
 %endif
-%if ! %{has_python36}
-BuildRequires: python-devel
-%else
-BuildRequires: python36-devel
-%endif
+BuildRequires: python2-devel
 BuildRequires: libgcrypt-devel
 BuildRequires: autoconf, automake
 %if 0%{?suse_version} > 0
