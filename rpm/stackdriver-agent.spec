@@ -109,6 +109,7 @@ BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
 %endif
 BuildRequires: python2-devel
+BuildRequires: python3-devel
 BuildRequires: libgcrypt-devel
 BuildRequires: autoconf, automake
 %if 0%{?suse_version} > 0
@@ -200,6 +201,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 %filter_requires_in write_gcm
 %filter_requires_in java
 %filter_requires_in python
+%filter_requires_in python3
 %filter_setup
 
 %description
@@ -264,6 +266,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-plugin_mem \
     --enable-processes \
     --enable-python \
+    --enable-python3 \
     --enable-ntpd \
     --enable-nfs \
     --enable-stackdriver_agent \

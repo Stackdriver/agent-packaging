@@ -58,6 +58,7 @@ override_dh_auto_configure:
 	--enable-plugin_mem \
 	--enable-processes \
 	--enable-python \
+	--enable-python3 \
 	--enable-ntpd \
 	--enable-nfs \
 	--enable-stackdriver_agent \
