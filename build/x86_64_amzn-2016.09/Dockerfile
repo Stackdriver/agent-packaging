@@ -1,6 +1,6 @@
 FROM amazonlinux:2016.09
 
-ADD http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el6/en/x86_64/rpmforge/RPMS/rpm-macros-rpmforge-0-6.el6.rf.noarch.rpm .
+ADD https://rpmfind.net/linux/dag/redhat/el6/en/i386/dag/RPMS/rpm-macros-rpmforge-0-6.el6.rf.noarch.rpm .
 RUN yum -y install epel-release \
  && yum -y install \
         autoconf \
