@@ -31,7 +31,8 @@ RUN true \
         openssl-devel \
         pkg-config \
         postgresql-devel \
-        python-devel \
+        python2-devel \
+        python3-devel \
         rpm-build \
         varnish-devel \
         which \
