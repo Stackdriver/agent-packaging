@@ -12,6 +12,7 @@ RUN zypper addrepo https://download.opensuse.org/repositories/devel:/libraries:/
         flex \
         gcc \
         git \
+        hiredis-devel \
         java-1_8_0-openjdk-devel \
         libcurl4 \
         libcurl-devel \
@@ -24,10 +25,11 @@ RUN zypper addrepo https://download.opensuse.org/repositories/devel:/libraries:/
         libmysqlclient-devel \
         make \
         openssl-devel \
-        hiredis-devel \
         pkg-config \
+        postgresql-devel \
         python-devel \
         rpm-build \
+        varnish-devel \
         which \
  # Pretend we are on SLES 15.
  && /bin/sed -i -e 's/VERSION="15.1"/VERSION="15-SP1"/' /etc/os-release \

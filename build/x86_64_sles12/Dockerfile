@@ -14,6 +14,7 @@ RUN zypper addrepo https://download.opensuse.org/repositories/Apache/SLE_12_SP4/
         flex \
         gcc \
         git \
+        hiredis-devel \
         java-1_7_0-openjdk-devel \
         libcurl-devel \
         libgcrypt-devel \
@@ -24,10 +25,11 @@ RUN zypper addrepo https://download.opensuse.org/repositories/Apache/SLE_12_SP4/
         libmysqlclient-devel \
         make \
         openssl-devel \
-        hiredis-devel \
         pkg-config \
+        postgresql-devel \
         python-devel \
         rpm-build \
+        varnish-devel \
         which \
  # Pretend we are on SLES 12.
  && /bin/sed -i -e 's/VERSION = 42.3/VERSION = 12/' /etc/SuSE-release \
