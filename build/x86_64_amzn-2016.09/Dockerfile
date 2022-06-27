@@ -1,6 +1,6 @@
 FROM amazonlinux:2016.09
 
-ADD http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el6/en/x86_64/rpmforge/RPMS/rpm-macros-rpmforge-0-6.el6.rf.noarch.rpm .
+ADD https://rpmfind.net/linux/dag/redhat/el6/en/i386/dag/RPMS/rpm-macros-rpmforge-0-6.el6.rf.noarch.rpm .
 RUN yum -y install epel-release \
  && yum -y install \
         autoconf \
@@ -22,9 +22,11 @@ RUN yum -y install epel-release \
         perl-devel \
         perl-ExtUtils-Embed \
         pkgconfig \
+        postgresql-devel \
         python-devel \
         rpm-build \
         rpm-sign \
+        varnish-libs-devel \
         which \
         yajl-devel \
  && rpm -Uvh rpm-macros-rpmforge*.rpm \

@@ -26,8 +26,10 @@ RUN yum -y install epel-release \
         openssl-devel \
         perl-devel \
         perl-ExtUtils-Embed \
+        postgresql-devel \
         python-devel \
         rpm-build \
+        varnish-libs-devel \
         which \
         yajl-devel \
  && yum -y clean all

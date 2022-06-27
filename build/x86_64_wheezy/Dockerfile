@@ -49,7 +49,9 @@ RUN apt-get -y update \
         libhiredis-dev \
         libltdl-dev \
         libmysqlclient-dev \
+        libpq-dev \
         libtool \
+        libvarnishapi-dev \
         libyajl-dev \
         make \
         pkg-config \
