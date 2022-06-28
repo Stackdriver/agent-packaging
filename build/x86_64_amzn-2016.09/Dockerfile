@@ -6,6 +6,7 @@ RUN yum -y install epel-release \
         autoconf \
         automake \
         bison \
+        ca-certificates \
         expect \
         flex \
         gcc \
