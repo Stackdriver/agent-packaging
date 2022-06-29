@@ -24,7 +24,8 @@ RUN yum -y install epel-release \
         perl-ExtUtils-Embed \
         pkgconfig \
         postgresql-devel \
-        python-devel \
+        python2-devel \
+        python36-devel \
         rpm-build \
         rpm-sign \
         varnish-libs-devel \
