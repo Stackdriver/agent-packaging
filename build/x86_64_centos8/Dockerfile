@@ -32,6 +32,7 @@ RUN dnf -y install 'dnf-command(config-manager)' \
         pkgconfig \
         postgresql-devel \
         python2-devel \
+        python3-devel \
         rpm-build \
         rpm-sign \
         varnish-libs-devel \

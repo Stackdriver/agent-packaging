@@ -37,6 +37,7 @@
 %define curl_version 7.34.0
 %define java_version 1.6.0
 %define java_lib_location /usr/lib/jvm/java
+%define use_python36 0
 # Enabled for systems that don't support the __provides_exclude_from global.
 %define dep_filter 1
 
@@ -53,6 +54,7 @@
 
 %if 0%{?amzn} >= 1
 %define bundle_yajl 1
+%define use_python36 1
 %define dep_filter 0
 %endif
 
@@ -109,6 +111,11 @@ BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
 %endif
 BuildRequires: python2-devel
+%if ! %{use_python36}
+BuildRequires: python3-devel
+%else
+BuildRequires: python36-devel
+%endif
 BuildRequires: libgcrypt-devel
 BuildRequires: autoconf, automake
 %if 0%{?suse_version} > 0
@@ -200,6 +207,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 %filter_requires_in write_gcm
 %filter_requires_in java
 %filter_requires_in python
+%filter_requires_in python3
 %filter_setup
 
 %description
@@ -264,6 +272,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-plugin_mem \
     --enable-processes \
     --enable-python \
+    --enable-python3 \
     --enable-ntpd \
     --enable-nfs \
     --enable-stackdriver_agent \
