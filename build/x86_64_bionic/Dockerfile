@@ -27,7 +27,7 @@ RUN apt-get -y update \
         lsb-release \
         make \
         pkg-config \
-        python2-dev \
+        python-dev \
         python3-dev \
  && apt-get -y clean \
  && rm -rf /var/lib/apt/lists/*
