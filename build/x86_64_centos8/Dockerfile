@@ -1,10 +1,4 @@
-FROM centos:8
-
-# CentOS 8 is EOL, so we have to switch to the vault repos.
-RUN sed -i \
-        -e 's%^mirrorlist%#mirrorlist%' \
-        -e 's%^# *baseurl=http://mirror%baseurl=http://vault%' \
-        /etc/yum.repos.d/CentOS-*.repo
+FROM rockylinux:8
 
 RUN dnf -y install 'dnf-command(config-manager)' \
  && yum config-manager --set-enabled powertools \
