@@ -5,9 +5,12 @@ ARCH := $(shell uname -m)
 DISTRO=$(shell lsb_release -a 2>/dev/null |grep Codename |awk {'printf $$2;'})
 debian_version := $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
 
-ifneq (,$(filter $(DISTRO),bullseye buster stretch))
+ifneq (,$(filter $(DISTRO),stretch))
 HIREDIS=libhiredis0.13
 MYSQL=libmariadbclient18
+else ifneq (,$(filter $(DISTRO),bullseye buster))
+HIREDIS=libhiredis0.14
+MYSQL=libmariadb3
 else ifneq (,$(filter $(DISTRO),xenial bionic))
 HIREDIS=libhiredis0.13
 MYSQL=libmysqlclient20

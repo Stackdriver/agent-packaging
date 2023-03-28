@@ -8,7 +8,7 @@ Build-Depends: autoconf, automake, debhelper (>= 7.0.50), default-jdk, default-l
 Package: stackdriver-agent
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, curl, libcurl4, libltdl7, libyajl2
-Suggests: default-jre, libhiredis0.13, libmariadbclient18
+Suggests: default-jre, libhiredis0.14, libmariadb3
 Description: Stackdriver system metrics collection daemon
   The Stackdriver system metrics daemon collects system statistics and
   sends them to the Stackdriver service.
