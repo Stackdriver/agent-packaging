@@ -38,6 +38,7 @@
 %define java_version 1.6.0
 %define java_lib_location /usr/lib/jvm/java
 %define use_python36 0
+%define has_python2 1
 # Enabled for systems that don't support the __provides_exclude_from global.
 %define dep_filter 1
 
@@ -50,6 +51,10 @@
 %if 0%{?rhel} >= 8
 %define java_version 1.8.0
 %define dep_filter 0
+%endif
+
+%if 0%{?rhel} >= 9
+%define has_python2 0
 %endif
 
 %if 0%{?amzn} >= 1
@@ -89,6 +94,10 @@
 %define java_flag --enable-java --with-java=%{java_lib_location}
 %endif
 
+%if %{has_python2}
+%define python_flag --enable-python
+%endif
+
 Summary: Stackdriver system metrics collection daemon
 Name: stackdriver-agent
 Version: %{package_version}
@@ -110,7 +119,9 @@ Source202: stackdriver.sysconfig
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
 %endif
+%if %{has_python2}
 BuildRequires: python2-devel
+%endif
 %if ! %{use_python36}
 BuildRequires: python3-devel
 %else
@@ -271,7 +282,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-protocols \
     --enable-plugin_mem \
     --enable-processes \
-    --enable-python \
+    %{python_flag} \
     --enable-python3 \
     --enable-ntpd \
     --enable-nfs \
