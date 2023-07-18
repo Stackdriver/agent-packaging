@@ -181,6 +181,8 @@ Requires(post): /bin/grep
 # sysvinit-tools is required by insserv-compat, but isn't a dependency.
 Requires: insserv-compat sysvinit-tools
 Requires(post): %insserv_prereq
+%else
+Requires: initscripts
 %endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
