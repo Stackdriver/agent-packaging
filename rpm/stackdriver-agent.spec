@@ -48,6 +48,7 @@
 %endif
 
 %if 0%{?rhel} >= 8
+%define bundle_curl 0
 %define java_version 1.8.0
 %define dep_filter 0
 %endif
