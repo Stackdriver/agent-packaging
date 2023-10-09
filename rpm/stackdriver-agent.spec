@@ -33,7 +33,7 @@
 %define bundle_yajl 0
 %define has_hiredis 1
 %define java_plugin 1
-%define bundle_curl 1
+%define bundle_curl 0
 %define curl_version 7.34.0
 %define java_version 1.6.0
 %define java_lib_location /usr/lib/jvm/java
