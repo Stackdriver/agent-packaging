@@ -33,7 +33,6 @@
 %define bundle_yajl 0
 %define has_hiredis 1
 %define java_plugin 1
-%define bundle_curl 1
 %define curl_version 7.34.0
 %define java_version 1.6.0
 %define java_lib_location /usr/lib/jvm/java
@@ -59,7 +58,6 @@
 %endif
 
 %if 0%{?suse_version} > 0
-%define bundle_curl 0
 %define java_lib_location /usr/lib64/jvm/java
 %if 0%{?suse_version} < 1500
 %define java_version 1.7.0
@@ -73,11 +71,6 @@
 
 %if %{has_hiredis}
 %define redis_flag --enable-redis --with-libhiredis
-%endif
-
-%if %{bundle_curl}
-%define curl_include -Icurl-%{curl_version}/include
-%define libcurl_flag --with-libcurl=%{buildroot}/%{_prefix}
 %endif
 
 %if %{has_yajl}
@@ -98,11 +91,6 @@ Group: System Environment/Daemons
 URL: http://www.stackdriver.com/
 
 Source: stackdriver-agent-%{version}.orig.tar.gz
-%if %{bundle_curl}
-# embed libcurl so we know it's linked against openssl instead of
-# nss. this avoids problems of nss leaking with libcurl. sigh.
-Source1: curl-%{curl_version}.tar.bz2
-%endif
 Source200: stackdriver-agent
 Source201: collectd.conf
 Source202: stackdriver.sysconfig
@@ -124,9 +112,7 @@ BuildRequires: flex
 BuildRequires: libtool
 BuildRequires: rpm-build
 %endif
-%if ! %{bundle_curl}
 BuildRequires: libcurl-devel
-%endif
 %if 0%{?suse_version} > 0
 BuildRequires: libmysqlclient-devel
 %else
@@ -219,27 +205,15 @@ Currently includes collectd.
 %prep
 %setup -q -n collectd-pristine
 # update for aarch64
-%if %{bundle_curl}
-%setup -q -n collectd-pristine -a 1
-%endif
 
 %build
-%if %{bundle_curl}
-# build libcurl first
-pushd curl-%{curl_version}
-./configure --prefix=%{buildroot}%{_prefix} --with-ssl --disable-threaded-resolver --enable-ipv6 \
-    --with-libidn --disable-shared --enable-static --disable-manual \
-    --with-ca-bundle=/etc/pki/tls/certs/ca-bundle.crt
-%{__make} %{?_smp_mflags}
-%{__make} install
-popd
-%endif
+
 export PATH=%{buildroot}/%{_prefix}/bin:$PATH
 
 # re-generate build files
 ./clean.sh && ./build.sh
 
-%configure CFLAGS="%{optflags} -DLT_LAZY_OR_NOW='RTLD_NOW|RTLD_GLOBAL' %{?curl_include}" \
+%configure CFLAGS="%{optflags} -DLT_LAZY_OR_NOW='RTLD_NOW|RTLD_GLOBAL'" \
     --program-prefix=stackdriver- \
     --with-useragent="stackdriver_agent/%{version}-%{release}" \
     --with-data-max-name-len=256 \
@@ -247,7 +221,6 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --disable-static \
     --disable-perl --without-libperl  --without-perl-bindings \
     --with-libiptc \
-    %{?libcurl_flag} \
     --enable-cpu \
     --enable-curl \
     --enable-df \
@@ -296,15 +269,6 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
 
 %install
 # we have to reinstall as %%install cleans the buildroot
-%if %{bundle_curl}
-pushd curl-%{curl_version}
-%{__make} install
-# now remove things to avoid unpackaged files
-rm -rf %{buildroot}/%{_prefix}/bin %{buildroot}/%{_prefix}/man
-rm -rf %{buildroot}/%{_prefix}/share %{buildroot}/%{_prefix}/lib*/pkgconfig
-popd
-%endif
-
 %{__rm} -rf contrib/SpamAssassin
 %{__make} install DESTDIR="%{buildroot}"
 
