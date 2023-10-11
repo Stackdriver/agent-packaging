@@ -31,7 +31,6 @@
 # some things that we enable or not based on distro version
 %define has_yajl 1
 %define bundle_yajl 0
-%define has_hiredis 1
 %define java_plugin 1
 %define java_version 1.6.0
 %define java_lib_location /usr/lib/jvm/java
@@ -65,10 +64,6 @@
 %define java_version 1_8_0
 %define dep_filter 0
 %endif
-%endif
-
-%if %{has_hiredis}
-%define redis_flag --enable-redis --with-libhiredis
 %endif
 
 %if %{has_yajl}
@@ -128,9 +123,7 @@ BuildRequires: java-%{java_version}-openjdk
 BuildRequires: java-devel
 %endif
 
-%if %{has_hiredis}
 BuildRequires: hiredis-devel
-%endif
 %if %{has_yajl}
 %if 0%{?suse_version} > 0
 BuildRequires: libyajl-devel
@@ -257,7 +250,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-write_log \
     --enable-unixsock \
     %{java_flag} \
-    %{redis_flag} \
+    --enable-redis --with-libhiredis \
     %{curl_json_flag} \
     %{gcm_flag} \
     --enable-debug
