@@ -8,26 +8,9 @@ source:
 	git archive --format tar --prefix=collectd-pristine/ HEAD | gzip > ../stackdriver-agent-$(PKG_VERSION).orig.tar.gz  ; \
 	popd
 
-# $(filter) will return all matching entries from the first list, or empty if none match.
-ifneq ($(filter epel-6 amzn-%,$(DISTRO)),)  # If DISTRO is epel-6 or amzn-*.
-CURL_VERSION=7.34.0
-else
-ifeq ($(filter sles%,$(DISTRO)),)  # If DISTRO is not sles*.
-CURL_VERSION=7.52.1
-endif
-endif
-
-ifeq ($(filter sles%,$(DISTRO)),)  # If DISTRO is not sles*.
-vendor:
-	[ -f curl-$(CURL_VERSION).tar.bz2 ] || curl -LO https://curl.haxx.se/download/curl-$(CURL_VERSION).tar.bz2
-	sha1sum -c curl-$(CURL_VERSION).sha1
-else
-vendor:;true
-endif
-
 TOPDIR=/root/rpmbuild
 
-build: source vendor vendor-rpms
+build: source vendor-rpms
 	[ -n "$(DIR_TO_RM)" ] && rm -rf "$(DIR_TO_RM)" || true # return true so we don't error out because the test condition fails
 	if [[ $(DISTRO) == "epel-6" || $(DISTRO) == amzn-* ]]; then \
 	  yum install -y vendor-$(DISTRO)/$(ARCH)/hiredis*-0.10.1-3.*.rpm; \
@@ -51,6 +34,7 @@ else
 DIR_TO_RM := $(OUTPUT_DIR)
 endif
 
+# $(filter) will return all matching entries from the first list, or empty if none match.
 ifeq ($(filter sles%,$(DISTRO)),)  # If DISTRO is not sles*.
 vendor-dirs:
 	mkdir -p vendor-epel-6/x86_64 vendor-epel-6/src

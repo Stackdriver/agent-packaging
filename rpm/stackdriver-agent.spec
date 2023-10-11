@@ -33,7 +33,6 @@
 %define bundle_yajl 0
 %define has_hiredis 1
 %define java_plugin 1
-%define curl_version 7.34.0
 %define java_version 1.6.0
 %define java_lib_location /usr/lib/jvm/java
 %define use_python36 0
@@ -42,7 +41,6 @@
 
 %if 0%{?rhel} >= 7
 %define java_version 1.7.0
-%define curl_version 7.52.1
 %define dep_filter 0
 %endif
 
