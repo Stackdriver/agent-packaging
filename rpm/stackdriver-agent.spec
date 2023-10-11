@@ -31,7 +31,6 @@
 # some things that we enable or not based on distro version
 %define has_yajl 1
 %define bundle_yajl 0
-%define java_plugin 1
 %define java_version 1.6.0
 %define java_lib_location /usr/lib/jvm/java
 %define use_python36 0
@@ -69,10 +68,6 @@
 %if %{has_yajl}
 %define curl_json_flag --enable-curl_json
 %define gcm_flag --enable-write_gcm
-%endif
-
-%if %{java_plugin}
-%define java_flag --enable-java --with-java=%{java_lib_location}
 %endif
 
 Summary: Stackdriver system metrics collection daemon
@@ -117,11 +112,9 @@ BuildRequires: /usr/bin/mysql_config
 BuildRequires: git
 BuildRequires: openssl-devel
 
-%if %{java_plugin}
 BuildRequires: java-%{java_version}-openjdk-devel
 BuildRequires: java-%{java_version}-openjdk
 BuildRequires: java-devel
-%endif
 
 BuildRequires: hiredis-devel
 %if %{has_yajl}
@@ -249,7 +242,7 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-match_throttle_metadata_keys \
     --enable-write_log \
     --enable-unixsock \
-    %{java_flag} \
+    --enable-java --with-java=%{java_lib_location} \
     --enable-redis --with-libhiredis \
     %{curl_json_flag} \
     %{gcm_flag} \
@@ -354,11 +347,9 @@ fi
 %{_libdir}/libyajl.so.1
 %endif
 
-%if %{java_plugin}
 %dir %{_datadir}/collectd/java
 %{_datadir}/collectd/java/collectd-api.jar
 %{_datadir}/collectd/java/generic-jmx.jar
-%endif
 
 %doc AUTHORS ChangeLog COPYING README
 
