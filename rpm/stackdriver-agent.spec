@@ -29,7 +29,6 @@
 %endif
 
 # some things that we enable or not based on distro version
-%define has_yajl 1
 %define bundle_yajl 0
 %define java_version 1.6.0
 %define java_lib_location /usr/lib/jvm/java
@@ -63,11 +62,6 @@
 %define java_version 1_8_0
 %define dep_filter 0
 %endif
-%endif
-
-%if %{has_yajl}
-%define curl_json_flag --enable-curl_json
-%define gcm_flag --enable-write_gcm
 %endif
 
 Summary: Stackdriver system metrics collection daemon
@@ -117,7 +111,6 @@ BuildRequires: java-%{java_version}-openjdk
 BuildRequires: java-devel
 
 BuildRequires: hiredis-devel
-%if %{has_yajl}
 %if 0%{?suse_version} > 0
 BuildRequires: libyajl-devel
 %else
@@ -128,7 +121,6 @@ BuildRequires: yajl-devel
 Requires: libyajl2
 %else
 Requires: yajl
-%endif
 %endif
 %endif
 Requires: curl
@@ -244,8 +236,8 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-unixsock \
     --enable-java --with-java=%{java_lib_location} \
     --enable-redis --with-libhiredis \
-    %{curl_json_flag} \
-    %{gcm_flag} \
+    --enable-curl_json \
+    --enable-write_gcm \
     --enable-debug
 
 %{__make} %{?_smp_mflags}
