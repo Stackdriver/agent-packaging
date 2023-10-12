@@ -34,33 +34,30 @@
 %define java_lib_location /usr/lib/jvm/java
 %define use_python36 0
 # Enabled for systems that don't support the __provides_exclude_from global.
-%define dep_filter 1
+%define dep_filter 0
 
 %if 0%{?rhel} >= 7
 %define java_version 1.7.0
-%define dep_filter 0
 %endif
 
 %if 0%{?rhel} >= 8
 %define java_version 1.8.0
-%define dep_filter 0
 %endif
 
 %if 0%{?amzn} >= 1
 %define bundle_yajl 1
 %define use_python36 1
-%define dep_filter 0
 %endif
 
 %if 0%{?suse_version} > 0
 %define java_lib_location /usr/lib64/jvm/java
 %if 0%{?suse_version} < 1500
 %define java_version 1.7.0
+%define dep_filter 1
 %endif
 %if 0%{?suse_version} >= 1500
 # Yes, SLES really has underscores.
 %define java_version 1_8_0
-%define dep_filter 0
 %endif
 %endif
 
