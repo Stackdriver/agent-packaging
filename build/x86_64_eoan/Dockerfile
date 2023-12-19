@@ -16,13 +16,17 @@ RUN apt-get -y update \
         libcurl4-openssl-dev \
         libhiredis-dev \
         libltdl-dev \
+        libmongoc-dev \
         libmysqlclient-dev \
+        libpq-dev \
         libssl-dev \
         libtool \
+        libvarnishapi-dev \
         libyajl-dev \
         lsb-release \
         make \
         pkg-config \
         python-dev \
+        python3-dev \
  && apt-get -y clean \
  && rm -rf /var/lib/apt/lists/*

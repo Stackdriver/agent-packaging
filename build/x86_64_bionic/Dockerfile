@@ -13,7 +13,6 @@ RUN apt-get -y update \
         flex \
         gcc \
         git \
-        libbson-dev \
         libcurl4-openssl-dev \
         libhiredis-dev \
         libltdl-dev \

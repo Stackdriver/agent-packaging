@@ -19,7 +19,6 @@ RUN apt-get -y update \
         libltdl-dev \
         libmongoc-dev \
         libpq-dev \
-        libpq5 \
         libssl-dev \
         libtool \
         libvarnishapi-dev \
