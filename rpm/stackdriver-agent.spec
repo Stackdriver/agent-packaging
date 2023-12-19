@@ -161,7 +161,11 @@ Requires: yajl
 BuildRequires: mongo-c-driver-devel libbson-devel
 %endif
 %if %{has_varnish}
+%if 0%{?suse_version} > 0
+BuildRequires: varnish-devel
+%else
 BuildRequires: varnish-libs-devel
+%endif
 %endif
 Requires: curl
 Requires: sed
