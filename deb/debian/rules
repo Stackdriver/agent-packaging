@@ -80,7 +80,7 @@ override_dh_auto_configure:
 	--enable-redis --with-libhiredis \
 	--enable-curl \
 	--enable-curl_json \
-if (0)
+ifneq (x,x)
 	--enable-mongodb \
 endif
 	--enable-varnish \
