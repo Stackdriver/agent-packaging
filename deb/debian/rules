@@ -58,12 +58,14 @@ override_dh_auto_configure:
 	--enable-memcached \
 	--enable-mysql \
 	--enable-protocols \
+	--enable-postgresql \
 	--enable-plugin_mem \
 	--enable-processes \
 	--enable-python \
 	--enable-python3 \
 	--enable-ntpd \
 	--enable-nfs \
+	--enable-zookeeper \
 	--enable-stackdriver_agent \
 	--enable-exec \
 	--enable-tail \
@@ -78,12 +80,16 @@ override_dh_auto_configure:
 	--enable-redis --with-libhiredis \
 	--enable-curl \
 	--enable-curl_json \
+if (0)
+	--enable-mongodb \
+endif
+	--enable-varnish \
 	--enable-write_gcm \
 	--enable-debug
 
 # filter out shlib deps we don't want to force on people
 override_dh_shlibdeps:
-	dh_shlibdeps --dpkg-shlibdeps-params="-x$(MYSQL) -x$(HIREDIS)"
+	dh_shlibdeps --dpkg-shlibdeps-params="-x$(MYSQL) -xlibpq5 -x$(HIREDIS) -xlibvarnishapi1"
 
 override_dh_strip:
 	dh_strip --dbg-package=stackdriver-agent

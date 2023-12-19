@@ -32,6 +32,8 @@
 %define has_yajl 1
 %define bundle_yajl 0
 %define has_hiredis 1
+%define has_mongo 0
+%define has_varnish 1
 %define java_plugin 1
 %define curl_version 7.34.0
 %define java_version 1.6.0
@@ -76,6 +78,14 @@
 %if %{has_yajl}
 %define curl_json_flag --enable-curl_json
 %define gcm_flag --enable-write_gcm
+%endif
+
+%if %{has_mongo}
+%define mongo_flag  --enable-mongodb
+%endif
+
+%if %{has_varnish}
+%define varnish_flag --enable-varnish
 %endif
 
 %if %{java_plugin}
@@ -147,6 +157,12 @@ Requires: yajl
 %endif
 %endif
 %endif
+%if %{has_mongo}
+BuildRequires: mongo-c-driver-devel libbson-devel
+%endif
+%if %{has_varnish}
+BuildRequires: varnish-libs-devel
+%endif
 Requires: curl
 Requires: sed
 Requires(preun): /sbin/chkconfig
@@ -188,7 +204,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 %endif
 
 %filter_requires_in mysql
+%filter_requires_in postgresql
 %filter_requires_in redis
+%filter_requires_in varnish
 %filter_requires_in curl_json
 %filter_requires_in write_gcm
 %filter_requires_in java
@@ -242,12 +260,14 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     --enable-memcached \
     --enable-mysql \
     --enable-protocols \
+    --enable-postgresql \
     --enable-plugin_mem \
     --enable-processes \
     --enable-python \
     --enable-python3 \
     --enable-ntpd \
     --enable-nfs \
+    --enable-zookeeper \
     --enable-stackdriver_agent \
     --enable-exec \
     --enable-tail \
@@ -261,6 +281,8 @@ export PATH=%{buildroot}/%{_prefix}/bin:$PATH
     %{java_flag} \
     %{redis_flag} \
     %{curl_json_flag} \
+    %{mongo_flag} \
+    %{varnish_flag} \
     %{gcm_flag} \
     --enable-debug
 
