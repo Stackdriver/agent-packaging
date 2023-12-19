@@ -1,5 +1,10 @@
 FROM ubuntu:groovy
 
+# Ubuntu Groovy is EOL, so we have to switch to the archive repos.
+RUN sed -i \
+        -e 's%^deb http://\(archive\|security\)\.%deb http://old-releases.%' \
+        /etc/apt/sources.list
+
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update \
  && apt-get -y install \
