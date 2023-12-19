@@ -30,7 +30,7 @@
 
 # some things that we enable or not based on distro version
 %define bundle_yajl 0
-%define java_version 1.6.0
+%define java_version %{nil}
 %define java_lib_location /usr/lib/jvm/java
 %define use_python36 0
 # Enabled for systems that don't support the __provides_exclude_from global.
@@ -45,6 +45,7 @@
 %endif
 
 %if 0%{?amzn} >= 1
+%define java_version 1.6.0
 %define bundle_yajl 1
 %define use_python36 1
 %endif
