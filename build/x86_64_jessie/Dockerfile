@@ -1,5 +1,20 @@
 FROM debian:jessie
 
+RUN \
+ # Point to the archive...
+    sed -i \
+      -e 's/\(deb\|httpredir\)\.debian\.org/archive.debian.org/g' \
+      -e '/-updates main/d' \
+      -e '/http\.debian\.net/d' \
+      /etc/apt/sources.list \
+ # ...and disable the expiration check...
+ && echo 'Acquire::Check-Valid-Until "0";' \
+      >/etc/apt/apt.conf.d/10no-check-valid-until \
+ # ...and remove pointers to the defunct security repos.
+ && sed -i \
+      -e '/security\.debian\.org/d' \
+      /etc/apt/sources.list
+
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update \
  && apt-get -y install \
