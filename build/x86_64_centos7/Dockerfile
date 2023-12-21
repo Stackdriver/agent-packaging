@@ -17,6 +17,7 @@ RUN yum -y install epel-release \
         libtool \
         libtool-ltdl-devel \
         make \
+        mongo-c-driver-devel \
         mysql-devel \
         openssl-devel \
         perl-devel \

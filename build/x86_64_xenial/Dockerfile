@@ -16,6 +16,7 @@ RUN apt-get -y update \
         libcurl4-openssl-dev \
         libhiredis-dev \
         libltdl-dev \
+        libmongoc-dev \
         libmysqlclient-dev \
         libpq-dev \
         libtool \
@@ -25,5 +26,6 @@ RUN apt-get -y update \
         make \
         pkg-config \
         python-dev \
+        python3-dev \
  && apt-get -y clean \
  && rm -rf /var/lib/apt/lists/*

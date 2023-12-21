@@ -25,6 +25,7 @@ RUN dnf -y install 'dnf-command(config-manager)' \
         libtool \
         libtool-ltdl-devel \
         make \
+        mongo-c-driver-devel \
         mysql-devel \
         openssl-devel \
         perl-devel \
