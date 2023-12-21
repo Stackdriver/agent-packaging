@@ -1,5 +1,14 @@
 FROM debian:stretch
 
+RUN \
+ # Point to the archive...
+    sed -i \
+      -e 's/\(deb\|httpredir\)\.debian\.org/archive.debian.org/g' \
+      -e 's/security\.debian\.org/archive.debian.org/g' \
+      -e '/-updates main/d' \
+      -e '/http\.debian\.net/d' \
+      /etc/apt/sources.list
+
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update \
  && apt-get -y install \
