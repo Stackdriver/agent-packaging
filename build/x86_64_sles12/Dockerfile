@@ -9,7 +9,7 @@ RUN true \
  && zypper --no-gpg-check refresh 'OSS Update' \
  && (echo 'b889b4bba03074cd66ef9c0184768f4816d4ccb1fa9ec2721c5583304c5f23d0  /var/cache/zypp/raw/OSS Update/repodata/repomd.xml' | sha256sum --check) \
  # Add Herbster0815 repo to install the latest automake.
- && zypper addrepo https://download.opensuse.org/pub/opensuse/repositories/home:/Herbster0815/openSUSE_Leap_15.4/home:Herbster0815.repo \
+ && zypper addrepo https://download.opensuse.org/pub/opensuse/repositories/home:/Herbster0815/openSUSE_Leap_15.6/home:Herbster0815.repo \
  && zypper -n --gpg-auto-import-keys refresh \
  && zypper -n install \
         autoconf \

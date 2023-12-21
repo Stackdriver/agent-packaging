@@ -4,7 +4,7 @@ RUN zypper addrepo https://ftp.lysator.liu.se/pub/opensuse/repositories/devel:/l
  # The lysator.liu.se mirror still references download.opensuse.org.
  && sed -i 's@download.opensuse.org@ftp.lysator.liu.se/pub/opensuse@' /etc/zypp/repos.d/devel_libraries_c_c++.repo \
  # Add Herbster0815 repo to install the latest automake.
- && zypper addrepo https://download.opensuse.org/pub/opensuse/repositories/home:/Herbster0815/openSUSE_Leap_15.4/home:Herbster0815.repo \
+ && zypper addrepo https://download.opensuse.org/pub/opensuse/repositories/home:/Herbster0815/openSUSE_Leap_15.6/home:Herbster0815.repo \
  && zypper -n --gpg-auto-import-keys refresh \
  && zypper -n install --allow-vendor-change \
         autoconf \
