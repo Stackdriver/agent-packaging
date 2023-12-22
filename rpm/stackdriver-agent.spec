@@ -32,7 +32,7 @@
 %define has_yajl 1
 %define bundle_yajl 0
 %define has_hiredis 1
-%define has_mongo 0
+%define has_mongo 1
 %define has_varnish 1
 %define java_plugin 1
 %define curl_version 7.34.0

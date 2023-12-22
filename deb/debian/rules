@@ -22,9 +22,7 @@ HIREDIS=libhiredis0.10
 MYSQL=libmysqlclient18
 endif
 
-ifneq (x,x)
 MONGO_FLAG=--enable-mongodb
-endif
 
 
 CFLAGS = -g
