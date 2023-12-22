@@ -28,7 +28,7 @@ RUN apt-get -y update \
         libcurl4-openssl-dev \
         libhiredis-dev \
         libltdl-dev \
-        libmongoc-dev \
+        libmongo-client-dev \
         libmysqlclient-dev \
         libpq-dev \
         libtool \
